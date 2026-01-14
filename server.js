@@ -148,11 +148,11 @@ app.get('/', (req, res) => {
 });
 
 app.get('/select', (req, res) => {
-    res.sendFile(path.join(__dirname, '../select.html'));
+    res.sendFile(path.join(__dirname, 'select.html'));
 });
 
 app.get('/response', (req, res) => {
-    res.sendFile(path.join(__dirname, '../rsponse.html'));
+    res.sendFile(path.join(__dirname, 'rsponse.html'));
 });
 
 // Start server
