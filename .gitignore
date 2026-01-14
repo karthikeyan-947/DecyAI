@@ -1,0 +1,13 @@
+node_modules/
+.env
+.DS_Store
+*.log
+index_backup.html
+1.html
+2.html
+3.html
+home.html
+select.html
+rsponse.html
+Screenshot*.png
+ui/

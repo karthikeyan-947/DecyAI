@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
+    <title>DECY - AI Decision Assistant</title>
+    <meta name="description" content="Find the perfect AI tool for any task." />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Great+Vibes&display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-25..0&display=swap"
+        rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "ios-bg": "#0A0A0A",
+                        "sidebar-bg": "#0D0D0D",
+                        "ios-pill": "rgba(255, 255, 255, 0.08)",
+                        "ios-border": "rgba(255, 255, 255, 0.15)",
+                        "brand-violet": "#8B5CF6",
+                        "brand-pink": "#EC4899",
+                        primary: "#8655f6"
+                    },
+                    fontFamily: {
+                        sans: ["Inter", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "Helvetica Neue", "Arial", "sans-serif"]
+                    },
+                    letterSpacing: {
+                        tightest: "-0.022em",
+                        tighter: "-0.015em"
+                    }
+                }
+            }
+        };
+    </script>
+    <style type="text/tailwindcss">
+        @layer base {
+            body {
+                @apply bg-ios-bg text-white font-sans antialiased selection:bg-purple-500/30;
+                -webkit-tap-highlight-color: transparent;
+            }
+        }
+    </style>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            height: 100%;
+            min-height: 100dvh;
+        }
+
+        /* Noise texture overlay - Apple style */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.015;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        /* Fade-in animation for content */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .animate-fadeIn {
+            animation: fadeIn 0.6s ease-out both;
+        }
+
+        .animate-fadeInUp {
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        /* Stagger animations - use animation-delay without opacity:0 initial */
+        .stagger-1 {
+            animation-delay: 0.1s;
+        }
+
+        .stagger-2 {
+            animation-delay: 0.2s;
+        }
+
+        .stagger-3 {
+            animation-delay: 0.3s;
+        }
+
+        .stagger-4 {
+            animation-delay: 0.4s;
+        }
+
+        /* Ensure hover transforms work after animation */
+        .animate-fadeInUp:hover {
+            animation: none;
+            opacity: 1;
+        }
+
+        /* Sidebar - Enhanced Glass */
+        .sidebar {
+            background: linear-gradient(180deg, rgba(18, 18, 18, 0.95) 0%, rgba(10, 10, 10, 0.98) 100%);
+            border-right: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+        }
+
+        .sidebar-item {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 10px;
+        }
+
+        .sidebar-item:hover {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(236, 72, 153, 0.05) 100%);
+            transform: translateX(4px);
+        }
+
+        .sidebar-item.active {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(236, 72, 153, 0.08) 100%);
+            border-left: 2px solid #8B5CF6;
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.15);
+        }
+
+        /* Header blur - Enhanced */
+        .ios-header-blur {
+            backdrop-filter: blur(40px) saturate(200%);
+            -webkit-backdrop-filter: blur(40px) saturate(200%);
+            background-color: rgba(10, 10, 10, 0.6);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        /* Ambient orbs - More vibrant */
+        .orb {
+            filter: blur(100px);
+            opacity: 0.4;
+            position: fixed;
+            border-radius: 9999px;
+            z-index: 0;
+            pointer-events: none;
+            animation: orb-float 20s ease-in-out infinite;
+        }
+
+        .orb:nth-child(2) {
+            animation-delay: -7s;
+        }
+
+        .orb:nth-child(3) {
+            animation-delay: -14s;
+        }
+
+        @keyframes orb-float {
+
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            33% {
+                transform: translate(30px, -30px) scale(1.05);
+            }
+
+            66% {
+                transform: translate(-20px, 20px) scale(0.95);
+            }
+        }
+
+        /* Input capsule - Premium glass */
+        .input-capsule {
+            backdrop-filter: blur(40px) saturate(200%);
+            -webkit-backdrop-filter: blur(40px) saturate(200%);
+            background: linear-gradient(135deg, rgba(50, 50, 50, 0.6) 0%, rgba(30, 30, 30, 0.8) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.4),
+                0 0 0 1px rgba(255, 255, 255, 0.05) inset,
+                0 0 20px -5px rgba(139, 92, 246, 0.15),
+                0 0 20px -5px rgba(236, 72, 153, 0.15);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .input-capsule:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow:
+                0 12px 40px rgba(0, 0, 0, 0.5),
+                0 0 0 1px rgba(255, 255, 255, 0.08) inset,
+                0 0 25px -5px rgba(139, 92, 246, 0.25),
+                0 0 25px -5px rgba(236, 72, 153, 0.2);
+        }
+
+        .input-capsule:focus-within {
+            border-color: rgba(139, 92, 246, 0.5);
+            box-shadow:
+                0 0 30px rgba(139, 92, 246, 0.3),
+                0 0 50px -10px rgba(236, 72, 153, 0.25),
+                0 12px 40px rgba(0, 0, 0, 0.5),
+                0 0 0 1px rgba(139, 92, 246, 0.2) inset;
+            background: linear-gradient(135deg, rgba(60, 50, 70, 0.7) 0%, rgba(35, 30, 45, 0.85) 100%);
+            transform: scale(1.01);
+        }
+
+        /* Pill buttons - Enhanced glass with glow */
+        .pill-button {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.04) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .pill-button:hover {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(236, 72, 153, 0.1) 100%);
+            border-color: rgba(139, 92, 246, 0.3);
+            box-shadow:
+                0 8px 25px rgba(0, 0, 0, 0.3),
+                0 0 20px rgba(139, 92, 246, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .pill-button:active {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(236, 72, 153, 0.15) 100%);
+            transform: scale(0.97) translateY(0);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Recommendation cards - Premium glass with gradient border */
+        .recommendation-card {
+            backdrop-filter: blur(30px) saturate(180%);
+            -webkit-backdrop-filter: blur(30px) saturate(180%);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .recommendation-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0) 0%, rgba(236, 72, 153, 0) 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            pointer-events: none;
+        }
+
+        .recommendation-card:hover {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.04) 100%);
+            border-color: rgba(139, 92, 246, 0.4);
+            transform: translateY(-4px) scale(1.01);
+            box-shadow:
+                0 12px 40px rgba(0, 0, 0, 0.35),
+                0 0 30px rgba(139, 92, 246, 0.15);
+        }
+
+        .recommendation-card:hover::before {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(236, 72, 153, 0.03) 100%);
+            opacity: 1;
+        }
+
+        .recommendation-card:active {
+            transform: scale(0.98);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Glass messages - Enhanced */
+        .glass-message-ai {
+            backdrop-filter: blur(30px) saturate(180%);
+            -webkit-backdrop-filter: blur(30px) saturate(180%);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .glass-message-ai:hover {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.06) 100%);
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .glass-message-user {
+            backdrop-filter: blur(30px) saturate(180%);
+            -webkit-backdrop-filter: blur(30px) saturate(180%);
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(236, 72, 153, 0.1) 100%);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .glass-message-user:hover {
+            box-shadow: 0 6px 25px rgba(139, 92, 246, 0.15);
+        }
+
+        /* Tag pills - Enhanced */
+        .tag-pill {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(10px);
+            transition: all 0.2s ease;
+        }
+
+        .tag-pill:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .tag-green {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0.08) 100%);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.1);
+        }
+
+        /* Typing dots - Enhanced */
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: linear-gradient(135deg, #8B5CF6, #EC4899);
+            border-radius: 50%;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+
+            0%,
+            60%,
+            100% {
+                opacity: 0.3;
+                transform: scale(0.8);
+            }
+
+            30% {
+                opacity: 1;
+                transform: scale(1.1);
+            }
+        }
+
+        /* Hide scrollbar */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* New chat button - Enhanced */
+        .new-chat-btn {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.04) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .new-chat-btn:hover {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(236, 72, 153, 0.1) 100%);
+            border-color: rgba(139, 92, 246, 0.3);
+            box-shadow: 0 0 15px rgba(139, 92, 246, 0.15);
+            transform: translateY(-1px);
+        }
+
+        /* Mobile sidebar toggle */
+        .sidebar-overlay {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        /* Icon buttons - Enhanced hover */
+        .icon-btn {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .icon-btn:hover {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(236, 72, 153, 0.15) 100%);
+            box-shadow: 0 0 15px rgba(139, 92, 246, 0.2);
+            transform: scale(1.05);
+        }
+
+        /* Send button - Gradient with glow */
+        .send-btn {
+            background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%);
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .send-btn:hover {
+            box-shadow: 0 6px 25px rgba(139, 92, 246, 0.5), 0 0 30px rgba(236, 72, 153, 0.3);
+            transform: scale(1.08);
+        }
+
+        .send-btn:active {
+            transform: scale(0.95);
+            box-shadow: 0 2px 10px rgba(139, 92, 246, 0.4);
+        }
+
+        /* Comparison Modal */
+        .comparison-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 1;
+            transition: opacity 0.3s ease;
+        }
+
+        .comparison-modal.hidden {
+            display: none;
+        }
+
+        .comparison-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .comparison-container {
+            position: relative;
+            width: 95%;
+            max-width: 1000px;
+            max-height: 85vh;
+            overflow-y: auto;
+            background: linear-gradient(135deg, rgba(30, 30, 35, 0.95) 0%, rgba(15, 15, 20, 0.98) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5), 0 0 40px rgba(139, 92, 246, 0.1);
+            animation: modalSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes modalSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .comparison-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .comparison-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        .comparison-title {
+            font-size: 24px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, #fff 0%, rgba(255, 255, 255, 0.7) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        .comparison-column {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .comparison-column:hover {
+            border-color: rgba(139, 92, 246, 0.3);
+            box-shadow: 0 8px 30px rgba(139, 92, 246, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .comparison-column.top-pick {
+            border-color: rgba(139, 92, 246, 0.4);
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.15);
+        }
+
+        .comparison-header {
+            text-align: center;
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .comparison-badge {
+            display: inline-block;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 20px;
+            margin-bottom: 8px;
+        }
+
+        .comparison-badge.top {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.3) 0%, rgba(236, 72, 153, 0.2) 100%);
+            color: #c4b5fd;
+        }
+
+        .comparison-badge.alt {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .comparison-tool-name {
+            font-size: 20px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .comparison-row {
+            display: flex;
+            flex-direction: column;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .comparison-row:last-of-type {
+            border-bottom: none;
+        }
+
+        .comparison-label {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: rgba(255, 255, 255, 0.4);
+            margin-bottom: 4px;
+        }
+
+        .comparison-value {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.4;
+        }
+
+        .comparison-value.highlight {
+            color: #34d399;
+        }
+
+        .comparison-value.muted {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .star-rating {
+            color: #fbbf24;
+            letter-spacing: 2px;
+        }
+
+        .try-btn {
+            display: block;
+            width: 100%;
+            margin-top: 16px;
+            padding: 12px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%);
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            text-align: center;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+        }
+
+        .try-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
+        }
+
+        .compare-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 16px;
+            padding: 12px 24px;
+            border-radius: 30px;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(236, 72, 153, 0.15) 100%);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .compare-btn:hover {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.3) 0%, rgba(236, 72, 153, 0.25) 100%);
+            border-color: rgba(139, 92, 246, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.2);
+        }
+    </style>
+</head>
+
+<body class="min-h-screen relative flex overflow-hidden">
+    <!-- Ambient Orbs -->
+    <div class="orb w-[600px] h-[600px] bg-purple-600/30 -top-40 left-1/4"></div>
+    <div class="orb w-[500px] h-[500px] bg-pink-500/25 bottom-0 right-0"></div>
+    <div class="orb w-[400px] h-[400px] bg-indigo-700/15 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
+
+    <!-- Sidebar Overlay (Mobile) -->
+    <div id="sidebar-overlay" class="sidebar-overlay fixed inset-0 z-40 hidden lg:hidden" onclick="toggleSidebar()">
+    </div>
+
+    <!-- Sidebar -->
+    <aside id="sidebar"
+        class="sidebar fixed lg:relative z-50 w-[260px] h-full flex flex-col transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
+        <!-- Sidebar Header -->
+        <div class="p-4 border-b border-white/5">
+            <div class="flex items-center mb-4">
+                <span style="font-family: 'Great Vibes', cursive;" class="text-[42px] text-white">Decy</span>
+            </div>
+            <button onclick="newChat()"
+                class="new-chat-btn w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-white/80 text-[14px] font-medium">
+                <span class="material-symbols-outlined text-[18px]">add</span>
+                New chat
+            </button>
+        </div>
+
+        <!-- Chat History -->
+        <div class="flex-1 overflow-y-auto no-scrollbar py-3">
+            <div class="px-4 mb-2">
+                <span class="text-[11px] font-semibold text-white/40 uppercase tracking-wider">Recent</span>
+            </div>
+            <div id="chat-history" class="space-y-0.5 px-2">
+                <!-- Chat history items will be added here -->
+            </div>
+        </div>
+
+        <!-- Sidebar Footer -->
+        <div class="p-4 border-t border-white/5">
+            <p class="text-[11px] text-white/30">Find the right AI tool</p>
+        </div>
+    </aside>
+
+    <!-- Main Content Wrapper -->
+    <div class="flex-1 flex flex-col min-h-screen relative">
+        <!-- Header -->
+        <header class="fixed top-0 right-0 left-0 lg:left-[260px] z-30 ios-header-blur border-b border-white/5">
+            <div class="flex items-center justify-between px-4 md:px-6 h-14 max-w-4xl mx-auto">
+                <!-- Mobile Menu Button -->
+                <button onclick="toggleSidebar()"
+                    class="lg:hidden w-8 h-8 flex items-center justify-center rounded-full bg-white/10 active:opacity-60 transition-opacity">
+                    <span class="material-symbols-outlined text-[20px]">menu</span>
+                </button>
+
+                <h2 class="text-[17px] font-semibold tracking-tight text-white/90 lg:hidden">DECY</h2>
+
+                <div class="hidden lg:block"></div>
+
+                <button onclick="newChat()"
+                    class="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 active:opacity-60 transition-opacity">
+                    <span class="material-symbols-outlined text-[20px] font-light">edit_square</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main id="chat-area" class="relative z-10 flex-1 flex flex-col pt-14 pb-40 overflow-y-auto no-scrollbar">
+
+            <!-- Welcome Screen -->
+            <div id="welcome-state" class="flex-1 flex flex-col items-center justify-center px-6 md:px-8">
+                <div class="w-full max-w-2xl text-center mb-6 animate-fadeInUp">
+                    <h1
+                        class="text-white text-[28px] md:text-[36px] lg:text-[40px] font-semibold leading-[1.15] tracking-tight mb-3">
+                        What do you want to create?
+                    </h1>
+                    <p class="text-white/50 text-[15px] md:text-[16px]">Tell me your idea and I'll find the perfect AI
+                        tool</p>
+                </div>
+
+                <!-- Suggestion Pills - Horizontal for desktop -->
+                <div class="flex flex-wrap gap-2.5 justify-center max-w-2xl mb-8">
+                    <button onclick="setQuery('I want to create an app')"
+                        class="pill-button flex h-[40px] items-center gap-2 rounded-full px-4 transition-all">
+                        <span class="text-[14px] font-medium tracking-tight">Create an app</span>
+                    </button>
+                    <button onclick="setQuery('I need to generate images')"
+                        class="pill-button flex h-[40px] items-center gap-2 rounded-full px-4 transition-all">
+                        <span class="text-[14px] font-medium tracking-tight">Generate images</span>
+                    </button>
+                    <button onclick="setQuery('I want to edit videos')"
+                        class="pill-button flex h-[40px] items-center gap-2 rounded-full px-4 transition-all">
+                        <span class="text-[14px] font-medium tracking-tight">Edit videos</span>
+                    </button>
+                    <button onclick="setQuery('Help me write code')"
+                        class="pill-button flex h-[40px] items-center gap-2 rounded-full px-4 transition-all">
+                        <span class="text-[14px] font-medium tracking-tight">Write code</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Chat Messages Container -->
+            <div id="messages" class="hidden w-full max-w-3xl mx-auto px-4 md:px-6 py-6">
+                <!-- Messages will be added here dynamically -->
+            </div>
+        </main>
+
+        <!-- Input Area -->
+        <div
+            class="fixed bottom-0 right-0 left-0 lg:left-[260px] z-30 px-4 md:px-6 pb-6 pt-4 bg-gradient-to-t from-ios-bg via-ios-bg/90 to-transparent">
+            <div class="max-w-3xl mx-auto flex flex-col items-center">
+                <!-- Budget Selection (Hidden by default) -->
+                <div id="budget-selection" class="hidden w-full mb-4">
+                    <p class="text-sm text-white/50 text-center mb-3">Choose your preference:</p>
+                    <div class="flex gap-3 justify-center">
+                        <button onclick="selectBudget('free')"
+                            class="pill-button px-5 py-2.5 rounded-full flex items-center gap-2 text-emerald-400 font-medium text-sm">
+                            <span>✨</span> Free tools
+                        </button>
+                        <button onclick="selectBudget('premium')"
+                            class="pill-button px-5 py-2.5 rounded-full flex items-center gap-2 text-purple-400 font-medium text-sm">
+                            <span>⭐</span> Premium
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Input Capsule -->
+                <div class="input-capsule w-full rounded-full flex items-center p-1.5 pl-3">
+                    <button
+                        class="size-9 flex items-center justify-center rounded-full text-white/90 active:scale-95 transition-transform">
+                        <span class="material-symbols-outlined text-[24px] font-light">add</span>
+                    </button>
+                    <input id="user-input" autofocus type="text"
+                        class="bg-transparent flex-1 border-none focus:ring-0 text-white placeholder:text-white/40 py-2.5 px-2 text-[16px] font-normal leading-normal caret-purple-400"
+                        placeholder="Describe what you want to do..." onkeydown="handleKeyDown(event)" />
+                    <button onclick="sendMessage()" id="send-btn"
+                        class="size-9 flex items-center justify-center rounded-full bg-brand-violet text-white active:scale-95 transition-transform">
+                        <span class="material-symbols-outlined text-[20px]">arrow_upward</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Comparison Modal -->
+    <div id="comparison-modal" class="comparison-modal hidden">
+        <div class="comparison-backdrop" onclick="closeComparison()"></div>
+        <div class="comparison-container" onclick="event.stopPropagation()">
+            <button class="comparison-close" onclick="closeComparison()">×</button>
+            <h2 class="comparison-title">Compare Tools</h2>
+            <div id="comparison-grid" class="comparison-grid">
+                <!-- Dynamic columns generated here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentQuery = '';
+        let isLoading = false;
+        let chatHistory = [];
+        let allChats = JSON.parse(localStorage.getItem('decy_chats') || '[]');
+        let currentChatId = null;
+        let currentTools = [];
+
+        // Initialize
+        renderChatHistory();
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            sidebar.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('hidden');
+        }
+
+        function setQuery(query) {
+            document.getElementById('user-input').value = query;
+            document.getElementById('user-input').focus();
+        }
+
+        function handleKeyDown(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        }
+
+        function newChat() {
+            document.getElementById('welcome-state').classList.remove('hidden');
+            document.getElementById('messages').classList.add('hidden');
+            document.getElementById('messages').innerHTML = '';
+            document.getElementById('budget-selection').classList.add('hidden');
+            currentQuery = '';
+            chatHistory = [];
+            currentChatId = null;
+
+            // Close sidebar on mobile
+            if (window.innerWidth < 1024) {
+                toggleSidebar();
+            }
+
+            // Remove active state from all items
+            document.querySelectorAll('.sidebar-item').forEach(el => el.classList.remove('active'));
+        }
+
+        function renderChatHistory() {
+            const container = document.getElementById('chat-history');
+            container.innerHTML = allChats.map(chat => `
+                <div class="sidebar-item px-3 py-2 rounded-lg cursor-pointer ${chat.id === currentChatId ? 'active' : ''}" onclick="loadChat('${chat.id}')">
+                    <p class="text-[13px] text-white/70 truncate">${escapeHtml(chat.title)}</p>
+                </div>
+            `).join('');
+        }
+
+        function saveChat(title) {
+            if (!currentChatId) {
+                currentChatId = 'chat_' + Date.now();
+                allChats.unshift({ id: currentChatId, title: title.slice(0, 50), messages: chatHistory });
+            } else {
+                const chat = allChats.find(c => c.id === currentChatId);
+                if (chat) chat.messages = chatHistory;
+            }
+            localStorage.setItem('decy_chats', JSON.stringify(allChats.slice(0, 20)));
+            renderChatHistory();
+        }
+
+        function loadChat(chatId) {
+            const chat = allChats.find(c => c.id === chatId);
+            if (!chat) return;
+
+            currentChatId = chatId;
+            chatHistory = [...chat.messages];
+
+            // Show messages
+            document.getElementById('welcome-state').classList.add('hidden');
+            document.getElementById('messages').classList.remove('hidden');
+            document.getElementById('messages').innerHTML = '';
+
+            chatHistory.forEach(msg => {
+                addMessage(msg.content, msg.role === 'user' ? 'user' : 'assistant', false);
+            });
+
+            renderChatHistory();
+
+            // Close sidebar on mobile
+            if (window.innerWidth < 1024) {
+                toggleSidebar();
+            }
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('user-input');
+            const query = input.value.trim();
+            if (!query || isLoading) return;
+
+            currentQuery = query;
+            isLoading = true;
+            document.getElementById('send-btn').disabled = true;
+
+            // Switch to chat view
+            document.getElementById('welcome-state').classList.add('hidden');
+            document.getElementById('messages').classList.remove('hidden');
+
+            // Add user message
+            addMessage(query, 'user');
+            chatHistory.push({ role: 'user', content: query });
+            input.value = '';
+
+            // Save chat
+            saveChat(query);
+
+            // Show typing
+            const loadingId = addTypingIndicator();
+
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: query, history: chatHistory.slice(0, -1) })
+                });
+                const data = await response.json();
+                removeMessage(loadingId);
+
+                if (data.type === 'tool_request') {
+                    document.getElementById('budget-selection').classList.remove('hidden');
+                }
+
+                addMessage(data.response, 'assistant');
+                chatHistory.push({ role: 'assistant', content: data.response });
+                saveChat(currentQuery);
+            } catch (error) {
+                removeMessage(loadingId);
+                addMessage("Something went wrong. Please try again.", 'assistant');
+            }
+
+            isLoading = false;
+            document.getElementById('send-btn').disabled = false;
+        }
+
+        async function selectBudget(budget) {
+            if (isLoading) return;
+            isLoading = true;
+
+            document.getElementById('budget-selection').classList.add('hidden');
+            addMessage(budget === 'free' ? '✨ Free tools' : '⭐ Premium', 'user');
+
+            const loadingId = addTypingIndicator();
+
+            try {
+                const response = await fetch('/api/recommend', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ query: currentQuery, budget })
+                });
+                const data = await response.json();
+                removeMessage(loadingId);
+
+                if (data.success && data.tools?.length > 0) {
+                    currentTools = data.tools;
+                    addMessage(data.reasoning || "Here are the best tools:", 'assistant');
+                    data.tools.forEach((tool, i) => addToolCard(tool, i));
+                    if (data.tools.length > 1) {
+                        addCompareButton();
+                    }
+                } else {
+                    addMessage("I couldn't find specific tools. Can you describe what you want in more detail?", 'assistant');
+                }
+            } catch (error) {
+                removeMessage(loadingId);
+                addMessage("Something went wrong. Please try again.", 'assistant');
+            }
+
+            isLoading = false;
+        }
+
+        function addMessage(text, type, scroll = true) {
+            const container = document.getElementById('messages');
+            const id = 'msg-' + Date.now() + Math.random();
+
+            let html;
+            if (type === 'user') {
+                html = `
+                    <div id="${id}" class="flex justify-end mb-4">
+                        <div class="glass-message-user max-w-[80%] rounded-[20px] px-4 py-3">
+                            <p class="text-[15px] leading-[1.5] text-white tracking-tight">${escapeHtml(text)}</p>
+                        </div>
+                    </div>
+                `;
+            } else {
+                html = `
+                    <div id="${id}" class="flex flex-col items-start w-full mb-4">
+                        <div class="glass-message-ai rounded-[20px] px-4 py-3 max-w-[80%]">
+                            <p class="text-[15px] leading-[1.5] text-white/95 tracking-tight">${escapeHtml(text)}</p>
+                        </div>
+                    </div>
+                `;
+            }
+
+            container.insertAdjacentHTML('beforeend', html);
+            if (scroll) scrollToBottom();
+            return id;
+        }
+
+        function addTypingIndicator() {
+            const container = document.getElementById('messages');
+            const id = 'typing-' + Date.now();
+
+            const html = `
+                <div id="${id}" class="flex flex-col items-start w-full mb-4">
+                    <div class="glass-message-ai rounded-[20px] px-4 py-4">
+                        <div class="flex gap-1.5">
+                            <span class="typing-dot"></span>
+                            <span class="typing-dot"></span>
+                            <span class="typing-dot"></span>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            container.insertAdjacentHTML('beforeend', html);
+            scrollToBottom();
+            return id;
+        }
+
+        function addToolCard(tool, index) {
+            const container = document.getElementById('messages');
+            const html = `
+                <div class="mb-4">
+                    <div class="recommendation-card rounded-2xl p-4 cursor-pointer" onclick="window.open('${tool.url}', '_blank')">
+                        <div class="flex justify-between items-start mb-1">
+                            <span class="text-[10px] font-bold tracking-[0.05em] ${index === 0 ? 'text-brand-violet' : 'text-white/50'} uppercase">${index === 0 ? 'TOP PICK' : 'ALTERNATIVE'}</span>
+                            <span class="material-symbols-outlined text-[18px] text-white/40 font-light">north_east</span>
+                        </div>
+                        <h3 class="text-[18px] font-bold tracking-tight text-white mb-1">${escapeHtml(tool.name)}</h3>
+                        <p class="text-[14px] text-white/60 leading-tight mb-3">${escapeHtml(tool.bestFor)}</p>
+                        <div class="flex gap-2 flex-wrap">
+                            <span class="tag-pill px-2.5 py-0.5 rounded-full text-[11px] font-medium text-white/50">${escapeHtml(tool.limits)}</span>
+                            <span class="tag-green px-2.5 py-0.5 rounded-full text-[11px] font-medium">${tool.pricing.free ? 'Free tier' : tool.pricing.premium}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', html);
+            scrollToBottom();
+        }
+
+        function removeMessage(id) {
+            document.getElementById(id)?.remove();
+        }
+
+        function scrollToBottom() {
+            const area = document.getElementById('chat-area');
+            area.scrollTop = area.scrollHeight;
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Comparison Modal Functions
+        function addCompareButton() {
+            const container = document.getElementById('messages');
+            const html = `
+                <div class="flex justify-center mb-4">
+                    <button onclick="openComparison()" class="compare-btn">
+                        <span class="material-symbols-outlined text-[18px]">compare</span>
+                        Compare Tools
+                    </button>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', html);
+            scrollToBottom();
+        }
+
+        function openComparison() {
+            if (currentTools.length === 0) return;
+
+            const grid = document.getElementById('comparison-grid');
+            grid.innerHTML = currentTools.map((tool, i) => buildToolColumn(tool, i)).join('');
+
+            document.getElementById('comparison-modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeComparison() {
+            document.getElementById('comparison-modal').classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        function buildToolColumn(tool, index) {
+            const isTopPick = index === 0;
+            const hasFree = tool.pricing?.free;
+            const premiumPrice = tool.pricing?.premium || 'N/A';
+            const ease = tool.ease || 4;
+
+            return `
+                <div class="comparison-column ${isTopPick ? 'top-pick' : ''}">
+                    <div class="comparison-header">
+                        <span class="comparison-badge ${isTopPick ? 'top' : 'alt'}">
+                            ${isTopPick ? 'Top Pick' : 'Alternative'}
+                        </span>
+                        <h3 class="comparison-tool-name">${escapeHtml(tool.name)}</h3>
+                    </div>
+                    
+                    <div class="comparison-row">
+                        <span class="comparison-label">Best For</span>
+                        <span class="comparison-value">${escapeHtml(tool.bestFor)}</span>
+                    </div>
+                    
+                    <div class="comparison-row">
+                        <span class="comparison-label">Why It Suits You</span>
+                        <span class="comparison-value">${escapeHtml(tool.whySuitsYou || tool.bestFor)}</span>
+                    </div>
+                    
+                    <div class="comparison-row">
+                        <span class="comparison-label">Usage Limits</span>
+                        <span class="comparison-value">${escapeHtml(tool.limits || 'No specific limits')}</span>
+                    </div>
+                    
+                    <div class="comparison-row">
+                        <span class="comparison-label">Free Tier</span>
+                        <span class="comparison-value ${hasFree ? 'highlight' : 'muted'}">
+                            ${hasFree ? '✓ Available' : '✗ Not available'}
+                        </span>
+                    </div>
+                    
+                    <div class="comparison-row">
+                        <span class="comparison-label">Premium Price</span>
+                        <span class="comparison-value">${premiumPrice}</span>
+                    </div>
+                    
+                    <div class="comparison-row">
+                        <span class="comparison-label">Ease of Use</span>
+                        <span class="comparison-value star-rating">${renderStars(ease)}</span>
+                    </div>
+                    
+                    ${tool.deploy?.available ? `
+                    <div class="comparison-row">
+                        <span class="comparison-label">Deploy</span>
+                        <span class="comparison-value highlight">${escapeHtml(tool.deploy.note || 'Available')}</span>
+                    </div>
+                    ` : ''}
+                    
+                    <a href="${tool.url}" target="_blank" class="try-btn">Try ${escapeHtml(tool.name)}</a>
+                </div>
+            `;
+        }
+
+        function renderStars(rating) {
+            const full = Math.floor(rating);
+            const empty = 5 - full;
+            return '★'.repeat(full) + '☆'.repeat(empty);
+        }
+    </script>
+</body>
+
+</html>
+</CodeContent>
+<parameter name="Complexity">7

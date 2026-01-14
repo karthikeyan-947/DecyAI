@@ -1,0 +1,1006 @@
+{
+  "categories": {
+    "app_building": {
+      "name": "App Building",
+      "icon": "smartphone",
+      "keywords": [
+        "app",
+        "application",
+        "mobile app",
+        "web app",
+        "create app",
+        "build app",
+        "develop app",
+        "software"
+      ],
+      "tools": [
+        {
+          "id": "lovable",
+          "name": "Lovable",
+          "bestFor": "Creating full-stack apps with AI - no coding needed",
+          "deploy": {
+            "available": true,
+            "type": "Free",
+            "note": "One-click deploy to Lovable hosting"
+          },
+          "limits": "Credits-based usage, free tier generous",
+          "pricing": {
+            "free": true,
+            "premium": "$20/month"
+          },
+          "whySuitsYou": "Build and deploy apps quickly with natural language, perfect for beginners",
+          "ease": 5,
+          "url": "https://lovable.dev"
+        },
+        {
+          "id": "bolt",
+          "name": "Bolt.new",
+          "bestFor": "Rapid web app prototyping in browser",
+          "deploy": {
+            "available": true,
+            "type": "Free",
+            "note": "Deploy to Netlify instantly"
+          },
+          "limits": "Token limits per session, resets daily",
+          "pricing": {
+            "free": true,
+            "premium": "$10/month"
+          },
+          "whySuitsYou": "Fastest way to go from idea to deployed app, all in browser",
+          "ease": 5,
+          "url": "https://bolt.new"
+        },
+        {
+          "id": "replit",
+          "name": "Replit",
+          "bestFor": "Collaborative coding and deployment",
+          "deploy": {
+            "available": true,
+            "type": "Free",
+            "note": "Free hosting with .replit.app domain"
+          },
+          "limits": "Limited compute on free tier",
+          "pricing": {
+            "free": true,
+            "premium": "$7/month"
+          },
+          "whySuitsYou": "Great for students - code, run, and share apps instantly",
+          "ease": 4,
+          "url": "https://replit.com"
+        },
+        {
+          "id": "v0",
+          "name": "v0 by Vercel",
+          "bestFor": "Generating React/Next.js UI components",
+          "deploy": {
+            "available": true,
+            "type": "Free",
+            "note": "Export to Vercel"
+          },
+          "limits": "10 generations/day free",
+          "pricing": {
+            "free": true,
+            "premium": "$20/month"
+          },
+          "whySuitsYou": "Perfect for creating beautiful UI components with just a description",
+          "ease": 4,
+          "url": "https://v0.dev"
+        }
+      ]
+    },
+    "image_generation": {
+      "name": "Image Generation",
+      "icon": "image",
+      "keywords": [
+        "image",
+        "picture",
+        "generate image",
+        "create image",
+        "AI art",
+        "illustration",
+        "graphics",
+        "visual",
+        "artwork",
+        "poster",
+        "banner"
+      ],
+      "tools": [
+        {
+          "id": "ideogram",
+          "name": "Ideogram",
+          "bestFor": "Creating images with accurate text rendering",
+          "deploy": {
+            "available": false,
+            "type": "N/A",
+            "note": "Download images directly"
+          },
+          "limits": "25 free images/day",
+          "pricing": {
+            "free": true,
+            "premium": "$8/month"
+          },
+          "whySuitsYou": "Best free option for images with text - logos, posters, banners",
+          "ease": 5,
+          "url": "https://ideogram.ai"
+        },
+        {
+          "id": "leonardo",
+          "name": "Leonardo.ai",
+          "bestFor": "High-quality image generation with fine control",
+          "deploy": {
+            "available": false,
+            "type": "N/A",
+            "note": "Download in multiple formats"
+          },
+          "limits": "150 tokens/day free",
+          "pricing": {
+            "free": true,
+            "premium": "$12/month"
+          },
+          "whySuitsYou": "Professional-quality images with style customization, generous free tier",
+          "ease": 4,
+          "url": "https://leonardo.ai"
+        },
+        {
+          "id": "bing_image_creator",
+          "name": "Bing Image Creator",
+          "bestFor": "Free DALL-E 3 powered image generation",
+          "deploy": {
+            "available": false,
+            "type": "N/A",
+            "note": "Download directly"
+          },
+          "limits": "15 boosts/day, then slower generation",
+          "pricing": {
+            "free": true,
+            "premium": null
+          },
+          "whySuitsYou": "Completely free, powered by DALL-E 3, just need Microsoft account",
+          "ease": 5,
+          "url": "https://www.bing.com/create"
+        },
+        {
+          "id": "midjourney",
+          "name": "Midjourney",
+          "bestFor": "Stunning artistic and realistic images",
+          "deploy": {
+            "available": false,
+            "type": "N/A",
+            "note": "Download from Discord"
+          },
+          "limits": "No free tier anymore",
+          "pricing": {
+            "free": false,
+            "premium": "$10/month"
+          },
+          "whySuitsYou": "Industry-leading quality for professional artwork and marketing",
+          "ease": 3,
+          "url": "https://midjourney.com"
+        }
+      ]
+    },
+    "image_editing": {
+      "name": "Image Editing",
+      "icon": "edit",
+      "keywords": [
+        "edit image",
+        "photo editing",
+        "remove background",
+        "enhance photo",
+        "upscale",
+        "retouch",
+        "modify image",
+        "change image"
+      ],
+      "tools": [
+        {
+          "id": "canva",
+          "name": "Canva",
+          "bestFor": "All-in-one design and photo editing",
+          "deploy": {
+            "available": true,
+            "type": "Free",
+            "note": "Share links or download"
+          },
+          "limits": "Most features free, some premium templates",
+          "pricing": {
+            "free": true,
+            "premium": "$13/month"
+          },
+          "whySuitsYou": "Easiest tool for beginners - drag-drop editing with AI features",
+          "ease": 5,
+          "url": "https://canva.com"
+        },
+        {
+          "id": "remove_bg",
+          "name": "Remove.bg",
+          "bestFor": "Instant background removal from photos",
+          "deploy": {
+            "available": false,
+            "type": "N/A",
+            "note": "Download instantly"
+          },
+          "limits": "1 free HD download, then credits",
+          "pricing": {
+            "free": true,
+            "premium": "$9/month"
+          },
+          "whySuitsYou": "One-click background removal, fastest in the market",
+          "ease": 5,
+          "url": "https://remove.bg"
+        },
+        {
+          "id": "photoroom",
+          "name": "PhotoRoom",
+          "bestFor": "Product photos and e-commerce images",
+          "deploy": {
+            "available": false,
+            "type": "N/A",
+            "note": "Export in multiple sizes"
+          },
+          "limits": "Watermark on free tier",
+          "pricing": {
+            "free": true,
+            "premium": "$10/month"
+          },
+          "whySuitsYou": "Perfect for sellers - create professional product photos instantly",
+          "ease": 5,
+          "url": "https://photoroom.com"
+        },
+        {
+          "id": "clipdrop",
+          "name": "ClipDrop",
+          "bestFor": "AI-powered photo cleanup and enhancement",
+          "deploy": {
+            "available": false,
+            "type": "N/A",
+            "note": "Download edited images"
+          },
+          "limits": "Limited free uses per day",
+          "pricing": {
+            "free": true,
+            "premium": "$9/month"
+          },
+          "whySuitsYou": "Remove objects, upscale images, and cleanup photos with AI",
+          "ease": 4,
+          "url": "https://clipdrop.co"
+        }
+      ]
+    },
+    "video_creation": {
+      "name": "Video Creation",
+      "icon": "videocam",
+      "keywords": [
+        "video",
+        "create video",
+        "edit video",
+        "animation",
+        "video editing",
+        "clips",
+        "short video",
+        "reels",
+        "youtube"
+      ],
+      "tools": [
+        {
+          "id": "capcut",
+          "name": "CapCut",
+          "bestFor": "Professional video editing with AI features",
+          "deploy": {
+            "available": true,
+            "type": "Free",
+            "note": "Export and share anywhere"
+          },
+          "limits": "Most features free, some premium effects",
+          "pricing": {
+            "free": true,
+            "premium": "$8/month"
+          },
+          "whySuitsYou": "TikTok-quality videos with auto-captions and effects - completely free",
+          "ease": 5,
+          "url": "https://capcut.com"
+        },
+        {
+          "id": "runway",
+          "name": "Runway ML",
+          "bestFor": "AI video generation and advanced editing",
+          "deploy": {
+            "available": false,
+            "type": "N/A",
+            "note": "Download generated videos"
+          },
+          "limits": "125 credits free, then paid",
+          "pricing": {
+            "free": true,
+            "premium": "$15/month"
+          },
+          "whySuitsYou": "Turn text or images into videos with cutting-edge AI",
+          "ease": 4,
+          "url": "https://runwayml.com"
+        },
+        {
+          "id": "invideo",
+          "name": "InVideo AI",
+          "bestFor": "Creating videos from text prompts",
+          "deploy": {
+            "available": true,
+            "type": "Free",
+            "note": "Export with watermark free"
+          },
+          "limits": "Watermark on free tier, 10 min limit",
+          "pricing": {
+            "free": true,
+            "premium": "$25/month"
+          },
+          "whySuitsYou": "Describe your video idea, AI creates it with stock footage and voiceover",
+          "ease": 5,
+          "url": "https://invideo.io"
+        },
+        {
+          "id": "descript",
+          "name": "Descript",
+          "bestFor": "Edit videos by editing text transcript",
+          "deploy": {
+            "available": true,
+            "type": "Free",
+            "note": "Export and publish"
+          },
+          "limits": "1 hour transcription free/month",
+          "pricing": {
+            "free": true,
+            "premium": "$12/month"
+          },
+          "whySuitsYou": "Revolutionary - edit video like a document, remove filler words automatically",
+          "ease": 4,
+          "url": "https://descript.com"
+        },
+        {
+          "id": "opusclip",
+          "name": "OpusClip",
+          "bestFor": "AI-powered video clipping for shorts and reels",
+          "deploy": {
+            "available": false,
+            "type": "N/A",
+            "note": "Download clips directly"
+          },
+          "limits": "60 mins upload/month free",
+          "pricing": {
+            "free": true,
+            "premium": "$19/month"
+          },
+          "whySuitsYou": "Turn long videos into viral shorts automatically - finds the best moments",
+          "ease": 5,
+          "url": "https://opus.pro"
+        }
+      ]
+    },
+    "coding_assistance": {
+      "name": "Coding & Development",
+      "icon": "code",
+      "keywords": [
+        "code",
+        "coding",
+        "programming",
+        "debug",
+        "write code",
+        "developer",
+        "software",
+        "script",
+        "automation",
+        "api"
+      ],
+      "tools": [
+        {
+          "id": "cursor",
+          "name": "Cursor",
+          "bestFor": "AI-powered code editor with chat",
+          "deploy": {
+            "available": false,
+            "type": "N/A",
+            "note": "Desktop IDE"
+          },
+          "limits": "Free tier with usage limits",
+          "pricing": {
+            "free": true,
+            "premium": "$20/month"
+          },
+          "whySuitsYou": "Like VS Code but with AI built-in - code faster with AI suggestions",
+          "ease": 4,
+          "url": "https://cursor.sh"
+        },
+        {
+          "id": "github_copilot",
+          "name": "GitHub Copilot",
+          "bestFor": "AI code completion in your editor",
+          "deploy": {
+            "available": false,
+            "type": "N/A",
+            "note": "IDE extension"
+          },
+          "limits": "Free for students, otherwise paid",
+          "pricing": {
+            "free": true,
+            "premium": "$10/month"
+          },
+          "whySuitsYou": "Best code autocomplete - suggests whole functions as you type",
+          "ease": 4,
+          "url": "https://github.com/features/copilot"
+        },
+        {
+          "id": "chatgpt",
+          "name": "ChatGPT",
+          "bestFor": "Explaining code and debugging help",
+          "deploy": {
+            "available": false,
+            "type": "N/A",
+            "note": "Web-based chat"
+          },
+          "limits": "GPT-4 limited on free tier",
+          "pricing": {
+            "free": true,
+            "premium": "$20/month"
+          },
+          "whySuitsYou": "Ask coding questions, get explanations and working code snippets",
+          "ease": 5,
+          "url": "https://chat.openai.com"
+        },
+        {
+          "id": "claude",
+          "name": "Claude",
+          "bestFor": "Long code analysis and documentation",
+          "deploy": {
+            "available": false,
+            "type": "N/A",
+            "note": "Web-based chat"
+          },
+          "limits": "Usage limits on free tier",
+          "pricing": {
+            "free": true,
+            "premium": "$20/month"
+          },
+          "whySuitsYou": "Handles large codebases well, great for refactoring and reviews",
+          "ease": 5,
+          "url": "https://claude.ai"
+        }
+      ]
+    },
+    "writing": {
+      "name": "Writing & Content",
+      "icon": "edit_note",
+      "keywords": [
+        "write",
+        "writing",
+        "content",
+        "blog",
+        "article",
+        "essay",
+        "copywriting",
+        "text",
+        "document",
+        "report"
+      ],
+      "tools": [
+        {
+          "id": "notion_ai",
+          "name": "Notion AI",
+          "bestFor": "Writing and organizing documents",
+          "deploy": {
+            "available": true,
+            "type": "Free",
+            "note": "Share Notion pages"
+          },
+          "limits": "20 free AI responses, then paid",
+          "pricing": {
+            "free": true,
+            "premium": "$10/month"
+          },
+          "whySuitsYou": "Write, summarize, and brainstorm in the same place you organize notes",
+          "ease": 5,
+          "url": "https://notion.so"
+        },
+        {
+          "id": "grammarly",
+          "name": "Grammarly",
+          "bestFor": "Grammar checking and writing improvement",
+          "deploy": {
+            "available": false,
+            "type": "N/A",
+            "note": "Browser extension"
+          },
+          "limits": "Basic checks free, AI features paid",
+          "pricing": {
+            "free": true,
+            "premium": "$12/month"
+          },
+          "whySuitsYou": "Works everywhere you write - fixes grammar and improves clarity",
+          "ease": 5,
+          "url": "https://grammarly.com"
+        },
+        {
+          "id": "copy_ai",
+          "name": "Copy.ai",
+          "bestFor": "Marketing copy and social media content",
+          "deploy": {
+            "available": false,
+            "type": "N/A",
+            "note": "Copy and use anywhere"
+          },
+          "limits": "2000 words/month free",
+          "pricing": {
+            "free": true,
+            "premium": "$49/month"
+          },
+          "whySuitsYou": "Generate blogs, ads, and social posts in seconds with templates",
+          "ease": 5,
+          "url": "https://copy.ai"
+        },
+        {
+          "id": "jasper",
+          "name": "Jasper",
+          "bestFor": "Enterprise content creation",
+          "deploy": {
+            "available": false,
+            "type": "N/A",
+            "note": "Export content"
+          },
+          "limits": "7-day free trial only",
+          "pricing": {
+            "free": false,
+            "premium": "$49/month"
+          },
+          "whySuitsYou": "Professional-grade marketing content with brand voice training",
+          "ease": 4,
+          "url": "https://jasper.ai"
+        }
+      ]
+    },
+    "design": {
+      "name": "Design & Graphics",
+      "icon": "brush",
+      "keywords": [
+        "design",
+        "graphic",
+        "logo",
+        "poster",
+        "flyer",
+        "presentation",
+        "ui",
+        "ux",
+        "mockup",
+        "template"
+      ],
+      "tools": [
+        {
+          "id": "canva_design",
+          "name": "Canva",
+          "bestFor": "All-purpose graphic design for beginners",
+          "deploy": {
+            "available": true,
+            "type": "Free",
+            "note": "Download or share link"
+          },
+          "limits": "Tons of free templates, some premium",
+          "pricing": {
+            "free": true,
+            "premium": "$13/month"
+          },
+          "whySuitsYou": "Create anything from logos to presentations - no design skills needed",
+          "ease": 5,
+          "url": "https://canva.com"
+        },
+        {
+          "id": "figma",
+          "name": "Figma",
+          "bestFor": "Professional UI/UX design",
+          "deploy": {
+            "available": true,
+            "type": "Free",
+            "note": "Share designs online"
+          },
+          "limits": "3 projects free",
+          "pricing": {
+            "free": true,
+            "premium": "$15/month"
+          },
+          "whySuitsYou": "Industry standard for app/web design, great for collaboration",
+          "ease": 3,
+          "url": "https://figma.com"
+        },
+        {
+          "id": "looka",
+          "name": "Looka",
+          "bestFor": "AI logo and brand kit generation",
+          "deploy": {
+            "available": false,
+            "type": "N/A",
+            "note": "Purchase to download"
+          },
+          "limits": "Free to design, pay to download",
+          "pricing": {
+            "free": true,
+            "premium": "$20 one-time"
+          },
+          "whySuitsYou": "Generate professional logos in minutes with complete brand kit",
+          "ease": 5,
+          "url": "https://looka.com"
+        },
+        {
+          "id": "kittl",
+          "name": "Kittl",
+          "bestFor": "Social media graphics and merch designs",
+          "deploy": {
+            "available": false,
+            "type": "N/A",
+            "note": "Download in multiple formats"
+          },
+          "limits": "5 downloads/month free",
+          "pricing": {
+            "free": true,
+            "premium": "$15/month"
+          },
+          "whySuitsYou": "Trendy templates for t-shirts, stickers, and social posts",
+          "ease": 5,
+          "url": "https://kittl.com"
+        }
+      ]
+    },
+    "presentation": {
+      "name": "Presentations",
+      "icon": "slideshow",
+      "keywords": [
+        "presentation",
+        "slides",
+        "ppt",
+        "powerpoint",
+        "pitch deck",
+        "slideshow"
+      ],
+      "tools": [
+        {
+          "id": "gamma",
+          "name": "Gamma",
+          "bestFor": "AI-generated presentations from text",
+          "deploy": {
+            "available": true,
+            "type": "Free",
+            "note": "Share or export to PPT"
+          },
+          "limits": "400 credits free, 40 per deck",
+          "pricing": {
+            "free": true,
+            "premium": "$10/month"
+          },
+          "whySuitsYou": "Describe your topic, get a beautiful presentation in seconds",
+          "ease": 5,
+          "url": "https://gamma.app"
+        },
+        {
+          "id": "tome",
+          "name": "Tome",
+          "bestFor": "Storytelling presentations with AI",
+          "deploy": {
+            "available": true,
+            "type": "Free",
+            "note": "Share online"
+          },
+          "limits": "500 credits to start",
+          "pricing": {
+            "free": true,
+            "premium": "$16/month"
+          },
+          "whySuitsYou": "Creates narrative-driven presentations that stand out",
+          "ease": 5,
+          "url": "https://tome.app"
+        },
+        {
+          "id": "beautiful_ai",
+          "name": "Beautiful.ai",
+          "bestFor": "Smart slide design automation",
+          "deploy": {
+            "available": true,
+            "type": "Free",
+            "note": "Export to PDF/PPT"
+          },
+          "limits": "Unlimited slides, Beautiful.ai branding free",
+          "pricing": {
+            "free": true,
+            "premium": "$12/month"
+          },
+          "whySuitsYou": "Slides auto-format beautifully as you add content",
+          "ease": 5,
+          "url": "https://beautiful.ai"
+        }
+      ]
+    },
+    "audio": {
+      "name": "Audio & Music",
+      "icon": "headphones",
+      "keywords": [
+        "audio",
+        "music",
+        "voice",
+        "podcast",
+        "sound",
+        "song",
+        "voiceover",
+        "text to speech",
+        "tts"
+      ],
+      "tools": [
+        {
+          "id": "elevenlabs",
+          "name": "ElevenLabs",
+          "bestFor": "Realistic AI voice generation",
+          "deploy": {
+            "available": false,
+            "type": "N/A",
+            "note": "Download audio files"
+          },
+          "limits": "10k characters/month free",
+          "pricing": {
+            "free": true,
+            "premium": "$5/month"
+          },
+          "whySuitsYou": "Most realistic AI voices for voiceovers and content",
+          "ease": 5,
+          "url": "https://elevenlabs.io"
+        },
+        {
+          "id": "suno",
+          "name": "Suno AI",
+          "bestFor": "Creating original songs with lyrics",
+          "deploy": {
+            "available": false,
+            "type": "N/A",
+            "note": "Download generated songs"
+          },
+          "limits": "50 credits/day free (5 songs)",
+          "pricing": {
+            "free": true,
+            "premium": "$10/month"
+          },
+          "whySuitsYou": "Generate full songs with vocals from just a text description",
+          "ease": 5,
+          "url": "https://suno.ai"
+        },
+        {
+          "id": "murf",
+          "name": "Murf AI",
+          "bestFor": "Professional voiceovers for videos",
+          "deploy": {
+            "available": false,
+            "type": "N/A",
+            "note": "Download voice files"
+          },
+          "limits": "10 mins free/month",
+          "pricing": {
+            "free": true,
+            "premium": "$29/month"
+          },
+          "whySuitsYou": "Studio-quality voiceovers in 120+ voices without recording",
+          "ease": 5,
+          "url": "https://murf.ai"
+        },
+        {
+          "id": "whisperflow",
+          "name": "Whisperflow",
+          "bestFor": "Voice-to-text transcription and note-taking",
+          "deploy": {
+            "available": false,
+            "type": "N/A",
+            "note": "Desktop app"
+          },
+          "limits": "Free tier available",
+          "pricing": {
+            "free": true,
+            "premium": "$8/month"
+          },
+          "whySuitsYou": "Just speak your thoughts and get accurate transcription instantly",
+          "ease": 5,
+          "url": "https://wisprflow.ai"
+        }
+      ]
+    },
+    "research": {
+      "name": "Research & Learning",
+      "icon": "search",
+      "keywords": [
+        "research",
+        "study",
+        "learn",
+        "summarize",
+        "pdf",
+        "paper",
+        "academic",
+        "homework",
+        "assignment"
+      ],
+      "tools": [
+        {
+          "id": "perplexity",
+          "name": "Perplexity AI",
+          "bestFor": "Research with cited sources",
+          "deploy": {
+            "available": false,
+            "type": "N/A",
+            "note": "Web-based search"
+          },
+          "limits": "Unlimited free, Pro searches limited",
+          "pricing": {
+            "free": true,
+            "premium": "$20/month"
+          },
+          "whySuitsYou": "Like Google but gives direct answers with sources cited",
+          "ease": 5,
+          "url": "https://perplexity.ai"
+        },
+        {
+          "id": "chatpdf",
+          "name": "ChatPDF",
+          "bestFor": "Chatting with PDF documents",
+          "deploy": {
+            "available": false,
+            "type": "N/A",
+            "note": "Web-based"
+          },
+          "limits": "2 PDFs/day, 120 pages max free",
+          "pricing": {
+            "free": true,
+            "premium": "$5/month"
+          },
+          "whySuitsYou": "Upload any PDF and ask questions - perfect for textbooks",
+          "ease": 5,
+          "url": "https://chatpdf.com"
+        },
+        {
+          "id": "scholarcy",
+          "name": "Scholarcy",
+          "bestFor": "Summarizing research papers",
+          "deploy": {
+            "available": false,
+            "type": "N/A",
+            "note": "Web-based"
+          },
+          "limits": "3 articles free",
+          "pricing": {
+            "free": true,
+            "premium": "$10/month"
+          },
+          "whySuitsYou": "Turn long research papers into quick summary flashcards",
+          "ease": 5,
+          "url": "https://scholarcy.com"
+        },
+        {
+          "id": "notebooklm",
+          "name": "NotebookLM",
+          "bestFor": "AI study companion for learning from documents",
+          "deploy": {
+            "available": false,
+            "type": "N/A",
+            "note": "Web-based by Google"
+          },
+          "limits": "Free with Google account",
+          "pricing": {
+            "free": true,
+            "premium": null
+          },
+          "whySuitsYou": "Upload notes, PDFs, videos - get AI summaries and even podcast-style explanations",
+          "ease": 5,
+          "url": "https://notebooklm.google.com"
+        },
+        {
+          "id": "grok",
+          "name": "Grok",
+          "bestFor": "Real-time news and context with AI",
+          "deploy": {
+            "available": false,
+            "type": "N/A",
+            "note": "Web and X integration"
+          },
+          "limits": "Free tier on X platform",
+          "pricing": {
+            "free": true,
+            "premium": "$16/month (X Premium)"
+          },
+          "whySuitsYou": "Get instant answers about current events with real-time X/Twitter data",
+          "ease": 5,
+          "url": "https://grok.com"
+        }
+      ]
+    },
+    "automation": {
+      "name": "Automation & Productivity",
+      "icon": "auto_fix_high",
+      "keywords": [
+        "automate",
+        "automation",
+        "workflow",
+        "productivity",
+        "schedule",
+        "integrate",
+        "zapier",
+        "connect apps"
+      ],
+      "tools": [
+        {
+          "id": "zapier",
+          "name": "Zapier",
+          "bestFor": "Connecting apps and automating workflows",
+          "deploy": {
+            "available": true,
+            "type": "Free",
+            "note": "Cloud-based automation"
+          },
+          "limits": "100 tasks/month free",
+          "pricing": {
+            "free": true,
+            "premium": "$20/month"
+          },
+          "whySuitsYou": "Connect any apps together without coding - like magic",
+          "ease": 4,
+          "url": "https://zapier.com"
+        },
+        {
+          "id": "make",
+          "name": "Make (Integromat)",
+          "bestFor": "Visual automation builder",
+          "deploy": {
+            "available": true,
+            "type": "Free",
+            "note": "Cloud-based"
+          },
+          "limits": "1000 operations/month free",
+          "pricing": {
+            "free": true,
+            "premium": "$9/month"
+          },
+          "whySuitsYou": "More powerful than Zapier with visual workflow builder",
+          "ease": 3,
+          "url": "https://make.com"
+        },
+        {
+          "id": "notion_automations",
+          "name": "Notion",
+          "bestFor": "All-in-one workspace with AI",
+          "deploy": {
+            "available": true,
+            "type": "Free",
+            "note": "Share and collaborate"
+          },
+          "limits": "Unlimited pages free",
+          "pricing": {
+            "free": true,
+            "premium": "$10/month"
+          },
+          "whySuitsYou": "Notes, tasks, wikis, databases - everything in one place",
+          "ease": 4,
+          "url": "https://notion.so"
+        },
+        {
+          "id": "granola",
+          "name": "Granola",
+          "bestFor": "AI meeting notes and transcription",
+          "deploy": {
+            "available": false,
+            "type": "N/A",
+            "note": "Desktop app"
+          },
+          "limits": "25 meetings/month free",
+          "pricing": {
+            "free": true,
+            "premium": "$10/month"
+          },
+          "whySuitsYou": "Never forget meeting details - AI captures notes so you can focus on the conversation",
+          "ease": 5,
+          "url": "https://granola.ai"
+        }
+      ]
+    }
+  },
+  "metadata": {
+    "version": "1.1.0",
+    "lastUpdated": "2026-01-13",
+    "totalTools": 50,
+    "categories": 11
+  }
+}
