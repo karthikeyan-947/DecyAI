@@ -94,6 +94,37 @@ app.post('/api/recommend', async (req, res) => {
 });
 
 /**
+ * POST /api/tools-by-ids
+ * Get specific tools by their IDs (used when AI recommends specific tools)
+ * Body: { toolIds: string[], budget: 'free' | 'premium' }
+ */
+app.post('/api/tools-by-ids', async (req, res) => {
+    try {
+        const { toolIds, budget = 'free' } = req.body;
+
+        if (!toolIds || !Array.isArray(toolIds) || toolIds.length === 0) {
+            return res.status(400).json({
+                success: false,
+                error: 'No tool IDs provided'
+            });
+        }
+
+        const tools = engine.getToolsByIds(toolIds, budget);
+
+        res.json({
+            success: true,
+            tools: tools
+        });
+    } catch (error) {
+        console.error('[DECY] Error:', error);
+        res.status(500).json({
+            success: false,
+            error: 'Something went wrong. Please try again.'
+        });
+    }
+});
+
+/**
  * GET /api/categories
  * Get all available categories
  */

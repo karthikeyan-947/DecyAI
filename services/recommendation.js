@@ -91,6 +91,28 @@ class RecommendationEngine {
         };
     }
 
+    /**
+     * Get specific tools by their IDs (when AI recommends specific tools)
+     * This is the TRUE ChatGPT-like approach - AI picks the tools, we just look them up
+     */
+    getToolsByIds(toolIds, budgetType = 'free') {
+        const tools = [];
+
+        for (const toolId of toolIds) {
+            const tool = this.findToolById(toolId);
+            if (tool) {
+                // Filter by budget if needed
+                if (budgetType === 'free' && !tool.pricing.free) {
+                    continue; // Skip non-free tools if user wants free
+                }
+                tools.push(tool);
+            }
+        }
+
+        console.log(`[DECY] Found ${tools.length} tools from AI's recommendations`);
+        return tools;
+    }
+
 
     /**
      * Handle chat messages - use AI to respond naturally to ANY input
@@ -134,34 +156,44 @@ class RecommendationEngine {
         const messages = [
             {
                 role: 'system',
-                content: `You are DECY - a specialized AI assistant that helps users find the perfect AI tools. You have access to 50+ tools across categories like app building, image generation, video creation, coding, writing, design, and audio.
+                content: `You are DECY - an AI assistant that helps users find the perfect AI tools. You TRULY UNDERSTAND what users need.
 
-YOUR RESPONSE FORMAT:
-You MUST respond with a JSON object. Always. No exceptions. The format is:
+YOUR TOOL KNOWLEDGE (use these exact IDs when recommending):
+- Website/App Building: lovable, bolt, replit, v0
+- Image Generation: ideogram, leonardo, bing_image_creator, midjourney
+- Image Editing: canva, remove_bg, photoroom, clipdrop
+- Video Creation: capcut, runway, invideo, descript, opusclip
+- Coding: cursor, github_copilot, chatgpt, claude
+- Writing: notion_ai, grammarly, copy_ai, jasper
+- Design/Graphics: canva_design, figma, looka, kittl
+- Presentations: gamma, tome, beautiful_ai
+- Audio/Music: elevenlabs, suno, murf
+
+YOUR RESPONSE FORMAT (JSON only):
 {
   "action": "chat" | "show_tools",
-  "message": "Your friendly response to the user",
+  "message": "Your friendly response",
   "budget": "free" | "premium" | null,
-  "query": "The task/project the user wants to accomplish" | null,
-  "category": "app_building" | "image_generation" | "image_editing" | "video_creation" | "coding_assistance" | "writing" | "design" | "presentation" | "audio" | "general" | null
+  "tools": ["tool_id_1", "tool_id_2", "tool_id_3"] | null
 }
 
-DECISION LOGIC:
-1. If user is just chatting, greeting, or asking questions about you → action: "chat"
-2. If user wants to CREATE/BUILD/MAKE/DESIGN/EDIT something AND has specified a budget (free/premium/paid) → action: "show_tools"
-3. If user wants to CREATE/BUILD/MAKE/DESIGN/EDIT something but hasn't specified budget → action: "chat", ask them "Would you prefer free tools or are you open to premium options?"
-4. If user says just "free" or "premium" after you asked → action: "show_tools" with the budget they chose
-5. Always detect the category from what they want to do
+HOW TO THINK (like ChatGPT does):
+1. UNDERSTAND the user's PRIMARY GOAL
+   - "build a website with cool graphics" → PRIMARY: website/app building → use: lovable, bolt, v0
+   - "create graphics for my website" → PRIMARY: graphics/images → use: canva, ideogram
+   - "edit my videos" → PRIMARY: video editing → use: capcut, descript
+2. Pick the 3 BEST tools for their PRIMARY need
+3. Consider budget if mentioned
 
-PERSONALITY:
-- Warm, friendly, use emojis occasionally
-- Keep messages concise (2-3 sentences max)
-- Always steer conversation towards finding the right tool
+DECISION RULES:
+- Just chatting → action: "chat", tools: null
+- Wants something, no budget mentioned → action: "chat", ask "Would you prefer free tools or premium options?"
+- Wants something + budget mentioned → action: "show_tools", return best 3 tool IDs
+- Says "free"/"premium" after you asked → action: "show_tools", pick best tools for that budget
 
-AVAILABLE CATEGORIES:
-${toolsContext}
+PERSONALITY: Warm, friendly, concise (2-3 sentences), use emojis occasionally.
 
-Remember: ALWAYS respond with valid JSON only. No text before or after.`
+CRITICAL: Return ONLY valid JSON. Put tool IDs in the "tools" array.`
             }
         ];
 
@@ -190,15 +222,14 @@ Remember: ALWAYS respond with valid JSON only. No text before or after.`
         try {
             const aiResponse = JSON.parse(responseText);
 
-            if (aiResponse.action === 'show_tools' && aiResponse.budget) {
-                console.log(`[DECY] AI decided to show tools | Budget: ${aiResponse.budget} | Category: ${aiResponse.category}`);
+            if (aiResponse.action === 'show_tools' && aiResponse.budget && aiResponse.tools) {
+                console.log(`[DECY] AI recommended tools: ${aiResponse.tools.join(', ')} | Budget: ${aiResponse.budget}`);
                 return {
                     success: true,
                     type: 'show_tools',
                     budget: aiResponse.budget,
-                    category: aiResponse.category || 'general',
-                    query: aiResponse.query || message,
-                    response: aiResponse.message || '🔍 Finding the best tools for you...'
+                    toolIds: aiResponse.tools,  // AI-selected tool IDs
+                    response: aiResponse.message || '🔍 Here are the best tools for you!'
                 };
             } else {
                 console.log('[DECY] AI decided to chat');
