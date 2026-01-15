@@ -11,7 +11,16 @@
         "create app",
         "build app",
         "develop app",
-        "software"
+        "software",
+        "website",
+        "site",
+        "web",
+        "build website",
+        "create website",
+        "make website",
+        "startup",
+        "prototype",
+        "mvp"
       ],
       "tools": [
         {
@@ -560,6 +569,7 @@
       "keywords": [
         "design",
         "graphic",
+        "graphics",
         "logo",
         "poster",
         "flyer",
@@ -567,7 +577,17 @@
         "ui",
         "ux",
         "mockup",
-        "template"
+        "template",
+        "website",
+        "web design",
+        "webpage",
+        "landing page",
+        "banner",
+        "social media",
+        "instagram",
+        "thumbnail",
+        "cover",
+        "branding"
       ],
       "tools": [
         {

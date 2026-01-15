@@ -946,6 +946,8 @@
                     // User explicitly said "free" or "premium" - skip budget selection and get tools directly
                     addMessage(data.budget === 'free' ? '🔍 Finding the best free tools for you...' : '🔍 Finding the best premium tools for you...', 'assistant');
                     chatHistory.push({ role: 'assistant', content: 'Finding tools...' });
+                    // Use the original query from backend, not the budget answer
+                    currentQuery = data.originalQuery || currentQuery;
                     isLoading = false;
                     await selectBudget(data.budget);
                 } else if (data.type === 'tool_request') {
