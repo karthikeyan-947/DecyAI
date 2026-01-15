@@ -39,7 +39,9 @@
           },
           "whySuitsYou": "Build and deploy apps quickly with natural language, perfect for beginners",
           "ease": 5,
-          "url": "https://lovable.dev"
+          "url": "https://lovable.dev",
+          "acceptsPrompt": true,
+          "promptHint": "Describe your app/website idea in detail"
         },
         {
           "id": "bolt",
@@ -57,7 +59,9 @@
           },
           "whySuitsYou": "Fastest way to go from idea to deployed app, all in browser",
           "ease": 5,
-          "url": "https://bolt.new"
+          "url": "https://bolt.new",
+          "acceptsPrompt": true,
+          "promptHint": "Describe your web app idea"
         },
         {
           "id": "replit",
@@ -75,7 +79,9 @@
           },
           "whySuitsYou": "Great for students - code, run, and share apps instantly",
           "ease": 4,
-          "url": "https://replit.com"
+          "url": "https://replit.com",
+          "acceptsPrompt": true,
+          "promptHint": "Describe your coding project"
         },
         {
           "id": "v0",
@@ -93,7 +99,9 @@
           },
           "whySuitsYou": "Perfect for creating beautiful UI components with just a description",
           "ease": 4,
-          "url": "https://v0.dev"
+          "url": "https://v0.dev",
+          "acceptsPrompt": true,
+          "promptHint": "Describe the UI component you want"
         }
       ]
     },
@@ -130,7 +138,9 @@
           },
           "whySuitsYou": "Best free option for images with text - logos, posters, banners",
           "ease": 5,
-          "url": "https://ideogram.ai"
+          "url": "https://ideogram.ai",
+          "acceptsPrompt": true,
+          "promptHint": "Describe the image you want to create"
         },
         {
           "id": "leonardo",
@@ -148,7 +158,9 @@
           },
           "whySuitsYou": "Professional-quality images with style customization, generous free tier",
           "ease": 4,
-          "url": "https://leonardo.ai"
+          "url": "https://leonardo.ai",
+          "acceptsPrompt": true,
+          "promptHint": "Describe the image you want to generate"
         },
         {
           "id": "bing_image_creator",
@@ -166,7 +178,9 @@
           },
           "whySuitsYou": "Completely free, powered by DALL-E 3, just need Microsoft account",
           "ease": 5,
-          "url": "https://www.bing.com/create"
+          "url": "https://www.bing.com/create",
+          "acceptsPrompt": true,
+          "promptHint": "Describe what you want DALL-E to create"
         },
         {
           "id": "midjourney",
@@ -184,7 +198,9 @@
           },
           "whySuitsYou": "Industry-leading quality for professional artwork and marketing",
           "ease": 3,
-          "url": "https://midjourney.com"
+          "url": "https://midjourney.com",
+          "acceptsPrompt": true,
+          "promptHint": "Describe the artistic image you want"
         }
       ]
     },
@@ -325,7 +341,9 @@
           },
           "whySuitsYou": "Turn text or images into videos with cutting-edge AI",
           "ease": 4,
-          "url": "https://runwayml.com"
+          "url": "https://runwayml.com",
+          "acceptsPrompt": true,
+          "promptHint": "Describe the video you want to generate"
         },
         {
           "id": "invideo",
@@ -343,7 +361,9 @@
           },
           "whySuitsYou": "Describe your video idea, AI creates it with stock footage and voiceover",
           "ease": 5,
-          "url": "https://invideo.io"
+          "url": "https://invideo.io",
+          "acceptsPrompt": true,
+          "promptHint": "Describe your video idea in detail"
         },
         {
           "id": "descript",
@@ -692,7 +712,9 @@
           },
           "whySuitsYou": "Describe your topic, get a beautiful presentation in seconds",
           "ease": 5,
-          "url": "https://gamma.app"
+          "url": "https://gamma.app",
+          "acceptsPrompt": true,
+          "promptHint": "Describe your presentation topic"
         },
         {
           "id": "tome",
@@ -710,7 +732,9 @@
           },
           "whySuitsYou": "Creates narrative-driven presentations that stand out",
           "ease": 5,
-          "url": "https://tome.app"
+          "url": "https://tome.app",
+          "acceptsPrompt": true,
+          "promptHint": "Describe your story or presentation idea"
         },
         {
           "id": "beautiful_ai",
@@ -763,7 +787,9 @@
           },
           "whySuitsYou": "Most realistic AI voices for voiceovers and content",
           "ease": 5,
-          "url": "https://elevenlabs.io"
+          "url": "https://elevenlabs.io",
+          "acceptsPrompt": true,
+          "promptHint": "Enter the text you want to convert to speech"
         },
         {
           "id": "suno",
@@ -781,7 +807,9 @@
           },
           "whySuitsYou": "Generate full songs with vocals from just a text description",
           "ease": 5,
-          "url": "https://suno.ai"
+          "url": "https://suno.ai",
+          "acceptsPrompt": true,
+          "promptHint": "Describe the song style, mood, and lyrics theme"
         },
         {
           "id": "murf",
@@ -799,7 +827,9 @@
           },
           "whySuitsYou": "Studio-quality voiceovers in 120+ voices without recording",
           "ease": 5,
-          "url": "https://murf.ai"
+          "url": "https://murf.ai",
+          "acceptsPrompt": true,
+          "promptHint": "Enter script for professional voiceover"
         },
         {
           "id": "whisperflow",

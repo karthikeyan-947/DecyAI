@@ -113,6 +113,105 @@ class RecommendationEngine {
         return tools;
     }
 
+    /**
+     * Generate an optimized prompt for a specific AI tool
+     * This is DECY's unique feature - we don't just recommend tools, we help you USE them!
+     */
+    async generatePromptForTool(toolId, toolName, userDescription) {
+        console.log(`[DECY] Generating prompt for ${toolName}: "${userDescription}"`);
+
+        if (!this.groq) {
+            // Fallback if Groq is not available
+            return this.generateBasicPrompt(toolName, userDescription);
+        }
+
+        // Tool-specific prompt templates
+        const toolContexts = {
+            // App Builders
+            'lovable': 'Lovable builds full-stack web apps. Include: tech stack preferences, UI components, features, pages, and functionality.',
+            'bolt': 'Bolt.new creates web apps in browser. Specify: framework (React/Vue/etc), components, styling, and features.',
+            'v0': 'v0 generates React/Next.js UI components. Describe: component type, styling, interactivity, and variants.',
+            'replit': 'Replit is a coding environment. Specify: programming language, project type, and what it should do.',
+
+            // Image Generators
+            'ideogram': 'Ideogram excels at text in images. Include: image style, subjects, colors, mood, and any text to include.',
+            'leonardo': 'Leonardo.ai creates detailed images. Specify: art style, subject, lighting, composition, and quality settings.',
+            'midjourney': 'Midjourney creates artistic images. Include: artistic style, subject, mood, lighting, and aspect ratio.',
+            'bing_image_creator': 'Bing uses DALL-E 3. Describe: subject, style, setting, mood, and composition.',
+
+            // Video
+            'runway': 'Runway generates AI videos. Describe: scene, motion, style, duration, and visual effects.',
+            'invideo': 'InVideo creates videos from descriptions. Include: topic, style, length, tone, and call-to-action.',
+
+            // Presentations
+            'gamma': 'Gamma creates presentations. Specify: topic, audience, key points, style, and number of slides.',
+            'tome': 'Tome makes storytelling presentations. Include: narrative arc, key messages, visual style.',
+
+            // Audio
+            'suno': 'Suno creates songs. Include: genre, mood, tempo, lyric theme, and musical style.',
+            'elevenlabs': 'ElevenLabs converts text to speech. Include: the exact script and voice characteristics.',
+            'murf': 'Murf creates professional voiceovers. Include: script, tone, pacing, and audience.'
+        };
+
+        const toolContext = toolContexts[toolId] || `${toolName} is an AI tool. Be specific about what you want to create.`;
+
+        const messages = [
+            {
+                role: 'system',
+                content: `You are an expert prompt engineer. Generate the PERFECT prompt for ${toolName}.
+
+TOOL CONTEXT: ${toolContext}
+
+YOUR TASK:
+1. Take the user's brief description
+2. Expand it into a detailed, optimized prompt that will get the BEST results from ${toolName}
+3. Include specific details, settings, and parameters that work well with this tool
+4. Format it cleanly so the user can copy-paste it directly
+
+OUTPUT RULES:
+- Output ONLY the prompt text, nothing else
+- No explanations, no "Here is your prompt:", just the prompt itself
+- Make it detailed but focused (150-300 words ideal)
+- Use the formatting style that works best for ${toolName}`
+            },
+            {
+                role: 'user',
+                content: `Generate an optimized ${toolName} prompt for: "${userDescription}"`
+            }
+        ];
+
+        try {
+            const completion = await this.groq.chat.completions.create({
+                messages: messages,
+                model: 'llama-3.3-70b-versatile',
+                temperature: 0.7,
+                max_tokens: 600
+            });
+
+            const prompt = completion.choices[0]?.message?.content?.trim() || '';
+            console.log(`[DECY] Generated prompt (${prompt.length} chars)`);
+            return prompt;
+        } catch (error) {
+            console.error('[DECY] Prompt generation failed:', error.message);
+            return this.generateBasicPrompt(toolName, userDescription);
+        }
+    }
+
+    /**
+     * Basic prompt generation fallback (when Groq is unavailable)
+     */
+    generateBasicPrompt(toolName, userDescription) {
+        return `Create ${userDescription}
+
+Requirements:
+- Modern, clean design
+- Professional quality
+- User-friendly and intuitive
+- Responsive and well-organized
+
+Please make it polished and ready to use.`;
+    }
+
 
     /**
      * Handle chat messages - use AI to respond naturally to ANY input

@@ -125,6 +125,37 @@ app.post('/api/tools-by-ids', async (req, res) => {
 });
 
 /**
+ * POST /api/generate-prompt
+ * Generate an optimized prompt for a specific AI tool
+ * Body: { toolId: string, toolName: string, description: string }
+ */
+app.post('/api/generate-prompt', async (req, res) => {
+    try {
+        const { toolId, toolName, description } = req.body;
+
+        if (!toolName || !description) {
+            return res.status(400).json({
+                success: false,
+                error: 'Tool name and description are required'
+            });
+        }
+
+        const prompt = await engine.generatePromptForTool(toolId, toolName, description);
+
+        res.json({
+            success: true,
+            prompt: prompt
+        });
+    } catch (error) {
+        console.error('[DECY] Prompt generation error:', error);
+        res.status(500).json({
+            success: false,
+            error: 'Failed to generate prompt. Please try again.'
+        });
+    }
+});
+
+/**
  * GET /api/categories
  * Get all available categories
  */
