@@ -617,6 +617,27 @@
             letter-spacing: 2px;
         }
 
+        body {
+            background: linear-gradient(180deg, #0A0A0A 0%, #0D0D12 50%, #0A0A0A 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            color: white;
+            min-height: 100dvh;
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        /* App container - centers on large screens */
+        .app-container {
+            width: 100%;
+            max-width: 1600px;
+            margin: 0 auto;
+            min-height: 100vh;
+            display: flex;
+            position: relative;
+        }
+
         .try-btn {
             display: block;
             width: 100%;
@@ -663,234 +684,240 @@
     </style>
 </head>
 
-<body class="min-h-screen relative flex overflow-hidden">
-    <!-- Ambient Orbs -->
-    <div class="orb w-[600px] h-[600px] bg-purple-600/30 -top-40 left-1/4"></div>
-    <div class="orb w-[500px] h-[500px] bg-pink-500/25 bottom-0 right-0"></div>
-    <div class="orb w-[400px] h-[400px] bg-indigo-700/15 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
+<body class="min-h-screen relative overflow-x-hidden">
+    <!-- App Container - Centers content on large screens -->
+    <div class="app-container">
+        <!-- Ambient Orbs -->
+        <div class="orb w-[600px] h-[600px] bg-purple-600/30 -top-40 left-1/4"></div>
+        <div class="orb w-[500px] h-[500px] bg-pink-500/25 bottom-0 right-0"></div>
+        <div class="orb w-[400px] h-[400px] bg-indigo-700/15 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
 
-    <!-- Sidebar Overlay (Mobile) -->
-    <div id="sidebar-overlay" class="sidebar-overlay fixed inset-0 z-40 hidden lg:hidden" onclick="toggleSidebar()">
-    </div>
-
-    <!-- Sidebar -->
-    <aside id="sidebar"
-        class="sidebar fixed lg:relative z-50 w-[260px] h-full flex flex-col transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
-        <!-- Sidebar Header -->
-        <div class="p-4 border-b border-white/5">
-            <div class="flex items-center mb-4">
-                <span style="font-family: 'Great Vibes', cursive;" class="text-[42px] text-white">Decy</span>
-            </div>
-            <button onclick="newChat()"
-                class="new-chat-btn w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-white/80 text-[14px] font-medium">
-                <span class="material-symbols-outlined text-[18px]">add</span>
-                New chat
-            </button>
+        <!-- Sidebar Overlay (Mobile) -->
+        <div id="sidebar-overlay" class="sidebar-overlay fixed inset-0 z-40 hidden lg:hidden" onclick="toggleSidebar()">
         </div>
 
-        <!-- Chat History -->
-        <div class="flex-1 overflow-y-auto no-scrollbar py-3">
-            <div class="px-4 mb-2">
-                <span class="text-[11px] font-semibold text-white/40 uppercase tracking-wider">Recent</span>
-            </div>
-            <div id="chat-history" class="space-y-0.5 px-2">
-                <!-- Chat history items will be added here -->
-            </div>
-        </div>
-
-        <!-- Sidebar Footer -->
-        <div class="p-4 border-t border-white/5">
-            <p class="text-[11px] text-white/30">Find the right AI tool</p>
-        </div>
-    </aside>
-
-    <!-- Main Content Wrapper -->
-    <div class="flex-1 flex flex-col min-h-screen relative">
-        <!-- Header -->
-        <header class="fixed top-0 right-0 left-0 lg:left-[260px] z-30 ios-header-blur border-b border-white/5">
-            <div class="flex items-center justify-between px-4 md:px-6 h-14 max-w-4xl mx-auto">
-                <!-- Mobile Menu Button -->
-                <button onclick="toggleSidebar()"
-                    class="lg:hidden w-8 h-8 flex items-center justify-center rounded-full bg-white/10 active:opacity-60 transition-opacity">
-                    <span class="material-symbols-outlined text-[20px]">menu</span>
-                </button>
-
-                <h2 class="text-[17px] font-semibold tracking-tight text-white/90 lg:hidden">DECY</h2>
-
-                <div class="hidden lg:block"></div>
-
+        <!-- Sidebar -->
+        <aside id="sidebar"
+            class="sidebar fixed lg:relative z-50 w-[260px] h-full flex flex-col transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
+            <!-- Sidebar Header -->
+            <div class="p-4 border-b border-white/5">
+                <div class="flex items-center mb-4">
+                    <span style="font-family: 'Great Vibes', cursive;" class="text-[42px] text-white">Decy</span>
+                </div>
                 <button onclick="newChat()"
-                    class="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 active:opacity-60 transition-opacity">
-                    <span class="material-symbols-outlined text-[20px] font-light">edit_square</span>
+                    class="new-chat-btn w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-white/80 text-[14px] font-medium">
+                    <span class="material-symbols-outlined text-[18px]">add</span>
+                    New chat
                 </button>
             </div>
-        </header>
 
-        <!-- Main Content -->
-        <main id="chat-area" class="relative z-10 flex-1 flex flex-col pt-14 pb-40 overflow-y-auto no-scrollbar">
-
-            <!-- Welcome Screen -->
-            <div id="welcome-state" class="flex-1 flex flex-col items-center justify-center px-6 md:px-8">
-                <div class="w-full max-w-2xl text-center mb-6 animate-fadeInUp">
-                    <h1
-                        class="text-white text-[28px] md:text-[36px] lg:text-[40px] font-semibold leading-[1.15] tracking-tight mb-3">
-                        What do you want to create?
-                    </h1>
-                    <p class="text-white/50 text-[15px] md:text-[16px]">Tell me your idea and I'll find the perfect AI
-                        tool</p>
+            <!-- Chat History -->
+            <div class="flex-1 overflow-y-auto no-scrollbar py-3">
+                <div class="px-4 mb-2">
+                    <span class="text-[11px] font-semibold text-white/40 uppercase tracking-wider">Recent</span>
                 </div>
-
-                <!-- Suggestion Pills - Horizontal for desktop -->
-                <div class="flex flex-wrap gap-2.5 justify-center max-w-2xl mb-8">
-                    <button onclick="setQuery('I want to create an app')"
-                        class="pill-button flex h-[40px] items-center gap-2 rounded-full px-4 transition-all">
-                        <span class="text-[14px] font-medium tracking-tight">Create an app</span>
-                    </button>
-                    <button onclick="setQuery('I need to generate images')"
-                        class="pill-button flex h-[40px] items-center gap-2 rounded-full px-4 transition-all">
-                        <span class="text-[14px] font-medium tracking-tight">Generate images</span>
-                    </button>
-                    <button onclick="setQuery('I want to edit videos')"
-                        class="pill-button flex h-[40px] items-center gap-2 rounded-full px-4 transition-all">
-                        <span class="text-[14px] font-medium tracking-tight">Edit videos</span>
-                    </button>
-                    <button onclick="setQuery('Help me write code')"
-                        class="pill-button flex h-[40px] items-center gap-2 rounded-full px-4 transition-all">
-                        <span class="text-[14px] font-medium tracking-tight">Write code</span>
-                    </button>
+                <div id="chat-history" class="space-y-0.5 px-2">
+                    <!-- Chat history items will be added here -->
                 </div>
             </div>
 
-            <!-- Chat Messages Container -->
-            <div id="messages" class="hidden w-full max-w-3xl mx-auto px-4 md:px-6 py-6">
-                <!-- Messages will be added here dynamically -->
+            <!-- Sidebar Footer -->
+            <div class="p-4 border-t border-white/5">
+                <p class="text-[11px] text-white/30">Find the right AI tool</p>
             </div>
-        </main>
+        </aside>
 
-        <!-- Input Area -->
-        <div
-            class="fixed bottom-0 right-0 left-0 lg:left-[260px] z-30 px-4 md:px-6 pb-6 pt-4 bg-gradient-to-t from-ios-bg via-ios-bg/90 to-transparent">
-            <div class="max-w-3xl mx-auto flex flex-col items-center">
-                <!-- Budget Selection (Hidden by default) -->
-                <div id="budget-selection" class="hidden w-full mb-4">
-                    <p class="text-sm text-white/50 text-center mb-3">Choose your preference:</p>
-                    <div class="flex gap-3 justify-center">
-                        <button onclick="selectBudget('free')"
-                            class="pill-button px-5 py-2.5 rounded-full flex items-center gap-2 text-emerald-400 font-medium text-sm">
-                            <span>✨</span> Free tools
+        <!-- Main Content Wrapper -->
+        <div class="flex-1 flex flex-col min-h-screen relative">
+            <!-- Header -->
+            <header class="fixed top-0 right-0 left-0 lg:left-[260px] z-30 ios-header-blur border-b border-white/5">
+                <div class="flex items-center justify-between px-4 md:px-6 h-14 max-w-4xl mx-auto">
+                    <!-- Mobile Menu Button -->
+                    <button onclick="toggleSidebar()"
+                        class="lg:hidden w-8 h-8 flex items-center justify-center rounded-full bg-white/10 active:opacity-60 transition-opacity">
+                        <span class="material-symbols-outlined text-[20px]">menu</span>
+                    </button>
+
+                    <h2 class="text-[17px] font-semibold tracking-tight text-white/90 lg:hidden">DECY</h2>
+
+                    <div class="hidden lg:block"></div>
+
+                    <button onclick="newChat()"
+                        class="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 active:opacity-60 transition-opacity">
+                        <span class="material-symbols-outlined text-[20px] font-light">edit_square</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Main Content -->
+            <main id="chat-area" class="relative z-10 flex-1 flex flex-col pt-14 pb-40 overflow-y-auto no-scrollbar">
+
+                <!-- Welcome Screen -->
+                <div id="welcome-state" class="flex-1 flex flex-col items-center justify-center px-6 md:px-8">
+                    <div class="w-full max-w-2xl text-center mb-6 animate-fadeInUp">
+                        <h1
+                            class="text-white text-[28px] md:text-[36px] lg:text-[40px] font-semibold leading-[1.15] tracking-tight mb-3">
+                            What do you want to create?
+                        </h1>
+                        <p class="text-white/50 text-[15px] md:text-[16px]">Tell me your idea and I'll find the perfect
+                            AI
+                            tool</p>
+                    </div>
+
+                    <!-- Suggestion Pills - Horizontal for desktop -->
+                    <div class="flex flex-wrap gap-2.5 justify-center max-w-2xl mb-8">
+                        <button onclick="setQuery('I want to create an app')"
+                            class="pill-button flex h-[40px] items-center gap-2 rounded-full px-4 transition-all">
+                            <span class="text-[14px] font-medium tracking-tight">Create an app</span>
                         </button>
-                        <button onclick="selectBudget('premium')"
-                            class="pill-button px-5 py-2.5 rounded-full flex items-center gap-2 text-purple-400 font-medium text-sm">
-                            <span>⭐</span> Premium
+                        <button onclick="setQuery('I need to generate images')"
+                            class="pill-button flex h-[40px] items-center gap-2 rounded-full px-4 transition-all">
+                            <span class="text-[14px] font-medium tracking-tight">Generate images</span>
+                        </button>
+                        <button onclick="setQuery('I want to edit videos')"
+                            class="pill-button flex h-[40px] items-center gap-2 rounded-full px-4 transition-all">
+                            <span class="text-[14px] font-medium tracking-tight">Edit videos</span>
+                        </button>
+                        <button onclick="setQuery('Help me write code')"
+                            class="pill-button flex h-[40px] items-center gap-2 rounded-full px-4 transition-all">
+                            <span class="text-[14px] font-medium tracking-tight">Write code</span>
                         </button>
                     </div>
                 </div>
 
-                <!-- Input Capsule -->
-                <div class="input-capsule w-full rounded-full flex items-center p-1.5 pl-3">
-                    <button
-                        class="size-9 flex items-center justify-center rounded-full text-white/90 active:scale-95 transition-transform">
-                        <span class="material-symbols-outlined text-[24px] font-light">add</span>
-                    </button>
-                    <input id="user-input" autofocus type="text"
-                        class="bg-transparent flex-1 border-none focus:ring-0 text-white placeholder:text-white/40 py-2.5 px-2 text-[16px] font-normal leading-normal caret-purple-400"
-                        placeholder="Describe what you want to do..." onkeydown="handleKeyDown(event)" />
-                    <button onclick="sendMessage()" id="send-btn"
-                        class="size-9 flex items-center justify-center rounded-full bg-brand-violet text-white active:scale-95 transition-transform">
-                        <span class="material-symbols-outlined text-[20px]">arrow_upward</span>
-                    </button>
+                <!-- Chat Messages Container -->
+                <div id="messages" class="hidden w-full max-w-3xl mx-auto px-4 md:px-6 py-6">
+                    <!-- Messages will be added here dynamically -->
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Comparison Modal -->
-    <div id="comparison-modal" class="comparison-modal hidden">
-        <div class="comparison-backdrop" onclick="closeComparison()"></div>
-        <div class="comparison-container" onclick="event.stopPropagation()">
-            <button class="comparison-close" onclick="closeComparison()">×</button>
-            <h2 class="comparison-title">Compare Tools</h2>
-            <div id="comparison-grid" class="comparison-grid">
-                <!-- Dynamic columns generated here -->
-            </div>
-        </div>
-    </div>
-
-    <!-- Prompt Generator Modal -->
-    <div id="prompt-modal" class="fixed inset-0 z-50 hidden items-center justify-center">
-        <div class="absolute inset-0 bg-black/80 backdrop-blur-xl" onclick="closePromptModal()"></div>
-        <div class="relative w-full max-w-xl mx-4 bg-gradient-to-br from-[#1a1a2e]/95 to-[#16161a]/95 backdrop-blur-2xl rounded-3xl border border-white/10 shadow-2xl p-6"
-            onclick="event.stopPropagation()">
-            <!-- Header -->
-            <div class="flex justify-between items-center mb-6">
-                <div>
-                    <h2 id="prompt-modal-title" class="text-xl font-bold text-white">Generate Prompt</h2>
-                    <p class="text-sm text-white/60 mt-1">Describe what you want to create</p>
-                </div>
-                <button onclick="closePromptModal()"
-                    class="size-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors">
-                    <span class="material-symbols-outlined text-white/70">close</span>
-                </button>
-            </div>
+            </main>
 
             <!-- Input Area -->
-            <div id="prompt-input-area">
-                <textarea id="prompt-description"
-                    class="w-full h-32 bg-white/5 border border-white/10 rounded-2xl p-4 text-white placeholder:text-white/40 text-[15px] resize-none focus:outline-none focus:border-purple-500/50 transition-colors"
-                    placeholder="E.g., A modern SaaS landing page with hero section, feature grid, testimonials, and pricing table..."></textarea>
-                <button onclick="generatePrompt()" id="generate-prompt-btn"
-                    class="mt-4 w-full py-3 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold text-[15px] hover:from-purple-500 hover:to-pink-500 transition-all duration-300 flex items-center justify-center gap-2 shadow-lg shadow-purple-500/25">
-                    <span class="material-symbols-outlined text-[20px]">auto_awesome</span>
-                    Generate Perfect Prompt
-                </button>
-            </div>
-
-            <!-- Loading State -->
-            <div id="prompt-loading" class="hidden">
-                <div class="flex flex-col items-center justify-center py-8">
-                    <div class="relative w-20 h-20 mb-4">
-                        <div class="absolute inset-0 rounded-full border-2 border-purple-500/30 animate-ping"></div>
-                        <div
-                            class="absolute inset-2 rounded-full border-2 border-t-purple-500 border-r-pink-500 border-b-transparent border-l-transparent animate-spin">
+            <div
+                class="fixed bottom-0 right-0 left-0 lg:left-[260px] z-30 px-4 md:px-6 pb-6 pt-4 bg-gradient-to-t from-ios-bg via-ios-bg/90 to-transparent">
+                <div class="max-w-3xl mx-auto flex flex-col items-center">
+                    <!-- Budget Selection (Hidden by default) -->
+                    <div id="budget-selection" class="hidden w-full mb-4">
+                        <p class="text-sm text-white/50 text-center mb-3">Choose your preference:</p>
+                        <div class="flex gap-3 justify-center">
+                            <button onclick="selectBudget('free')"
+                                class="pill-button px-5 py-2.5 rounded-full flex items-center gap-2 text-emerald-400 font-medium text-sm">
+                                <span>✨</span> Free tools
+                            </button>
+                            <button onclick="selectBudget('premium')"
+                                class="pill-button px-5 py-2.5 rounded-full flex items-center gap-2 text-purple-400 font-medium text-sm">
+                                <span>⭐</span> Premium
+                            </button>
                         </div>
-                        <span
-                            class="absolute inset-0 flex items-center justify-center material-symbols-outlined text-[32px] text-purple-400">auto_awesome</span>
                     </div>
-                    <p class="text-white/70 text-[15px]">Generating your perfect prompt...</p>
-                </div>
-            </div>
 
-            <!-- Result Area -->
-            <div id="prompt-result" class="hidden">
-                <!-- Header -->
-                <div class="flex items-center gap-2 mb-3">
-                    <span class="material-symbols-outlined text-[18px] text-purple-400">magic_button</span>
-                    <span class="text-[13px] font-bold text-purple-400 uppercase tracking-wider">Generated Prompt</span>
-                </div>
-
-                <!-- Scrollable Prompt Frame -->
-                <div class="bg-black/40 border border-white/20 rounded-xl p-4 mb-4"
-                    style="height: 200px; overflow-y: scroll;">
-                    <pre id="generated-prompt-text"
-                        class="text-white/90 text-[13px] leading-relaxed whitespace-pre-wrap font-mono m-0"></pre>
-                </div>
-
-                <!-- Action Buttons -->
-                <div class="flex gap-3">
-                    <button onclick="copyGeneratedPrompt()" id="copy-prompt-btn"
-                        class="flex-1 py-3 rounded-xl bg-white/10 border border-white/10 text-white font-medium text-[14px] hover:bg-white/15 transition-all flex items-center justify-center gap-2">
-                        <span class="material-symbols-outlined text-[18px]">content_copy</span>
-                        <span id="copy-btn-text">Copy Prompt</span>
-                    </button>
-                    <button onclick="openToolWithPrompt()"
-                        class="flex-1 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 text-white font-medium text-[14px] hover:from-purple-500 hover:to-pink-500 transition-all flex items-center justify-center gap-2 shadow-lg shadow-purple-500/20">
-                        <span class="material-symbols-outlined text-[18px]">open_in_new</span>
-                        Open <span id="open-tool-name">Tool</span>
-                    </button>
+                    <!-- Input Capsule -->
+                    <div class="input-capsule w-full rounded-full flex items-center p-1.5 pl-3">
+                        <button
+                            class="size-9 flex items-center justify-center rounded-full text-white/90 active:scale-95 transition-transform">
+                            <span class="material-symbols-outlined text-[24px] font-light">add</span>
+                        </button>
+                        <input id="user-input" autofocus type="text"
+                            class="bg-transparent flex-1 border-none focus:ring-0 text-white placeholder:text-white/40 py-2.5 px-2 text-[16px] font-normal leading-normal caret-purple-400"
+                            placeholder="Describe what you want to do..." onkeydown="handleKeyDown(event)" />
+                        <button onclick="sendMessage()" id="send-btn"
+                            class="size-9 flex items-center justify-center rounded-full bg-brand-violet text-white active:scale-95 transition-transform">
+                            <span class="material-symbols-outlined text-[20px]">arrow_upward</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+
+        <!-- Comparison Modal -->
+        <div id="comparison-modal" class="comparison-modal hidden">
+            <div class="comparison-backdrop" onclick="closeComparison()"></div>
+            <div class="comparison-container" onclick="event.stopPropagation()">
+                <button class="comparison-close" onclick="closeComparison()">×</button>
+                <h2 class="comparison-title">Compare Tools</h2>
+                <div id="comparison-grid" class="comparison-grid">
+                    <!-- Dynamic columns generated here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Prompt Generator Modal -->
+        <div id="prompt-modal" class="fixed inset-0 z-50 hidden items-center justify-center">
+            <div class="absolute inset-0 bg-black/80 backdrop-blur-xl" onclick="closePromptModal()"></div>
+            <div class="relative w-full max-w-xl mx-4 bg-gradient-to-br from-[#1a1a2e]/95 to-[#16161a]/95 backdrop-blur-2xl rounded-3xl border border-white/10 shadow-2xl p-6"
+                onclick="event.stopPropagation()">
+                <!-- Header -->
+                <div class="flex justify-between items-center mb-6">
+                    <div>
+                        <h2 id="prompt-modal-title" class="text-xl font-bold text-white">Generate Prompt</h2>
+                        <p class="text-sm text-white/60 mt-1">Describe what you want to create</p>
+                    </div>
+                    <button onclick="closePromptModal()"
+                        class="size-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors">
+                        <span class="material-symbols-outlined text-white/70">close</span>
+                    </button>
+                </div>
+
+                <!-- Input Area -->
+                <div id="prompt-input-area">
+                    <textarea id="prompt-description"
+                        class="w-full h-32 bg-white/5 border border-white/10 rounded-2xl p-4 text-white placeholder:text-white/40 text-[15px] resize-none focus:outline-none focus:border-purple-500/50 transition-colors"
+                        placeholder="E.g., A modern SaaS landing page with hero section, feature grid, testimonials, and pricing table..."></textarea>
+                    <button onclick="generatePrompt()" id="generate-prompt-btn"
+                        class="mt-4 w-full py-3 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold text-[15px] hover:from-purple-500 hover:to-pink-500 transition-all duration-300 flex items-center justify-center gap-2 shadow-lg shadow-purple-500/25">
+                        <span class="material-symbols-outlined text-[20px]">auto_awesome</span>
+                        Generate Perfect Prompt
+                    </button>
+                </div>
+
+                <!-- Loading State -->
+                <div id="prompt-loading" class="hidden">
+                    <div class="flex flex-col items-center justify-center py-8">
+                        <div class="relative w-20 h-20 mb-4">
+                            <div class="absolute inset-0 rounded-full border-2 border-purple-500/30 animate-ping"></div>
+                            <div
+                                class="absolute inset-2 rounded-full border-2 border-t-purple-500 border-r-pink-500 border-b-transparent border-l-transparent animate-spin">
+                            </div>
+                            <span
+                                class="absolute inset-0 flex items-center justify-center material-symbols-outlined text-[32px] text-purple-400">auto_awesome</span>
+                        </div>
+                        <p class="text-white/70 text-[15px]">Generating your perfect prompt...</p>
+                    </div>
+                </div>
+
+                <!-- Result Area -->
+                <div id="prompt-result" class="hidden">
+                    <!-- Header -->
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="material-symbols-outlined text-[18px] text-purple-400">magic_button</span>
+                        <span class="text-[13px] font-bold text-purple-400 uppercase tracking-wider">Generated
+                            Prompt</span>
+                    </div>
+
+                    <!-- Scrollable Prompt Frame -->
+                    <div class="bg-black/40 border border-white/20 rounded-xl p-4 mb-4"
+                        style="height: 200px; overflow-y: scroll;">
+                        <pre id="generated-prompt-text"
+                            class="text-white/90 text-[13px] leading-relaxed whitespace-pre-wrap font-mono m-0"></pre>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex gap-3">
+                        <button onclick="copyGeneratedPrompt()" id="copy-prompt-btn"
+                            class="flex-1 py-3 rounded-xl bg-white/10 border border-white/10 text-white font-medium text-[14px] hover:bg-white/15 transition-all flex items-center justify-center gap-2">
+                            <span class="material-symbols-outlined text-[18px]">content_copy</span>
+                            <span id="copy-btn-text">Copy Prompt</span>
+                        </button>
+                        <button onclick="openToolWithPrompt()"
+                            class="flex-1 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 text-white font-medium text-[14px] hover:from-purple-500 hover:to-pink-500 transition-all flex items-center justify-center gap-2 shadow-lg shadow-purple-500/20">
+                            <span class="material-symbols-outlined text-[18px]">open_in_new</span>
+                            Open <span id="open-tool-name">Tool</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div> <!-- Close app-container -->
 
     <script>
         let currentQuery = '';
@@ -1436,5 +1463,3 @@
 </body>
 
 </html>
-</CodeContent>
-<parameter name="Complexity">7
