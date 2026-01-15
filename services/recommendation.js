@@ -616,16 +616,25 @@ IMPORTANT: Only use tool IDs from the database. Be concise. Maximum 3 tools.`;
      */
     extractKeyIntent(query) {
         const intents = {
+            'website': 'building a website',
+            'web': 'building a website',
             'app': 'building applications',
             'image': 'working with images',
             'video': 'video creation',
             'code': 'coding and development',
             'write': 'writing and content',
             'design': 'design and graphics',
+            'graphic': 'design and graphics',
+            'logo': 'logo and branding',
             'present': 'creating presentations',
             'music': 'audio and music',
+            'voice': 'voice and audio',
             'research': 'research and learning',
-            'automate': 'automation'
+            'automate': 'automation',
+            'build': 'building your project',
+            'create': 'creating your project',
+            'edit': 'editing content',
+            'startup': 'your startup project'
         };
 
         for (const [keyword, intent] of Object.entries(intents)) {
@@ -633,7 +642,7 @@ IMPORTANT: Only use tool IDs from the database. Be concise. Maximum 3 tools.`;
                 return intent;
             }
         }
-        return 'your task';
+        return 'your project';
     }
 }
 
