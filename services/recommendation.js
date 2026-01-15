@@ -85,6 +85,25 @@ class RecommendationEngine {
      * Get response using Groq (Llama 3) - FAST & RELIABLE
      */
     async getGroqResponse(message, history = []) {
+        const lowerMessage = message.toLowerCase();
+
+        // DIRECT BUDGET DETECTION: If user explicitly says "free" or "premium", skip chat and get tools
+        const wantsFree = /\b(free|no cost|without paying|don't want to pay|i need free|want free)\b/i.test(message);
+        const wantsPremium = /\b(premium|paid|pro|professional|best quality|money|budget|willing to pay)\b/i.test(message);
+        const isToolRequest = /\b(tool|app|software|recommend|suggest|find|need|want to|help me|looking for|create|build|make|design|edit|generate)\b/i.test(message);
+
+        // If user explicitly states budget AND wants a tool -> directly get recommendations
+        if ((wantsFree || wantsPremium) && isToolRequest) {
+            const budget = wantsFree ? 'free' : 'premium';
+            console.log(`[DECY] Direct tool request detected with budget: ${budget}`);
+            return {
+                success: true,
+                type: 'direct_recommendation',
+                budget: budget,
+                originalQuery: message
+            };
+        }
+
         // Build conversation messages
         const messages = [
             {
@@ -105,17 +124,15 @@ EXPERTISE (50+ AI Tools):
 - Design: Canva, Figma, Kittl, Looka
 - Audio: ElevenLabs, Suno AI, Murf
 
-CORE BEHAVIOR - ALWAYS FOLLOW:
-1. ANSWER questions naturally, but ALWAYS connect back to tools
-2. When users describe a problem or project -> PROACTIVELY offer: "I can recommend some great tools for that! Would you prefer free tools or are you open to premium options?"
-3. After answering a general question, ADD a helpful nudge like: "By the way, if you're interested in [topic], I know some great AI tools that could help!"
-4. NEVER drift into long conversations without mentioning tools
-5. If the conversation goes off-topic for 2+ messages, gently steer back: "That's interesting! Speaking of which, is there any project or task I can help you find the right AI tool for?"
+CRITICAL RULE - NEVER BREAK THIS:
+When a user wants to create, build, make, design, edit, or do ANYTHING that requires a tool:
+-> You MUST ask EXACTLY: "Would you prefer free tools or are you open to premium options?"
+-> Do NOT list tool names or make recommendations in your text response
+-> The tool cards will be shown AFTER they answer the budget question
 
-TOOL RECOMMENDATION TRIGGER:
-When users want to BUILD, CREATE, MAKE, or DO something -> Ask: "Would you prefer free tools or are you open to premium options?"
+For casual chat and questions about what tools do, answer naturally. But the moment they want to USE a tool for a task -> ASK THE BUDGET QUESTION.
 
-Keep responses concise (2-3 sentences + tool suggestion). Stay focused on your mission!`
+Keep responses concise (2-3 sentences). Stay focused on your mission!`
             }
         ];
 
@@ -140,14 +157,14 @@ Keep responses concise (2-3 sentences + tool suggestion). Stay focused on your m
         const text = completion.choices[0]?.message?.content || '';
         console.log('[DECY] Groq response:', text.substring(0, 80) + '...');
 
-        // Detect if this is a tool request
-        const isToolRequest = text.toLowerCase().includes('free') &&
+        // Detect if this is a tool request (AI asked the budget question)
+        const askedBudgetQuestion = text.toLowerCase().includes('free') &&
             text.toLowerCase().includes('premium') &&
-            text.toLowerCase().includes('prefer');
+            (text.toLowerCase().includes('prefer') || text.toLowerCase().includes('would you'));
 
         return {
             success: true,
-            type: isToolRequest ? 'tool_request' : 'question',
+            type: askedBudgetQuestion ? 'tool_request' : 'question',
             response: text
         };
     }

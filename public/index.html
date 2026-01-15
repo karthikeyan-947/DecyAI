@@ -942,13 +942,22 @@
                 const data = await response.json();
                 removeMessage(loadingId);
 
-                if (data.type === 'tool_request') {
+                if (data.type === 'direct_recommendation') {
+                    // User explicitly said "free" or "premium" - skip budget selection and get tools directly
+                    addMessage(data.budget === 'free' ? '🔍 Finding the best free tools for you...' : '🔍 Finding the best premium tools for you...', 'assistant');
+                    chatHistory.push({ role: 'assistant', content: 'Finding tools...' });
+                    isLoading = false;
+                    await selectBudget(data.budget);
+                } else if (data.type === 'tool_request') {
                     document.getElementById('budget-selection').classList.remove('hidden');
+                    addMessage(data.response, 'assistant');
+                    chatHistory.push({ role: 'assistant', content: data.response });
+                    saveChat(currentQuery);
+                } else {
+                    addMessage(data.response, 'assistant');
+                    chatHistory.push({ role: 'assistant', content: data.response });
+                    saveChat(currentQuery);
                 }
-
-                addMessage(data.response, 'assistant');
-                chatHistory.push({ role: 'assistant', content: data.response });
-                saveChat(currentQuery);
             } catch (error) {
                 removeMessage(loadingId);
                 addMessage("Something went wrong. Please try again.", 'assistant');
