@@ -942,20 +942,17 @@
                 const data = await response.json();
                 removeMessage(loadingId);
 
-                if (data.type === 'direct_recommendation') {
-                    // User explicitly said "free" or "premium" - skip budget selection and get tools directly
-                    addMessage(data.budget === 'free' ? '🔍 Finding the best free tools for you...' : '🔍 Finding the best premium tools for you...', 'assistant');
-                    chatHistory.push({ role: 'assistant', content: 'Finding tools...' });
-                    // Use the original query from backend, not the budget answer
-                    currentQuery = data.originalQuery || currentQuery;
-                    isLoading = false;
-                    await selectBudget(data.budget);
-                } else if (data.type === 'tool_request') {
-                    document.getElementById('budget-selection').classList.remove('hidden');
+                if (data.type === 'show_tools') {
+                    // AI decided it's time to show tool recommendations
                     addMessage(data.response, 'assistant');
                     chatHistory.push({ role: 'assistant', content: data.response });
-                    saveChat(currentQuery);
+                    // Use the query from AI's understanding
+                    currentQuery = data.query || currentQuery;
+                    isLoading = false;
+                    // Directly get tools with the budget AI detected
+                    await selectBudgetDirect(data.budget, data.category);
                 } else {
+                    // Regular chat response
                     addMessage(data.response, 'assistant');
                     chatHistory.push({ role: 'assistant', content: data.response });
                     saveChat(currentQuery);
@@ -969,6 +966,40 @@
             document.getElementById('send-btn').disabled = false;
         }
 
+        // Called when AI directly decides to show tools (new AI-first approach)
+        async function selectBudgetDirect(budget, category) {
+            if (isLoading) return;
+            isLoading = true;
+
+            const loadingId = addTypingIndicator();
+
+            try {
+                const response = await fetch('/api/recommend', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ query: currentQuery, budget, category })
+                });
+                const data = await response.json();
+                removeMessage(loadingId);
+
+                if (data.success && data.tools?.length > 0) {
+                    currentTools = data.tools;
+                    data.tools.forEach((tool, i) => addToolCard(tool, i));
+                    if (data.tools.length > 1) {
+                        addCompareButton();
+                    }
+                } else {
+                    addMessage("I couldn't find specific tools. Can you describe what you want in more detail?", 'assistant');
+                }
+            } catch (error) {
+                removeMessage(loadingId);
+                addMessage("Something went wrong. Please try again.", 'assistant');
+            }
+
+            isLoading = false;
+        }
+
+        // Called when user clicks the budget buttons
         async function selectBudget(budget) {
             if (isLoading) return;
             isLoading = true;

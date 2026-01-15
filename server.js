@@ -68,11 +68,11 @@ app.post('/api/chat', async (req, res) => {
 /**
  * POST /api/recommend
  * Get AI tool recommendations
- * Body: { query: string, budget: 'free' | 'premium' }
+ * Body: { query: string, budget: 'free' | 'premium', category?: string }
  */
 app.post('/api/recommend', async (req, res) => {
     try {
-        const { query, budget = 'free' } = req.body;
+        const { query, budget = 'free', category = null } = req.body;
 
         if (!query || query.trim().length === 0) {
             return res.status(400).json({
@@ -81,7 +81,7 @@ app.post('/api/recommend', async (req, res) => {
             });
         }
 
-        const recommendations = await engine.getRecommendations(query.trim(), budget);
+        const recommendations = await engine.getRecommendations(query.trim(), budget, category);
 
         res.json(recommendations);
     } catch (error) {

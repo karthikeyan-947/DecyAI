@@ -28,14 +28,20 @@ class RecommendationEngine {
 
 
     /**
-     * Main recommendation function - tries Gemini first, falls back to keyword matching
+     * Main recommendation function - uses AI-detected category when available
      */
-    async getRecommendations(userQuery, budgetType = 'free') {
-        console.log(`[DECY] Processing: "${userQuery}" | Budget: ${budgetType}`);
+    async getRecommendations(userQuery, budgetType = 'free', category = null) {
+        console.log(`[DECY] Processing: "${userQuery}" | Budget: ${budgetType} | Category: ${category || 'auto-detect'}`);
+
+        // If AI provided a specific category, use it directly
+        if (category && this.tools.categories[category]) {
+            console.log(`[DECY] Using AI-detected category: ${category}`);
+            return this.getToolsFromCategory(category, budgetType, userQuery);
+        }
 
         try {
-            // Try Gemini first
-            if (this.genAI && this.apiKey !== 'your_gemini_api_key_here') {
+            // Try Gemini first for smart matching
+            if (this.genAI && this.geminiKey !== 'your_gemini_api_key_here') {
                 const result = await this.getGeminiRecommendation(userQuery, budgetType);
                 if (result && result.tools && result.tools.length > 0) {
                     console.log('[DECY] Gemini response successful');
@@ -50,6 +56,41 @@ class RecommendationEngine {
         console.log('[DECY] Using fallback recommendation engine');
         return this.getFallbackRecommendation(userQuery, budgetType);
     }
+
+    /**
+     * Get tools directly from a specific category (when AI already detected it)
+     */
+    getToolsFromCategory(categoryKey, budgetType, userQuery) {
+        const category = this.tools.categories[categoryKey];
+        if (!category) {
+            return this.getFallbackRecommendation(userQuery, budgetType);
+        }
+
+        let matchedTools = category.tools.filter(tool => {
+            if (budgetType === 'free') {
+                return tool.pricing.free === true;
+            }
+            return true;
+        });
+
+        // Sort by ease of use
+        matchedTools.sort((a, b) => (b.ease || 3) - (a.ease || 3));
+
+        const recommendations = matchedTools.slice(0, 3).map(tool => ({
+            ...tool,
+            category: category.name,
+            categoryIcon: category.icon
+        }));
+
+        return {
+            success: true,
+            source: 'ai_category',
+            category: category.name,
+            reasoning: `Here are the best ${budgetType} tools for ${this.extractKeyIntent(userQuery.toLowerCase())}:`,
+            tools: recommendations
+        };
+    }
+
 
     /**
      * Handle chat messages - use AI to respond naturally to ANY input
@@ -82,82 +123,45 @@ class RecommendationEngine {
     }
 
     /**
-     * Get response using Groq (Llama 3) - FAST & RELIABLE
+     * Get response using Groq (Llama 3) - AI-FIRST APPROACH
+     * The AI understands the conversation and returns structured JSON
      */
     async getGroqResponse(message, history = []) {
-        const lowerMessage = message.toLowerCase().trim();
+        // Build the tools context for the AI
+        const toolsContext = this.buildToolsContext();
 
-        // STANDALONE BUDGET ANSWER: User typed just "free" or "premium" as a response
-        const isStandaloneBudgetAnswer = /^(free|free tools?|premium|paid|pro)$/i.test(lowerMessage) ||
-            /^(i want|i prefer|i'll go with|go with|show me|give me)?\s*(free|premium|paid)(\s+tools?)?$/i.test(lowerMessage);
-
-        if (isStandaloneBudgetAnswer && history.length > 0) {
-            // Check if the last assistant message was asking about budget
-            const lastAssistant = history.filter(m => m.role === 'assistant').slice(-1)[0];
-            const askedBudget = lastAssistant?.content?.toLowerCase().includes('free') &&
-                lastAssistant?.content?.toLowerCase().includes('premium');
-
-            if (askedBudget) {
-                const budget = lowerMessage.includes('free') ? 'free' : 'premium';
-                console.log(`[DECY] User typed budget answer: ${budget}`);
-                // Get the original query from history (the message before the budget question)
-                const userMessages = history.filter(m => m.role === 'user');
-                const originalQuery = userMessages.length > 0 ? userMessages[userMessages.length - 1].content : message;
-                return {
-                    success: true,
-                    type: 'direct_recommendation',
-                    budget: budget,
-                    originalQuery: originalQuery
-                };
-            }
-        }
-
-        // DIRECT BUDGET DETECTION: If user explicitly says "free" or "premium", skip chat and get tools
-        const wantsFree = /\b(free|no cost|without paying|don't want to pay|i need free|want free)\b/i.test(message);
-        const wantsPremium = /\b(premium|paid|pro|professional|best quality|money|budget|willing to pay)\b/i.test(message);
-        const isToolRequest = /\b(tool|app|software|recommend|suggest|find|need|want to|help me|looking for|create|build|make|design|edit|generate)\b/i.test(message);
-
-        // If user explicitly states budget AND wants a tool -> directly get recommendations
-        if ((wantsFree || wantsPremium) && isToolRequest) {
-            const budget = wantsFree ? 'free' : 'premium';
-            console.log(`[DECY] Direct tool request detected with budget: ${budget}`);
-            return {
-                success: true,
-                type: 'direct_recommendation',
-                budget: budget,
-                originalQuery: message
-            };
-        }
-
-        // Build conversation messages
+        // Build conversation messages with a smart system prompt
         const messages = [
             {
                 role: 'system',
-                content: `You are DECY - an AI assistant specialized in recommending AI tools. Your PRIMARY MISSION is to help users find the perfect AI tool for their needs.
+                content: `You are DECY - a specialized AI assistant that helps users find the perfect AI tools. You have access to 50+ tools across categories like app building, image generation, video creation, coding, writing, design, and audio.
+
+YOUR RESPONSE FORMAT:
+You MUST respond with a JSON object. Always. No exceptions. The format is:
+{
+  "action": "chat" | "show_tools",
+  "message": "Your friendly response to the user",
+  "budget": "free" | "premium" | null,
+  "query": "The task/project the user wants to accomplish" | null,
+  "category": "app_building" | "image_generation" | "image_editing" | "video_creation" | "coding_assistance" | "writing" | "design" | "presentation" | "audio" | "general" | null
+}
+
+DECISION LOGIC:
+1. If user is just chatting, greeting, or asking questions about you → action: "chat"
+2. If user wants to CREATE/BUILD/MAKE/DESIGN/EDIT something AND has specified a budget (free/premium/paid) → action: "show_tools"
+3. If user wants to CREATE/BUILD/MAKE/DESIGN/EDIT something but hasn't specified budget → action: "chat", ask them "Would you prefer free tools or are you open to premium options?"
+4. If user says just "free" or "premium" after you asked → action: "show_tools" with the budget they chose
+5. Always detect the category from what they want to do
 
 PERSONALITY:
-- Warm, witty, and genuinely helpful
-- Chat naturally like a knowledgeable friend 
-- Use emoji occasionally when appropriate
+- Warm, friendly, use emojis occasionally
+- Keep messages concise (2-3 sentences max)
+- Always steer conversation towards finding the right tool
 
-EXPERTISE (50+ AI Tools):
-- App builders: Bolt, Lovable, Bubble, Glide, Replit
-- Image AI: Midjourney ($10/mo), DALL-E, Canva (free!), Leonardo AI, Ideogram
-- Video AI: Runway, Pika Labs, CapCut, InVideo
-- Coding: Cursor, GitHub Copilot, ChatGPT, Claude
-- Writing: Jasper, Copy.ai, Notion AI, Grammarly
-- Design: Canva, Figma, Kittl, Looka
-- Audio: ElevenLabs, Suno AI, Murf
+AVAILABLE CATEGORIES:
+${toolsContext}
 
-CRITICAL RULE - NEVER BREAK THIS:
-When a user wants to create, build, make, design, edit, or do ANYTHING that requires a tool:
--> You MUST ask EXACTLY: "Would you prefer free tools or are you open to premium options?"
--> Do NOT list tool names or make recommendations in your text response
--> The tool cards will be shown AFTER they answer the budget question
-
-For casual chat and questions about what tools do, answer naturally. But the moment they want to USE a tool for a task -> ASK THE BUDGET QUESTION.
-
-Keep responses concise (2-3 sentences). Stay focused on your mission!`
+Remember: ALWAYS respond with valid JSON only. No text before or after.`
             }
         ];
 
@@ -176,22 +180,43 @@ Keep responses concise (2-3 sentences). Stay focused on your mission!`
             messages: messages,
             model: 'llama-3.3-70b-versatile',
             temperature: 0.7,
-            max_tokens: 400,
+            max_tokens: 500,
+            response_format: { type: "json_object" }
         });
 
-        const text = completion.choices[0]?.message?.content || '';
-        console.log('[DECY] Groq response:', text.substring(0, 80) + '...');
+        const responseText = completion.choices[0]?.message?.content || '{}';
+        console.log('[DECY] Groq raw response:', responseText.substring(0, 150) + '...');
 
-        // Detect if this is a tool request (AI asked the budget question)
-        const askedBudgetQuestion = text.toLowerCase().includes('free') &&
-            text.toLowerCase().includes('premium') &&
-            (text.toLowerCase().includes('prefer') || text.toLowerCase().includes('would you'));
+        try {
+            const aiResponse = JSON.parse(responseText);
 
-        return {
-            success: true,
-            type: askedBudgetQuestion ? 'tool_request' : 'question',
-            response: text
-        };
+            if (aiResponse.action === 'show_tools' && aiResponse.budget) {
+                console.log(`[DECY] AI decided to show tools | Budget: ${aiResponse.budget} | Category: ${aiResponse.category}`);
+                return {
+                    success: true,
+                    type: 'show_tools',
+                    budget: aiResponse.budget,
+                    category: aiResponse.category || 'general',
+                    query: aiResponse.query || message,
+                    response: aiResponse.message || '🔍 Finding the best tools for you...'
+                };
+            } else {
+                console.log('[DECY] AI decided to chat');
+                return {
+                    success: true,
+                    type: 'chat',
+                    response: aiResponse.message || "I'm here to help you find the perfect AI tool! What would you like to create or build?"
+                };
+            }
+        } catch (parseError) {
+            console.log('[DECY] Failed to parse AI response, treating as chat:', parseError.message);
+            // If JSON parsing fails, treat the response as a regular chat message
+            return {
+                success: true,
+                type: 'chat',
+                response: responseText
+            };
+        }
     }
 
 
