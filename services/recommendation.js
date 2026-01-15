@@ -85,7 +85,32 @@ class RecommendationEngine {
      * Get response using Groq (Llama 3) - FAST & RELIABLE
      */
     async getGroqResponse(message, history = []) {
-        const lowerMessage = message.toLowerCase();
+        const lowerMessage = message.toLowerCase().trim();
+
+        // STANDALONE BUDGET ANSWER: User typed just "free" or "premium" as a response
+        const isStandaloneBudgetAnswer = /^(free|free tools?|premium|paid|pro)$/i.test(lowerMessage) ||
+            /^(i want|i prefer|i'll go with|go with|show me|give me)?\s*(free|premium|paid)(\s+tools?)?$/i.test(lowerMessage);
+
+        if (isStandaloneBudgetAnswer && history.length > 0) {
+            // Check if the last assistant message was asking about budget
+            const lastAssistant = history.filter(m => m.role === 'assistant').slice(-1)[0];
+            const askedBudget = lastAssistant?.content?.toLowerCase().includes('free') &&
+                lastAssistant?.content?.toLowerCase().includes('premium');
+
+            if (askedBudget) {
+                const budget = lowerMessage.includes('free') ? 'free' : 'premium';
+                console.log(`[DECY] User typed budget answer: ${budget}`);
+                // Get the original query from history (the message before the budget question)
+                const userMessages = history.filter(m => m.role === 'user');
+                const originalQuery = userMessages.length > 0 ? userMessages[userMessages.length - 1].content : message;
+                return {
+                    success: true,
+                    type: 'direct_recommendation',
+                    budget: budget,
+                    originalQuery: originalQuery
+                };
+            }
+        }
 
         // DIRECT BUDGET DETECTION: If user explicitly says "free" or "premium", skip chat and get tools
         const wantsFree = /\b(free|no cost|without paying|don't want to pay|i need free|want free)\b/i.test(message);
