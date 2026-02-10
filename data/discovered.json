@@ -13,8 +13,309 @@
       "category": "video_creation",
       "discoveredAt": "2026-02-10T13:09:09.906Z",
       "url": "https://luma.ai"
+    },
+    {
+      "id": "flux",
+      "name": "Flux",
+      "category": "design",
+      "discoveredAt": "2026-02-10T13:51:23.180Z",
+      "url": "https://flux.ai"
+    },
+    {
+      "id": "deepai",
+      "name": "DeepAI",
+      "category": "image_generation",
+      "discoveredAt": "2026-02-10T13:51:41.335Z",
+      "url": "https://deepai.org"
+    },
+    {
+      "id": "synthesia",
+      "name": "Synthesia",
+      "category": "video_creation",
+      "discoveredAt": "2026-02-10T13:51:49.661Z",
+      "url": "https://www.synthesia.io"
+    },
+    {
+      "id": "heygen",
+      "name": "HeyGen",
+      "category": "video_creation",
+      "discoveredAt": "2026-02-10T13:51:52.905Z",
+      "url": "https://heygen.com"
+    },
+    {
+      "id": "veed_io",
+      "name": "VEED.IO",
+      "category": "video_creation",
+      "discoveredAt": "2026-02-10T13:51:55.660Z",
+      "url": "https://www.veed.io"
+    },
+    {
+      "id": "fliki",
+      "name": "Fliki",
+      "category": "video_creation",
+      "discoveredAt": "2026-02-10T13:52:01.689Z",
+      "url": "https://fliki.ai"
+    },
+    {
+      "id": "d_id",
+      "name": "D-ID",
+      "category": "video_creation",
+      "discoveredAt": "2026-02-10T13:52:04.485Z",
+      "url": "https://www.d-id.com"
+    },
+    {
+      "id": "pictory",
+      "name": "Pictory",
+      "category": "video_creation",
+      "discoveredAt": "2026-02-10T13:52:09.064Z",
+      "url": "https://pictory.ai"
+    },
+    {
+      "id": "writesonic",
+      "name": "Writesonic",
+      "category": "research",
+      "discoveredAt": "2026-02-10T13:52:11.885Z",
+      "url": "https://writesonic.com"
+    },
+    {
+      "id": "wordtune",
+      "name": "Wordtune",
+      "category": "writing",
+      "discoveredAt": "2026-02-10T13:52:19.941Z",
+      "url": "https://www.wordtune.com"
+    },
+    {
+      "id": "quillbot",
+      "name": "QuillBot",
+      "category": "writing",
+      "discoveredAt": "2026-02-10T13:52:24.107Z",
+      "url": "https://quillbot.com"
+    },
+    {
+      "id": "hyperwrite",
+      "name": "HyperWrite",
+      "category": "writing",
+      "discoveredAt": "2026-02-10T13:52:27.223Z",
+      "url": "https://www.hyperwriteai.com"
+    },
+    {
+      "id": "sudowrite",
+      "name": "Sudowrite",
+      "category": "writing",
+      "discoveredAt": "2026-02-10T13:52:31.066Z",
+      "url": "https://www.sudowrite.com"
+    },
+    {
+      "id": "tabnine",
+      "name": "Tabnine AI Code Assistant",
+      "category": "coding_assistance",
+      "discoveredAt": "2026-02-10T13:52:34.977Z",
+      "url": "https://www.tabnine.com"
+    },
+    {
+      "id": "windsurf",
+      "name": "Windsurf",
+      "category": "coding_assistance",
+      "discoveredAt": "2026-02-10T13:52:41.094Z",
+      "url": "https://codeium.com"
+    },
+    {
+      "id": "aider",
+      "name": "Aider",
+      "category": "coding_assistance",
+      "discoveredAt": "2026-02-10T13:52:44.436Z",
+      "url": "https://aider.chat"
+    },
+    {
+      "id": "qodo",
+      "name": "Qodo",
+      "category": "coding_assistance",
+      "discoveredAt": "2026-02-10T13:52:49.076Z",
+      "url": "https://www.codium.ai"
+    },
+    {
+      "id": "autodraw",
+      "name": "AutoDraw",
+      "category": "design",
+      "discoveredAt": "2026-02-10T13:53:09.308Z",
+      "url": "https://www.autodraw.com"
+    },
+    {
+      "id": "uizard",
+      "name": "Uizard",
+      "category": "design",
+      "discoveredAt": "2026-02-10T13:53:12.602Z",
+      "url": "https://uizard.io"
+    },
+    {
+      "id": "slidesai",
+      "name": "SlidesAI",
+      "category": "presentation",
+      "discoveredAt": "2026-02-10T13:53:21.425Z",
+      "url": "https://www.slidesai.io"
+    },
+    {
+      "id": "decktopus",
+      "name": "Decktopus AI",
+      "category": "presentation",
+      "discoveredAt": "2026-02-10T13:53:24.057Z",
+      "url": "https://www.decktopus.com"
+    },
+    {
+      "id": "pitch",
+      "name": "Pitch",
+      "category": "presentation",
+      "discoveredAt": "2026-02-10T13:53:29.145Z",
+      "url": "https://pitch.com"
+    },
+    {
+      "id": "resemble_ai",
+      "name": "Resemble AI",
+      "category": "audio",
+      "discoveredAt": "2026-02-10T13:53:49.921Z",
+      "url": "https://www.resemble.ai"
+    },
+    {
+      "id": "speechify",
+      "name": "Speechify",
+      "category": "audio",
+      "discoveredAt": "2026-02-10T13:53:54.445Z",
+      "url": "https://speechify.com"
+    },
+    {
+      "id": "natural_reader",
+      "name": "NaturalReader",
+      "category": "audio",
+      "discoveredAt": "2026-02-10T13:53:59.736Z",
+      "url": "https://www.naturalreaders.com"
+    },
+    {
+      "id": "udio",
+      "name": "Udio",
+      "category": "audio",
+      "discoveredAt": "2026-02-10T13:54:03.471Z",
+      "url": "https://udio.com"
+    },
+    {
+      "id": "aiva",
+      "name": "AIVA",
+      "category": "audio",
+      "discoveredAt": "2026-02-10T13:54:07.042Z",
+      "url": "https://www.aiva.ai"
+    },
+    {
+      "id": "boomy",
+      "name": "Boomy",
+      "category": "audio",
+      "discoveredAt": "2026-02-10T13:54:10.034Z",
+      "url": "https://boomy.com"
+    },
+    {
+      "id": "you_com",
+      "name": "You.com",
+      "category": "research",
+      "discoveredAt": "2026-02-10T13:54:16.171Z",
+      "url": "https://you.com"
+    },
+    {
+      "id": "otter_ai",
+      "name": "Otter AI Meeting Agent",
+      "category": "audio",
+      "discoveredAt": "2026-02-10T13:54:24.211Z",
+      "url": "https://otter.ai"
+    },
+    {
+      "id": "fireflies_ai",
+      "name": "Fireflies.ai",
+      "category": "audio",
+      "discoveredAt": "2026-02-10T13:54:28.052Z",
+      "url": "https://fireflies.ai"
+    },
+    {
+      "id": "taskade",
+      "name": "Taskade",
+      "category": "app_building",
+      "discoveredAt": "2026-02-10T13:54:33.566Z",
+      "url": "https://www.taskade.com"
+    },
+    {
+      "id": "mem",
+      "name": "Mem",
+      "category": "automation",
+      "discoveredAt": "2026-02-10T13:54:37.757Z",
+      "url": "https://www.mem.ai"
+    },
+    {
+      "id": "reclaim",
+      "name": "Reclaim",
+      "category": "automation",
+      "discoveredAt": "2026-02-10T13:54:41.492Z",
+      "url": "https://reclaim.ai"
+    },
+    {
+      "id": "bubble",
+      "name": "Bubble",
+      "category": "app_building",
+      "discoveredAt": "2026-02-10T13:54:48.785Z",
+      "url": "https://bubble.io"
+    },
+    {
+      "id": "glide",
+      "name": "Glide",
+      "category": "app_building",
+      "discoveredAt": "2026-02-10T13:54:52.273Z",
+      "url": "https://glideapps.com"
+    },
+    {
+      "id": "softr",
+      "name": "Softr",
+      "category": "app_building",
+      "discoveredAt": "2026-02-10T13:54:56.210Z",
+      "url": "https://www.softr.io"
+    },
+    {
+      "id": "adcreative_ai",
+      "name": "AdCreative.ai",
+      "category": "design",
+      "discoveredAt": "2026-02-10T13:55:02.655Z",
+      "url": "https://www.adcreative.ai"
+    },
+    {
+      "id": "predis_ai",
+      "name": "Predis.ai",
+      "category": "video_creation",
+      "discoveredAt": "2026-02-10T13:55:08.580Z",
+      "url": "https://www.predis.ai"
+    },
+    {
+      "id": "elicit",
+      "name": "Elicit",
+      "category": "research",
+      "discoveredAt": "2026-02-10T13:55:19.632Z",
+      "url": "https://elicit.com"
+    },
+    {
+      "id": "semantic_scholar",
+      "name": "Semantic Scholar",
+      "category": "research",
+      "discoveredAt": "2026-02-10T13:55:26.694Z",
+      "url": "https://www.semanticscholar.org"
+    },
+    {
+      "id": "meshy_ai",
+      "name": "Meshy AI",
+      "category": "design",
+      "discoveredAt": "2026-02-10T13:55:33.620Z",
+      "url": "https://meshy.ai"
+    },
+    {
+      "id": "skybox_ai",
+      "name": "Skybox AI",
+      "category": "image_generation",
+      "discoveredAt": "2026-02-10T13:55:46.200Z",
+      "url": "https://www.blockadelabs.com"
     }
   ],
-  "lastScrape": "2026-02-10T13:09:09.906Z",
-  "totalDiscovered": 2
+  "lastScrape": "2026-02-10T13:55:46.200Z",
+  "totalDiscovered": 45
 }

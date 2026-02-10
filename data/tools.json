@@ -102,6 +102,80 @@
           "url": "https://v0.dev",
           "acceptsPrompt": true,
           "promptHint": "Describe the UI component you want"
+        },
+        {
+          "id": "taskade",
+          "name": "Taskade",
+          "bestFor": "Building AI-powered workspaces and automations",
+          "deploy": {
+            "available": true,
+            "type": "Free/Paid",
+            "note": "Sign up for free, with additional features for paid plans"
+          },
+          "limits": "Limited features in free tier",
+          "pricing": {
+            "free": true,
+            "premium": null
+          },
+          "whySuitsYou": "Taskade allows users to build intelligent portals for client intake, support, and CRM with ease",
+          "ease": 4,
+          "url": "https://www.taskade.com",
+          "acceptsPrompt": true,
+          "promptHint": "Describe the app or automation you want to build"
+        },
+        {
+          "id": "bubble",
+          "name": "Bubble",
+          "bestFor": "Building web and mobile apps with no-code AI",
+          "deploy": {
+            "available": true,
+            "type": "Paid",
+            "note": "Offers custom domain and export options"
+          },
+          "limits": "Limited features in free tier",
+          "pricing": {
+            "free": true,
+            "premium": "$25/month"
+          },
+          "whySuitsYou": "You can build web and mobile apps quickly with AI assistance and visual editing",
+          "ease": 4,
+          "url": "https://bubble.io"
+        },
+        {
+          "id": "glide",
+          "name": "Glide",
+          "bestFor": "Creating custom, AI-powered apps from spreadsheets with no code",
+          "deploy": {
+            "available": true,
+            "type": "Free/Paid",
+            "note": "Start for free, contact sales for custom plans"
+          },
+          "limits": "Limited features in free tier",
+          "pricing": {
+            "free": true,
+            "premium": null
+          },
+          "whySuitsYou": "You can create powerful custom apps without needing to code",
+          "ease": 4,
+          "url": "https://glideapps.com"
+        },
+        {
+          "id": "softr",
+          "name": "Softr",
+          "bestFor": "Building custom AI business apps, portals, and internal tools with no code",
+          "deploy": {
+            "available": true,
+            "type": "Paid",
+            "note": "Offers various plans including Project Management, Non-profit, and Enterprise"
+          },
+          "limits": "Limited to the features and support of the chosen plan",
+          "pricing": {
+            "free": false,
+            "premium": "Custom pricing based on plan"
+          },
+          "whySuitsYou": "You can build custom AI-powered business apps without needing to code",
+          "ease": 4,
+          "url": "https://www.softr.io"
         }
       ]
     },
@@ -201,6 +275,46 @@
           "url": "https://midjourney.com",
           "acceptsPrompt": true,
           "promptHint": "Describe the artistic image you want"
+        },
+        {
+          "id": "deepai",
+          "name": "DeepAI",
+          "bestFor": "Access to various AI tools for creative tasks",
+          "deploy": {
+            "available": true,
+            "type": "Free/Paid",
+            "note": "Offers a free version and a Pro version with more features"
+          },
+          "limits": "Limited credits for free users",
+          "pricing": {
+            "free": true,
+            "premium": "DeepAI Pro"
+          },
+          "whySuitsYou": "DeepAI provides a range of AI tools for creative humans to explore and create",
+          "ease": 4,
+          "url": "https://deepai.org",
+          "acceptsPrompt": true,
+          "promptHint": "Enter a prompt for the desired AI tool, such as image generation or text analysis"
+        },
+        {
+          "id": "skybox_ai",
+          "name": "Skybox AI",
+          "bestFor": "Generating professional 360° skyboxes and environments instantly with AI",
+          "deploy": {
+            "available": true,
+            "type": "Free/Paid",
+            "note": "Try for free, with custom projects and API integrations available"
+          },
+          "limits": "Limited to free trial, with paid plans for full access",
+          "pricing": {
+            "free": true,
+            "premium": null
+          },
+          "whySuitsYou": "You can create professional 360° environments instantly with AI, perfect for game developers and immersive content creators",
+          "ease": 4,
+          "url": "https://www.blockadelabs.com",
+          "acceptsPrompt": true,
+          "promptHint": "Describe the 360° environment you want to generate, including details like sky type, terrain, and lighting"
         }
       ]
     },
@@ -440,6 +554,144 @@
           "url": "https://luma.ai",
           "acceptsPrompt": true,
           "promptHint": "Write a text prompt describing the video you want to create"
+        },
+        {
+          "id": "synthesia",
+          "name": "Synthesia",
+          "bestFor": "Creating AI-generated videos from text with advanced avatars and voiceovers",
+          "deploy": {
+            "available": true,
+            "type": "Free/Paid",
+            "note": "Offers a free AI video generator"
+          },
+          "limits": "Limited to free AI video generator for trial",
+          "pricing": {
+            "free": true,
+            "premium": null
+          },
+          "whySuitsYou": "You can create professional-looking videos in minutes with AI avatars and voiceovers in multiple languages",
+          "ease": 4,
+          "url": "https://www.synthesia.io",
+          "acceptsPrompt": true,
+          "promptHint": "Enter the text you want to turn into a video"
+        },
+        {
+          "id": "heygen",
+          "name": "HeyGen",
+          "bestFor": "Creating stunning videos from text, image, or audio with AI",
+          "deploy": {
+            "available": true,
+            "type": "Free/Paid",
+            "note": "Offers a free plan with limited features"
+          },
+          "limits": "Limited features in free plan",
+          "pricing": {
+            "free": true,
+            "premium": null
+          },
+          "whySuitsYou": "You can create high-quality videos without needing cameras, actors, or studios",
+          "ease": 4,
+          "url": "https://heygen.com",
+          "acceptsPrompt": true,
+          "promptHint": "Input text, image, or audio to create complete videos"
+        },
+        {
+          "id": "veed_io",
+          "name": "VEED.IO",
+          "bestFor": "Creating professional-level videos online with AI-powered tools",
+          "deploy": {
+            "available": true,
+            "type": "Free/Paid",
+            "note": "Offers both free and paid plans"
+          },
+          "limits": "Limited features in the free tier",
+          "pricing": {
+            "free": true,
+            "premium": null
+          },
+          "whySuitsYou": "You can create high-quality videos quickly and easily with its AI-powered features",
+          "ease": 4,
+          "url": "https://www.veed.io",
+          "acceptsPrompt": true,
+          "promptHint": "Describe the video you want to create, including text, images, or other elements"
+        },
+        {
+          "id": "fliki",
+          "name": "Fliki",
+          "bestFor": "Turning text into videos with AI voices",
+          "deploy": {
+            "available": true,
+            "type": "Free",
+            "note": "Start for free, credit card not required"
+          },
+          "limits": "Not specified",
+          "pricing": {
+            "free": true,
+            "premium": null
+          },
+          "whySuitsYou": "You can create professional and engaging videos for every use case with ease",
+          "ease": 5,
+          "url": "https://fliki.ai",
+          "acceptsPrompt": true,
+          "promptHint": "Enter the text you want to turn into a video"
+        },
+        {
+          "id": "d_id",
+          "name": "D-ID",
+          "bestFor": "Creating AI-generated videos and interactive avatars for humanlike communication",
+          "deploy": {
+            "available": true,
+            "type": "Paid",
+            "note": "Contact sales for pricing details"
+          },
+          "limits": "Free trial available, but limits not specified",
+          "pricing": {
+            "free": false,
+            "premium": null
+          },
+          "whySuitsYou": "You can create engaging AI avatars and videos for various applications, including marketing and customer experience",
+          "ease": 4,
+          "url": "https://www.d-id.com"
+        },
+        {
+          "id": "pictory",
+          "name": "Pictory",
+          "bestFor": "Turning text into professional videos instantly",
+          "deploy": {
+            "available": true,
+            "type": "Free/Paid",
+            "note": "Start with a free plan"
+          },
+          "limits": "Limited features and exports in the free tier",
+          "pricing": {
+            "free": true,
+            "premium": null
+          },
+          "whySuitsYou": "You can create professional-quality videos quickly and effortlessly using AI-powered tools",
+          "ease": 5,
+          "url": "https://pictory.ai",
+          "acceptsPrompt": true,
+          "promptHint": "Enter text to turn into a video, such as a script, blog post, or article"
+        },
+        {
+          "id": "predis_ai",
+          "name": "Predis.ai",
+          "bestFor": "Creating smart ads and videos for social media platforms",
+          "deploy": {
+            "available": true,
+            "type": "Free/Paid",
+            "note": "Try for free, with paid plans available"
+          },
+          "limits": "Limited access to features in free tier",
+          "pricing": {
+            "free": true,
+            "premium": null
+          },
+          "whySuitsYou": "You can create effective ads and videos in just 30 seconds with AI assistance",
+          "ease": 4,
+          "url": "https://www.predis.ai",
+          "acceptsPrompt": true,
+          "promptHint": "Simple text prompts, product links, or images to generate ads and videos"
         }
       ]
     },
@@ -530,6 +782,84 @@
           "whySuitsYou": "Handles large codebases well, great for refactoring and reviews",
           "ease": 5,
           "url": "https://claude.ai"
+        },
+        {
+          "id": "tabnine",
+          "name": "Tabnine AI Code Assistant",
+          "bestFor": "Accelerating and simplifying software development with AI-powered coding assistance",
+          "deploy": {
+            "available": true,
+            "type": "Paid",
+            "note": "Enterprise-focused with custom pricing"
+          },
+          "limits": "Not specified for free tier, if available",
+          "pricing": {
+            "free": false,
+            "premium": "Custom pricing for enterprises"
+          },
+          "whySuitsYou": "You want an AI-powered coding assistant that prioritizes code privacy, security, and compliance for enterprise software development",
+          "ease": 4,
+          "url": "https://www.tabnine.com",
+          "acceptsPrompt": true,
+          "promptHint": "Write a description of the code you want to generate or assist with"
+        },
+        {
+          "id": "windsurf",
+          "name": "Windsurf",
+          "bestFor": "Advanced AI coding assistance for developers and enterprises",
+          "deploy": {
+            "available": true,
+            "type": "Paid",
+            "note": "Available for download with enterprise pricing"
+          },
+          "limits": "Not specified",
+          "pricing": {
+            "free": false,
+            "premium": "Custom enterprise pricing"
+          },
+          "whySuitsYou": "You want an advanced AI coding assistant to improve your development workflow",
+          "ease": 4,
+          "url": "https://codeium.com",
+          "acceptsPrompt": true,
+          "promptHint": "Write a terminal command or describe a coding task"
+        },
+        {
+          "id": "aider",
+          "name": "Aider",
+          "bestFor": "AI pair programming in the terminal for coding assistance",
+          "deploy": {
+            "available": true,
+            "type": "Free/Paid",
+            "note": "Depends on the LLM model used"
+          },
+          "limits": "Limited by the LLM model used",
+          "pricing": {
+            "free": true,
+            "premium": null
+          },
+          "whySuitsYou": "You can pair program with LLMs to start a new project or build on your existing codebase",
+          "ease": 4,
+          "url": "https://aider.chat",
+          "acceptsPrompt": true,
+          "promptHint": "Ask for changes by adding comments to your code"
+        },
+        {
+          "id": "qodo",
+          "name": "Qodo",
+          "bestFor": "AI code review and quality improvement for complex codebases",
+          "deploy": {
+            "available": true,
+            "type": "Paid",
+            "note": "Enterprise grade, with free option for open source projects"
+          },
+          "limits": "Free for open source projects, limits on other plans not specified",
+          "pricing": {
+            "free": true,
+            "premium": null
+          },
+          "whySuitsYou": "You want to improve code quality and accelerate review time with context-aware AI code review",
+          "ease": 4,
+          "url": "https://www.codium.ai"
         }
       ]
     },
@@ -620,6 +950,86 @@
           "whySuitsYou": "Professional-grade marketing content with brand voice training",
           "ease": 4,
           "url": "https://jasper.ai"
+        },
+        {
+          "id": "wordtune",
+          "name": "Wordtune",
+          "bestFor": "Perfecting English writing with AI-powered grammar correction and rewriting",
+          "deploy": {
+            "available": true,
+            "type": "Free/Paid",
+            "note": "Offers both free and paid plans"
+          },
+          "limits": "Limited features in free tier",
+          "pricing": {
+            "free": true,
+            "premium": null
+          },
+          "whySuitsYou": "You want to improve your English writing with AI assistance",
+          "ease": 4,
+          "url": "https://www.wordtune.com",
+          "acceptsPrompt": true,
+          "promptHint": "Enter text you want to rewrite or correct"
+        },
+        {
+          "id": "quillbot",
+          "name": "QuillBot",
+          "bestFor": "Improving writing with AI-powered tools for grammar, tone, and fluency",
+          "deploy": {
+            "available": true,
+            "type": "Free/Paid",
+            "note": "Offers a free version with limited features and a premium upgrade"
+          },
+          "limits": "Limited features in the free tier, such as word limits for paraphrasing",
+          "pricing": {
+            "free": true,
+            "premium": "$20/month"
+          },
+          "whySuitsYou": "You want to enhance your writing skills with AI assistance for grammar, tone, and fluency",
+          "ease": 4,
+          "url": "https://quillbot.com",
+          "acceptsPrompt": true,
+          "promptHint": "Enter text you want to improve, such as an essay or article, and select the desired tool like paraphrasing or grammar checking"
+        },
+        {
+          "id": "hyperwrite",
+          "name": "HyperWrite",
+          "bestFor": "AI-powered writing assistance and content generation",
+          "deploy": {
+            "available": true,
+            "type": "Free/Paid",
+            "note": "Offers a free plan with AI writing assistant and web search"
+          },
+          "limits": "Limited features in free plan",
+          "pricing": {
+            "free": true,
+            "premium": null
+          },
+          "whySuitsYou": "You can use HyperWrite to generate content, conduct research, and rewrite text with the help of AI",
+          "ease": 4,
+          "url": "https://www.hyperwriteai.com",
+          "acceptsPrompt": true,
+          "promptHint": "Write a prompt for the type of content you want to generate, such as 'write a blog post about AI' or 'research and summarize a topic'"
+        },
+        {
+          "id": "sudowrite",
+          "name": "Sudowrite",
+          "bestFor": "AI-powered writing assistance for fiction writers",
+          "deploy": {
+            "available": true,
+            "type": "Free",
+            "note": "Sign up with Google or email"
+          },
+          "limits": "Unknown",
+          "pricing": {
+            "free": true,
+            "premium": null
+          },
+          "whySuitsYou": "It helps fiction writers to write faster and smarter with its unparalleled story smarts",
+          "ease": 4,
+          "url": "https://www.sudowrite.com",
+          "acceptsPrompt": true,
+          "promptHint": "Write a prompt related to your story, such as a character description or scene idea"
         }
       ]
     },
@@ -721,6 +1131,102 @@
           "whySuitsYou": "Trendy templates for t-shirts, stickers, and social posts",
           "ease": 5,
           "url": "https://kittl.com"
+        },
+        {
+          "id": "flux",
+          "name": "Flux",
+          "bestFor": "Designing PCBs with AI assistance",
+          "deploy": {
+            "available": true,
+            "type": "Paid",
+            "note": "Enterprise pricing available upon request"
+          },
+          "limits": "Limited access to features in free tier",
+          "pricing": {
+            "free": true,
+            "premium": null
+          },
+          "whySuitsYou": "You want to streamline your PCB design process with AI-powered tools",
+          "ease": 4,
+          "url": "https://flux.ai",
+          "acceptsPrompt": true,
+          "promptHint": "Describe your PCB design project and let Flux assist with planning and execution"
+        },
+        {
+          "id": "autodraw",
+          "name": "AutoDraw",
+          "bestFor": "Quick drawing with machine learning assistance",
+          "deploy": {
+            "available": true,
+            "type": "Free",
+            "note": "Web-based, no download required"
+          },
+          "limits": "Unknown",
+          "pricing": {
+            "free": true,
+            "premium": null
+          },
+          "whySuitsYou": "You can create fast drawings with the help of machine learning and artist contributions",
+          "ease": 5,
+          "url": "https://www.autodraw.com"
+        },
+        {
+          "id": "uizard",
+          "name": "Uizard",
+          "bestFor": "AI-powered UI design for apps, websites, and desktop software",
+          "deploy": {
+            "available": true,
+            "type": "Paid",
+            "note": "Subscription-based plans"
+          },
+          "limits": "Limited features in free plan",
+          "pricing": {
+            "free": true,
+            "premium": "$24/month"
+          },
+          "whySuitsYou": "Uizard helps you create professional UI designs quickly and easily with its AI-powered tools",
+          "ease": 4,
+          "url": "https://uizard.io"
+        },
+        {
+          "id": "adcreative_ai",
+          "name": "AdCreative.ai",
+          "bestFor": "Generating conversion-focused ad creatives and competitor insights for marketers",
+          "deploy": {
+            "available": true,
+            "type": "Paid",
+            "note": "Comprehensive suite of tools for creating impactful ad texts and visuals"
+          },
+          "limits": "Not specified",
+          "pricing": {
+            "free": false,
+            "premium": null
+          },
+          "whySuitsYou": "You can generate high-performing ad creatives and access detailed competitor insights with AI-powered tools",
+          "ease": 4,
+          "url": "https://www.adcreative.ai",
+          "acceptsPrompt": true,
+          "promptHint": "Describe your advertising needs and goals to generate tailored ad creatives"
+        },
+        {
+          "id": "meshy_ai",
+          "name": "Meshy AI",
+          "bestFor": "Creating production-ready 3D models from text and images",
+          "deploy": {
+            "available": true,
+            "type": "Free",
+            "note": "Free 3D model generation with optional upgrades"
+          },
+          "limits": "Limited to free 3D models, with potential paid upgrades for additional features",
+          "pricing": {
+            "free": true,
+            "premium": null
+          },
+          "whySuitsYou": "You can create detailed 3D models from simple text prompts or images in seconds",
+          "ease": 5,
+          "url": "https://meshy.ai",
+          "acceptsPrompt": true,
+          "promptHint": "Write a simple text prompt describing the 3D model you want to create"
         }
       ]
     },
@@ -793,6 +1299,64 @@
           "whySuitsYou": "Slides auto-format beautifully as you add content",
           "ease": 5,
           "url": "https://beautiful.ai"
+        },
+        {
+          "id": "slidesai",
+          "name": "SlidesAI",
+          "bestFor": "Creating stunning presentation slides in seconds with AI",
+          "deploy": {
+            "available": true,
+            "type": "Free",
+            "note": "Works with Google Slides and PowerPoint"
+          },
+          "limits": "Unknown",
+          "pricing": {
+            "free": true,
+            "premium": null
+          },
+          "whySuitsYou": "You can create presentations 10X faster with AI, without needing design skills",
+          "ease": 5,
+          "url": "https://www.slidesai.io",
+          "acceptsPrompt": true,
+          "promptHint": "Enter text to turn into presentation slides"
+        },
+        {
+          "id": "decktopus",
+          "name": "Decktopus AI",
+          "bestFor": "Creating presentations with AI assistance",
+          "deploy": {
+            "available": true,
+            "type": "Paid",
+            "note": "Sign up with Google or email"
+          },
+          "limits": "Unknown",
+          "pricing": {
+            "free": false,
+            "premium": null
+          },
+          "whySuitsYou": "You can create amazing presentations in seconds with Decktopus AI",
+          "ease": 5,
+          "url": "https://www.decktopus.com",
+          "acceptsPrompt": true,
+          "promptHint": "Type a presentation title to generate a presentation"
+        },
+        {
+          "id": "pitch",
+          "name": "Pitch",
+          "bestFor": "Creating sleek presentations quickly with AI-powered features",
+          "deploy": {
+            "available": true,
+            "type": "Free/Paid",
+            "note": "Sign up for free, with optional paid upgrades"
+          },
+          "limits": "100+ customizable templates, limited features in free tier",
+          "pricing": {
+            "free": true,
+            "premium": null
+          },
+          "whySuitsYou": "You want to create professional presentations quickly with AI assistance and collaboration features",
+          "ease": 4,
+          "url": "https://pitch.com"
         }
       ]
     },
@@ -888,6 +1452,158 @@
           "whySuitsYou": "Just speak your thoughts and get accurate transcription instantly",
           "ease": 5,
           "url": "https://wisprflow.ai"
+        },
+        {
+          "id": "resemble_ai",
+          "name": "Resemble AI",
+          "bestFor": "Creating ultra-realistic voices and detecting deepfakes for enterprise",
+          "deploy": {
+            "available": true,
+            "type": "Paid",
+            "note": "Scalable and built for production"
+          },
+          "limits": "Not specified for free tier",
+          "pricing": {
+            "free": false,
+            "premium": "Custom pricing for enterprise"
+          },
+          "whySuitsYou": "You can create realistic voices and protect your brand from deepfakes with Resemble AI",
+          "ease": 4,
+          "url": "https://www.resemble.ai",
+          "acceptsPrompt": true,
+          "promptHint": "Text or voice prompts to generate AI voices"
+        },
+        {
+          "id": "speechify",
+          "name": "Speechify",
+          "bestFor": "Converting text to speech and voice typing",
+          "deploy": {
+            "available": true,
+            "type": "Free/Paid",
+            "note": "Offers a free version with limitations"
+          },
+          "limits": "Limited features in the free tier",
+          "pricing": {
+            "free": true,
+            "premium": null
+          },
+          "whySuitsYou": "You can listen to books, PDFs, or web pages anytime with natural voices",
+          "ease": 5,
+          "url": "https://speechify.com"
+        },
+        {
+          "id": "natural_reader",
+          "name": "NaturalReader",
+          "bestFor": "Converting text into natural-sounding audio for reading, accessibility, and voiceover creation",
+          "deploy": {
+            "available": true,
+            "type": "Free/Paid",
+            "note": "Available as a web app, mobile app, and Chrome extension"
+          },
+          "limits": "Limited features in the free version",
+          "pricing": {
+            "free": true,
+            "premium": "Varies by plan (Personal, Commercial, EDU)"
+          },
+          "whySuitsYou": "You can easily convert any text into natural-sounding audio for personal or professional use",
+          "ease": 4,
+          "url": "https://www.naturalreaders.com",
+          "acceptsPrompt": true,
+          "promptHint": "Enter the text you want to convert to speech"
+        },
+        {
+          "id": "udio",
+          "name": "Udio",
+          "bestFor": "Creating AI-generated music in seconds",
+          "deploy": {
+            "available": true,
+            "type": "N/A",
+            "note": "No clear deployment information"
+          },
+          "limits": "Unknown",
+          "pricing": {
+            "free": true,
+            "premium": null
+          },
+          "whySuitsYou": "Udio allows users to create and share music with the world using the latest AI technology.",
+          "ease": 4,
+          "url": "https://udio.com",
+          "acceptsPrompt": true,
+          "promptHint": "Describe the type of music you want to generate"
+        },
+        {
+          "id": "aiva",
+          "name": "AIVA",
+          "bestFor": "AI music generation in various styles",
+          "deploy": {
+            "available": true,
+            "type": "Free/Paid",
+            "note": "Free account available with limitations"
+          },
+          "limits": "3 downloads per month, track durations up to 3 minutes, MP3 & MIDI formats",
+          "pricing": {
+            "free": true,
+            "premium": "€11/month (Standard), €33/month (Pro)"
+          },
+          "whySuitsYou": "You can generate high-quality music tracks in seconds using AI technology",
+          "ease": 4,
+          "url": "https://www.aiva.ai",
+          "acceptsPrompt": true,
+          "promptHint": "Describe the style, mood, or genre of music you want to generate"
+        },
+        {
+          "id": "boomy",
+          "name": "Boomy",
+          "bestFor": "Creating generative music with AI",
+          "deploy": {
+            "available": true,
+            "type": "N/A",
+            "note": "JavaScript required"
+          },
+          "limits": "Unknown",
+          "pricing": {
+            "free": true,
+            "premium": null
+          },
+          "whySuitsYou": "You want to create unique music using AI",
+          "ease": 4,
+          "url": "https://boomy.com"
+        },
+        {
+          "id": "otter_ai",
+          "name": "Otter AI Meeting Agent",
+          "bestFor": "Real-time meeting transcription and insights",
+          "deploy": {
+            "available": true,
+            "type": "Paid",
+            "note": "Subscription-based service"
+          },
+          "limits": "Limited to 40 minutes of conversation per meeting in the free version",
+          "pricing": {
+            "free": true,
+            "premium": "$8.33/month"
+          },
+          "whySuitsYou": "Automates meeting note-taking and provides actionable insights",
+          "ease": 4,
+          "url": "https://otter.ai"
+        },
+        {
+          "id": "fireflies_ai",
+          "name": "Fireflies.ai",
+          "bestFor": "Automatically taking notes, transcribing, summarizing, searching, and analyzing team conversations",
+          "deploy": {
+            "available": true,
+            "type": "Paid",
+            "note": "Requires subscription for full features"
+          },
+          "limits": "Limited to certain features in free tier",
+          "pricing": {
+            "free": true,
+            "premium": null
+          },
+          "whySuitsYou": "You want an AI-powered notetaker to transcribe, summarize, and analyze your team conversations",
+          "ease": 4,
+          "url": "https://fireflies.ai"
         }
       ]
     },
@@ -995,6 +1711,82 @@
           "whySuitsYou": "Get instant answers about current events with real-time X/Twitter data",
           "ease": 5,
           "url": "https://grok.com"
+        },
+        {
+          "id": "writesonic",
+          "name": "Writesonic",
+          "bestFor": "Tracking and optimizing AI search visibility across multiple platforms",
+          "deploy": {
+            "available": true,
+            "type": "Paid",
+            "note": "Free trial available"
+          },
+          "limits": "Limited access to features in free trial",
+          "pricing": {
+            "free": false,
+            "premium": null
+          },
+          "whySuitsYou": "You want to track and boost your brand's visibility in AI search results across multiple platforms",
+          "ease": 4,
+          "url": "https://writesonic.com"
+        },
+        {
+          "id": "you_com",
+          "name": "You.com",
+          "bestFor": "Building AI search infrastructure for enterprise teams",
+          "deploy": {
+            "available": true,
+            "type": "Paid",
+            "note": "Enterprise solutions"
+          },
+          "limits": "Custom pricing for enterprise teams",
+          "pricing": {
+            "free": false,
+            "premium": "Custom quote"
+          },
+          "whySuitsYou": "You.com provides advanced search capabilities to power your next product with its AI-ready API platform and ultra-specific vertical indexes.",
+          "ease": 3,
+          "url": "https://you.com"
+        },
+        {
+          "id": "elicit",
+          "name": "Elicit",
+          "bestFor": "AI-powered scientific research and paper analysis",
+          "deploy": {
+            "available": true,
+            "type": "Paid",
+            "note": "Sign up required for access"
+          },
+          "limits": "Limited access to features and data sources in free tier",
+          "pricing": {
+            "free": true,
+            "premium": null
+          },
+          "whySuitsYou": "You want to accelerate your scientific research with AI-driven tools and insights",
+          "ease": 4,
+          "url": "https://elicit.com",
+          "acceptsPrompt": true,
+          "promptHint": "Enter a research question or topic to get started with Elicit's semantic search"
+        },
+        {
+          "id": "semantic_scholar",
+          "name": "Semantic Scholar",
+          "bestFor": "AI-powered research tool for scientific literature",
+          "deploy": {
+            "available": true,
+            "type": "Free",
+            "note": "Free account available"
+          },
+          "limits": "None mentioned",
+          "pricing": {
+            "free": true,
+            "premium": null
+          },
+          "whySuitsYou": "You want to discover relevant research using AI-powered tools",
+          "ease": 4,
+          "url": "https://www.semanticscholar.org",
+          "acceptsPrompt": true,
+          "promptHint": "Enter keywords, authors, or topics to search for relevant research papers"
         }
       ]
     },
@@ -1083,6 +1875,42 @@
           "whySuitsYou": "Never forget meeting details - AI captures notes so you can focus on the conversation",
           "ease": 5,
           "url": "https://granola.ai"
+        },
+        {
+          "id": "mem",
+          "name": "Mem",
+          "bestFor": "Organizing team work, meeting notes, and knowledge bases with AI",
+          "deploy": {
+            "available": true,
+            "type": "N/A",
+            "note": "Requires a newer browser version"
+          },
+          "limits": "Unknown",
+          "pricing": {
+            "free": true,
+            "premium": null
+          },
+          "whySuitsYou": "You want an AI tool to organize your team's work and make it instantly searchable",
+          "ease": 4,
+          "url": "https://www.mem.ai"
+        },
+        {
+          "id": "reclaim",
+          "name": "Reclaim",
+          "bestFor": "Auto-scheduling tasks and meetings to optimize time",
+          "deploy": {
+            "available": true,
+            "type": "Paid",
+            "note": "Integrates with Google Calendar and Outlook Calendar"
+          },
+          "limits": "Limited features in free version",
+          "pricing": {
+            "free": true,
+            "premium": "$X/month"
+          },
+          "whySuitsYou": "You want to optimize your time and schedule with AI assistance",
+          "ease": 4,
+          "url": "https://reclaim.ai"
         }
       ]
     }
@@ -1090,7 +1918,7 @@
   "metadata": {
     "version": "1.1.0",
     "lastUpdated": "2026-02-10",
-    "totalTools": 47,
+    "totalTools": 90,
     "categories": 11
   }
 }
