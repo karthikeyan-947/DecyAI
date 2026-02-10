@@ -8,12 +8,15 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const RecommendationEngine = require('./services/recommendation');
+const ToolScraper = require('./services/scraper');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Initialize recommendation engine
+// Initialize engines
 const engine = new RecommendationEngine(process.env.GEMINI_API_KEY);
+const scraper = new ToolScraper();
+engine.setScraper(scraper);  // Connect scraper for auto-discovery
 
 // Middleware
 app.use(cors());
@@ -202,6 +205,72 @@ app.get('/api/tools/:category', (req, res) => {
     });
 });
 
+// ============================================
+//  SCRAPER API ROUTES - Auto Tool Discovery
+// ============================================
+
+/**
+ * POST /api/discover/url
+ * Discover a new AI tool by its website URL
+ * Body: { url: string }
+ */
+app.post('/api/discover/url', async (req, res) => {
+    try {
+        const { url } = req.body;
+        if (!url) {
+            return res.status(400).json({ success: false, error: 'URL is required' });
+        }
+        const result = await scraper.discoverToolByUrl(url);
+        res.json(result);
+    } catch (error) {
+        console.error('[DECY] Discover error:', error);
+        res.status(500).json({ success: false, error: 'Discovery failed' });
+    }
+});
+
+/**
+ * POST /api/discover/name
+ * Discover a new AI tool by searching for its name
+ * Body: { name: string }
+ */
+app.post('/api/discover/name', async (req, res) => {
+    try {
+        const { name } = req.body;
+        if (!name) {
+            return res.status(400).json({ success: false, error: 'Tool name is required' });
+        }
+        const result = await scraper.discoverToolByName(name);
+        res.json(result);
+    } catch (error) {
+        console.error('[DECY] Discover error:', error);
+        res.status(500).json({ success: false, error: 'Discovery failed' });
+    }
+});
+
+/**
+ * POST /api/discover/scrape
+ * Run a full scrape of AI tool directories
+ * Returns: { discovered, added, skipped, errors }
+ */
+app.post('/api/discover/scrape', async (req, res) => {
+    try {
+        const results = await scraper.runFullScrape();
+        res.json({ success: true, ...results });
+    } catch (error) {
+        console.error('[DECY] Scrape error:', error);
+        res.status(500).json({ success: false, error: 'Scrape failed' });
+    }
+});
+
+/**
+ * GET /api/discover/stats
+ * Get scraper stats
+ */
+app.get('/api/discover/stats', (req, res) => {
+    const stats = scraper.getStats();
+    res.json(stats);
+});
+
 /**
  * Serve frontend
  */
@@ -222,13 +291,16 @@ app.listen(PORT, () => {
     console.log(`
 ╔═══════════════════════════════════════════════════════════╗
 ║                                                           ║
-║   🤖 DECY - AI Decision Assistant                         ║
+║   🤖 DECY - AI Decision Assistant v2.0                    ║
 ║   ─────────────────────────────────────                   ║
 ║                                                           ║
-║   Server running at: http://localhost:${PORT}               ║
-║   API endpoint:      http://localhost:${PORT}/api/recommend ║
+║   Server:    http://localhost:${PORT}                       ║
+║   API:       http://localhost:${PORT}/api/recommend         ║
+║   Scraper:   http://localhost:${PORT}/api/discover/stats    ║
 ║                                                           ║
-║   Gemini API: ${process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY !== 'your_gemini_api_key_here' ? '✅ Enabled' : '⚠️  Using fallback mode'}                         ║
+║   Groq:   ${process.env.GROQ_API_KEY ? '✅ Enabled' : '⚠️  Not configured'}                                  ║
+║   Gemini: ${process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY !== 'your_gemini_api_key_here' ? '✅ Enabled' : '⚠️  Not configured'}                                  ║
+║   Scraper: ✅ Ready                                       ║
 ║                                                           ║
 ╚═══════════════════════════════════════════════════════════╝
     `);

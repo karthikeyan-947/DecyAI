@@ -5,7 +5,8 @@
 
 const Groq = require('groq-sdk');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
-const tools = require('../data/tools.json');
+const fs = require('fs');
+const path = require('path');
 
 class RecommendationEngine {
     constructor(geminiKey) {
@@ -17,13 +18,47 @@ class RecommendationEngine {
         this.geminiKey = geminiKey;
         this.genAI = geminiKey ? new GoogleGenerativeAI(geminiKey) : null;
 
-        this.tools = tools;
+        // Load tools (dynamic - reloads when new tools are added by scraper)
+        this.toolsPath = path.join(__dirname, '..', 'data', 'tools.json');
+        this.tools = this.loadTools();
+
+        // Scraper for auto-discovery
+        this.scraper = null; // lazy-loaded to avoid circular dependency
 
         if (this.groq) {
             console.log('[DECY] ⚡ Using Groq (Llama 3) - Fast & Reliable');
         } else if (this.genAI) {
             console.log('[DECY] Using Gemini (backup mode)');
         }
+    }
+
+    /**
+     * Load tools from disk (called after scraper adds new tools)
+     */
+    loadTools() {
+        try {
+            // Clear require cache to get fresh data
+            delete require.cache[require.resolve('../data/tools.json')];
+            return require('../data/tools.json');
+        } catch (e) {
+            console.error('[DECY] Failed to load tools:', e.message);
+            return { categories: {} };
+        }
+    }
+
+    /**
+     * Refresh tools data (call after scraper adds new tools)
+     */
+    refreshTools() {
+        this.tools = this.loadTools();
+        console.log(`[DECY] Tools refreshed: ${this.tools.metadata?.totalTools || 0} tools`);
+    }
+
+    /**
+     * Set the scraper instance (called from server.js to avoid circular deps)
+     */
+    setScraper(scraperInstance) {
+        this.scraper = scraperInstance;
     }
 
 

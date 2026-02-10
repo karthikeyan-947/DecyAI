@@ -400,6 +400,46 @@
           "whySuitsYou": "Turn long videos into viral shorts automatically - finds the best moments",
           "ease": 5,
           "url": "https://opus.pro"
+        },
+        {
+          "id": "pika",
+          "name": "Pika",
+          "bestFor": "Creating videos from ideas with hyper-real expressions and near real-time generation speed",
+          "deploy": {
+            "available": true,
+            "type": "Free/Paid",
+            "note": "Sign-in required to use the Pikaformance model"
+          },
+          "limits": "Unknown",
+          "pricing": {
+            "free": true,
+            "premium": null
+          },
+          "whySuitsYou": "You can create stunning videos with hyper-real expressions and near real-time generation speed",
+          "ease": 4,
+          "url": "https://pika.art",
+          "acceptsPrompt": true,
+          "promptHint": "Describe the video you want to create, including the scene, characters, and actions"
+        },
+        {
+          "id": "luma_ai",
+          "name": "Luma AI",
+          "bestFor": "Transforming ideas into videos instantly with AI",
+          "deploy": {
+            "available": true,
+            "type": "Paid",
+            "note": "Subscription-based service"
+          },
+          "limits": "Limited video duration or resolution in free tier",
+          "pricing": {
+            "free": false,
+            "premium": "$29/month"
+          },
+          "whySuitsYou": "You can create stunning AI-generated videos from text prompts or images in seconds",
+          "ease": 4,
+          "url": "https://luma.ai",
+          "acceptsPrompt": true,
+          "promptHint": "Write a text prompt describing the video you want to create"
         }
       ]
     },
@@ -1049,8 +1089,8 @@
   },
   "metadata": {
     "version": "1.1.0",
-    "lastUpdated": "2026-01-13",
-    "totalTools": 50,
+    "lastUpdated": "2026-02-10",
+    "totalTools": 47,
     "categories": 11
   }
 }

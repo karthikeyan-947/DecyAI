@@ -1,0 +1,20 @@
+{
+  "tools": [
+    {
+      "id": "pika",
+      "name": "Pika",
+      "category": "video_creation",
+      "discoveredAt": "2026-02-10T13:07:56.943Z",
+      "url": "https://pika.art"
+    },
+    {
+      "id": "luma_ai",
+      "name": "Luma AI",
+      "category": "video_creation",
+      "discoveredAt": "2026-02-10T13:09:09.906Z",
+      "url": "https://luma.ai"
+    }
+  ],
+  "lastScrape": "2026-02-10T13:09:09.906Z",
+  "totalDiscovered": 2
+}
