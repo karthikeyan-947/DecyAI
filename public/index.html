@@ -1158,6 +1158,11 @@
                     isLoading = false;
                     // Get tools that AI specifically recommended
                     await getToolsByIds(data.toolIds, data.budget);
+                } else if (data.type === 'show_workflow') {
+                    // AI generated a multi-step workflow plan
+                    addMessage(data.response, 'assistant');
+                    chatHistory.push({ role: 'assistant', content: data.response });
+                    addWorkflowCards(data.steps);
                 } else {
                     // Regular chat response
                     addMessage(data.response, 'assistant');
@@ -1315,6 +1320,63 @@
             `;
             container.insertAdjacentHTML('beforeend', html);
             scrollToBottom();
+        }
+
+        function addWorkflowCards(steps) {
+            const container = document.getElementById('messages');
+
+            // Build the workflow steps HTML
+            const stepsHtml = steps.map((step, i) => {
+                const isLast = i === steps.length - 1;
+                return `
+                    <div class="flex gap-3 items-start ${i > 0 ? 'mt-3' : ''}">
+                        <!-- Step number with connector line -->
+                        <div class="flex flex-col items-center">
+                            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white text-[13px] font-bold flex-shrink-0">
+                                ${step.step}
+                            </div>
+                            ${!isLast ? '<div class="w-[2px] bg-gradient-to-b from-purple-500/40 to-transparent flex-1 min-h-[40px] mt-1.5"></div>' : ''}
+                        </div>
+                        <!-- Step content -->
+                        <div class="flex-1 pb-2">
+                            <h4 class="text-[15px] font-bold text-white tracking-tight">${escapeHtml(step.title)}</h4>
+                            <p class="text-[13px] text-purple-300/90 font-medium mt-0.5">Use ${escapeHtml(step.tool_name)}</p>
+                            <div class="mt-2 bg-white/[0.04] border border-white/[0.08] rounded-xl px-3 py-2.5 group cursor-pointer hover:bg-white/[0.07] transition-all" onclick="copyPrompt(this, '${escapeHtml(step.prompt).replace(/'/g, "\\'")}')">
+                                <div class="flex items-start justify-between gap-2">
+                                    <p class="text-[12px] text-white/50 leading-relaxed italic">"${escapeHtml(step.prompt)}"</p>
+                                    <span class="material-symbols-outlined text-[14px] text-white/30 group-hover:text-white/60 flex-shrink-0 mt-0.5 transition-colors">content_copy</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+            }).join('');
+
+            const html = `
+                <div class="mb-4">
+                    <div class="recommendation-card rounded-2xl p-5">
+                        <div class="flex items-center gap-2 mb-4">
+                            <span class="material-symbols-outlined text-[20px] text-purple-400">route</span>
+                            <span class="text-[11px] font-bold tracking-[0.08em] text-purple-400/80 uppercase">Your Workflow</span>
+                        </div>
+                        ${stepsHtml}
+                    </div>
+                </div>
+            `;
+
+            container.insertAdjacentHTML('beforeend', html);
+            scrollToBottom();
+        }
+
+        function copyPrompt(el, text) {
+            navigator.clipboard.writeText(text).then(() => {
+                const icon = el.querySelector('.material-symbols-outlined');
+                icon.textContent = 'check';
+                icon.classList.add('text-green-400');
+                setTimeout(() => {
+                    icon.textContent = 'content_copy';
+                    icon.classList.remove('text-green-400');
+                }, 2000);
+            });
         }
 
         // Add a "Get Prompt" section below all tool recommendations

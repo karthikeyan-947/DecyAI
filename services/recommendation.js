@@ -326,23 +326,48 @@ CRITICAL RULES:
 2. Recommend ALL 3 tools from the SAME primary category
 3. Only mix categories if the request EXPLICITLY mentions two different tasks
 
-YOUR RESPONSE FORMAT (JSON only):
+YOUR RESPONSE FORMAT (JSON only) — pick ONE of these:
+
+FORMAT A - Single task (e.g. "I need to edit videos"):
 {
-  "action": "chat" | "show_tools",
+  "action": "show_tools",
   "message": "Your friendly response",
-  "budget": "free" | "premium" | null,
-  "tools": ["tool_id_1", "tool_id_2", "tool_id_3"] | null
+  "budget": "free",
+  "tools": ["tool_id_1", "tool_id_2", "tool_id_3"]
 }
 
+FORMAT B - Complex multi-step goal (e.g. "launch a food delivery startup", "build and market my app"):
+{
+  "action": "show_workflow",
+  "message": "Here's your complete plan!",
+  "steps": [
+    {"step": 1, "title": "Build Your App", "tool_id": "lovable", "tool_name": "Lovable", "prompt": "Create a food delivery app with menu browsing, cart, and checkout"},
+    {"step": 2, "title": "Design Your Logo", "tool_id": "looka", "tool_name": "Looka", "prompt": "Modern food delivery logo with warm colors and friendly font"},
+    {"step": 3, "title": "Create Pitch Deck", "tool_id": "gamma", "tool_name": "Gamma", "prompt": "Pitch deck for food delivery startup targeting urban millennials"},
+    {"step": 4, "title": "Launch Video", "tool_id": "invideo", "tool_name": "InVideo", "prompt": "30-second promotional video announcing new food delivery service"}
+  ]
+}
+
+FORMAT C - Just chatting:
+{
+  "action": "chat",
+  "message": "Your friendly response"
+}
+
+WHEN TO USE EACH FORMAT:
+- "show_tools" → User wants ONE specific thing (edit video, generate image, build website)
+- "show_workflow" → User describes a BIG GOAL that needs MULTIPLE tools in sequence (launch startup, build and market, create full brand)
+- "chat" → User is just chatting, greeting, or asking a question
+
 DECISION RULES:
-- Just chatting/greeting/question → action: "chat", tools: null
-- User wants to CREATE, BUILD, MAKE, or DO something → action: "show_tools", budget: "free", return best 3 tool IDs IMMEDIATELY
-- User specifically says "premium" or "paid" → action: "show_tools", budget: "premium", return best 3 premium tools
-- NEVER ask "free or premium?". Just show free tools by default. Users will ask for premium if they want it.
+- Just chatting/greeting/question → action: "chat"
+- User wants to CREATE, BUILD, MAKE one thing → action: "show_tools", budget: "free", return best 3 tool IDs IMMEDIATELY
+- User describes a COMPLEX GOAL needing multiple steps → action: "show_workflow", return 3-5 steps with specific tools and prompts
+- NEVER ask "free or premium?". Just show free tools by default.
 
 PERSONALITY: Warm, friendly, concise (2-3 sentences), use emojis occasionally.
 
-CRITICAL: Return ONLY valid JSON. Put tool IDs in the "tools" array.`
+CRITICAL: Return ONLY valid JSON.`
             }
         ];
 
@@ -361,7 +386,7 @@ CRITICAL: Return ONLY valid JSON. Put tool IDs in the "tools" array.`
             messages: messages,
             model: 'llama-3.3-70b-versatile',
             temperature: 0.7,
-            max_tokens: 500,
+            max_tokens: 1000,
             response_format: { type: "json_object" }
         });
 
@@ -371,13 +396,21 @@ CRITICAL: Return ONLY valid JSON. Put tool IDs in the "tools" array.`
         try {
             const aiResponse = JSON.parse(responseText);
 
-            if (aiResponse.action === 'show_tools' && aiResponse.budget && aiResponse.tools) {
+            if (aiResponse.action === 'show_workflow' && aiResponse.steps) {
+                console.log(`[DECY] AI generated workflow: ${aiResponse.steps.length} steps`);
+                return {
+                    success: true,
+                    type: 'show_workflow',
+                    steps: aiResponse.steps,
+                    response: aiResponse.message || '🚀 Here\'s your complete plan!'
+                };
+            } else if (aiResponse.action === 'show_tools' && aiResponse.budget && aiResponse.tools) {
                 console.log(`[DECY] AI recommended tools: ${aiResponse.tools.join(', ')} | Budget: ${aiResponse.budget}`);
                 return {
                     success: true,
                     type: 'show_tools',
                     budget: aiResponse.budget,
-                    toolIds: aiResponse.tools,  // AI-selected tool IDs
+                    toolIds: aiResponse.tools,
                     response: aiResponse.message || '🔍 Here are the best tools for you!'
                 };
             } else {
