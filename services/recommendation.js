@@ -352,7 +352,8 @@ FORMAT A - User wants ONE specific thing:
   "action": "show_tools",
   "message": "Brief friendly response explaining WHY these tools are perfect for their need. Be specific, not generic.",
   "budget": "free",
-  "tools": ["tool_id_1", "tool_id_2", "tool_id_3"]
+  "tools": ["tool_id_1", "tool_id_2", "tool_id_3"],
+  "ready_prompt": "A ready-to-use prompt the user can copy-paste into the #1 tool. Be very specific to their task."
 }
 
 FORMAT B - User describes a BIG multi-step goal (launch startup, build & market, full brand):
@@ -420,16 +421,17 @@ CRITICAL: Return ONLY valid JSON.`;
                     steps: aiResponse.steps,
                     proTips: aiResponse.pro_tips || [],
                     response: aiResponse.message || `Here's how to use ${aiResponse.tool_name}! 🚀`,
-                    followUps: this.intelligence.getFollowUpSuggestions(analysis.category)
+                    followUps: this.intelligence.getFollowUpSuggestions(analysis.category, [aiResponse.tool_id || ''], message)
                 };
             } else if (aiResponse.action === 'show_workflow' && aiResponse.steps) {
                 console.log(`[DECY] AI generated workflow: ${aiResponse.steps.length} steps`);
+                const workflowToolIds = aiResponse.steps.map(s => s.tool_id).filter(Boolean);
                 return {
                     success: true,
                     type: 'show_workflow',
                     steps: aiResponse.steps,
                     response: aiResponse.message || '🚀 Here\'s your complete plan!',
-                    followUps: this.intelligence.getFollowUpSuggestions(analysis.category)
+                    followUps: this.intelligence.getFollowUpSuggestions(analysis.category, workflowToolIds, message)
                 };
             } else if (aiResponse.action === 'show_tools' && aiResponse.budget && aiResponse.tools) {
                 console.log(`[DECY] AI recommended tools: ${aiResponse.tools.join(', ')} | Budget: ${aiResponse.budget}`);
@@ -438,8 +440,9 @@ CRITICAL: Return ONLY valid JSON.`;
                     type: 'show_tools',
                     budget: aiResponse.budget,
                     toolIds: aiResponse.tools,
+                    readyPrompt: aiResponse.ready_prompt || null,
                     response: aiResponse.message || '🔍 Here are the best tools for you!',
-                    followUps: this.intelligence.getFollowUpSuggestions(analysis.category)
+                    followUps: this.intelligence.getFollowUpSuggestions(analysis.category, aiResponse.tools, message)
                 };
             } else {
                 console.log('[DECY] AI decided to chat');

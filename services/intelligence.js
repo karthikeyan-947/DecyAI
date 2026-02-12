@@ -378,100 +378,56 @@ class DecyIntelligence {
     }
 
     /**
-     * Get follow-up suggestions based on what the user just did
-     * Like ChatGPT — always suggest what to do next
+     * Generate SMART follow-up suggestions based on actual recommended tools + user query
+     * These are contextual — not random category suggestions
      */
-    getFollowUpSuggestions(category) {
-        const followUps = {
-            'app_building': [
-                { text: '🎨 Design a logo for it', message: 'I need a logo for my project' },
-                { text: '📊 Create a pitch deck', message: 'I want to create a pitch deck' },
-                { text: '🎬 Make a launch video', message: 'I need to create a promotional video' },
-                { text: '📝 Write marketing copy', message: 'Help me write marketing content for my app' }
-            ],
-            'design': [
-                { text: '🌐 Build a website', message: 'I want to build a website' },
-                { text: '🎬 Create a promo video', message: 'I need to create a promotional video' },
-                { text: '📝 Write brand content', message: 'I need help writing content for my brand' },
-                { text: '📊 Make a presentation', message: 'I want to create a presentation' }
-            ],
-            'image_generation': [
-                { text: '✂️ Edit the image', message: 'I need to edit a photo' },
-                { text: '🎨 Design social posts', message: 'I want to create social media posts' },
-                { text: '🌐 Build a portfolio', message: 'I want to build a portfolio website' },
-                { text: '🎬 Turn it into a video', message: 'I want to create a video from images' }
-            ],
-            'image_editing': [
-                { text: '🖼️ Generate new images', message: 'I want to generate AI images' },
-                { text: '🎨 Design with them', message: 'I want to create designs with my images' },
-                { text: '🌐 Build a gallery site', message: 'I need to build a gallery website' }
-            ],
-            'video_creation': [
-                { text: '🎵 Add music/voiceover', message: 'I need music or voiceover for my video' },
-                { text: '📝 Write a script', message: 'I need help writing a video script' },
-                { text: '🎨 Design a thumbnail', message: 'I need a YouTube thumbnail' },
-                { text: '🌐 Build a channel site', message: 'I want to build a content creator website' }
-            ],
-            'writing': [
-                { text: '🎨 Design graphics for it', message: 'I need graphics for my content' },
-                { text: '📊 Turn it into slides', message: 'I want to turn my content into a presentation' },
-                { text: '🎬 Make a video version', message: 'I want to turn my content into a video' },
-                { text: '🌐 Publish it online', message: 'I want to build a blog website' }
-            ],
-            'coding_assistance': [
-                { text: '🌐 Deploy my project', message: 'I want to deploy my app online' },
-                { text: '🎨 Design the UI', message: 'I need to design a user interface' },
-                { text: '📊 Create docs/slides', message: 'I want to create project documentation' }
-            ],
-            'presentation': [
-                { text: '🎬 Record a video pitch', message: 'I want to record a video pitch' },
-                { text: '🎨 Design a logo', message: 'I need a professional logo' },
-                { text: '🌐 Build a landing page', message: 'I want to create a landing page' }
-            ],
-            'audio': [
-                { text: '🎬 Add to a video', message: 'I want to create a video with voiceover' },
-                { text: '📝 Write a script first', message: 'I need help writing a script' },
-                { text: '🎵 Generate background music', message: 'I need to create background music' }
-            ],
-            'music_generation': [
-                { text: '🎬 Create a music video', message: 'I want to create a music video' },
-                { text: '🎙️ Add vocals/voiceover', message: 'I need voiceover or vocals' },
-                { text: '🌐 Build an artist site', message: 'I want to build a music artist website' }
-            ],
-            'productivity': [
-                { text: '📊 Create a presentation', message: 'I want to create a presentation from my notes' },
-                { text: '📝 Write a summary', message: 'I need help writing a document' },
-                { text: '🌐 Build a project page', message: 'I want to build a project website' }
-            ],
-            'research': [
-                { text: '📝 Write the paper', message: 'I need help writing a research paper' },
-                { text: '📊 Create slides', message: 'I want to create a research presentation' },
-                { text: '🎬 Make an explainer video', message: 'I want to create an explainer video' }
-            ]
-        };
+    getFollowUpSuggestions(category, toolIds = [], userQuery = '') {
+        const suggestions = [];
 
-        // Get suggestions for the matched category, or return generic ones
-        const suggestions = followUps[category] || [
-            { text: '🌐 Build a website', message: 'I want to build a website' },
-            { text: '🎨 Create a design', message: 'I need help with design' },
-            { text: '🎬 Make a video', message: 'I want to create a video' },
-            { text: '📝 Write content', message: 'I need help with writing' }
-        ];
-
-        // Return 3 random suggestions to keep it fresh
-        return this.shuffle(suggestions).slice(0, 3);
-    }
-
-    /**
-     * Shuffle array (Fisher-Yates)
-     */
-    shuffle(arr) {
-        const a = [...arr];
-        for (let i = a.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [a[i], a[j]] = [a[j], a[i]];
+        // 1. ALWAYS: Offer guidance on the #1 recommended tool
+        if (toolIds.length > 0) {
+            const topTool = this.allToolsFlat.find(t => t.id === toolIds[0]);
+            if (topTool) {
+                suggestions.push({
+                    text: `📋 How to use ${topTool.name}`,
+                    message: `How to use ${topTool.name}`
+                });
+            }
         }
-        return a;
+
+        // 2. ALWAYS: Offer a workflow for what they're trying to do
+        if (userQuery) {
+            suggestions.push({
+                text: `🚀 Full workflow for this`,
+                message: `Give me a complete step-by-step workflow to ${userQuery}`
+            });
+        }
+
+        // 3. Offer a ready-to-use prompt for the top tool
+        if (toolIds.length > 0) {
+            const topTool = this.allToolsFlat.find(t => t.id === toolIds[0]);
+            if (topTool && topTool.acceptsPrompt) {
+                suggestions.push({
+                    text: `✨ Get a prompt for ${topTool.name}`,
+                    message: `Give me a ready-to-use prompt for ${topTool.name} to ${userQuery || 'get started'}`
+                });
+            }
+        }
+
+        // 4. If we have a second tool, offer to compare
+        if (toolIds.length > 1) {
+            const tool1 = this.allToolsFlat.find(t => t.id === toolIds[0]);
+            const tool2 = this.allToolsFlat.find(t => t.id === toolIds[1]);
+            if (tool1 && tool2 && suggestions.length < 3) {
+                suggestions.push({
+                    text: `⚖️ Compare ${tool1.name} vs ${tool2.name}`,
+                    message: `Compare ${tool1.name} vs ${tool2.name} - which is better for me?`
+                });
+            }
+        }
+
+        // Return max 3 suggestions
+        return suggestions.slice(0, 3);
     }
 }
 
