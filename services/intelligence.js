@@ -191,6 +191,13 @@ class DecyIntelligence {
      */
     analyzeIntent(userMessage) {
         const query = userMessage.toLowerCase().trim();
+
+        // FIRST: Check if user is asking for guidance on a SPECIFIC tool
+        const guidance = this.detectToolGuidance(query);
+        if (guidance) {
+            return guidance;
+        }
+
         const words = query.split(/\s+/);
 
         let bestMatch = null;
@@ -253,6 +260,44 @@ class DecyIntelligence {
             confidence: 0,
             tools: []
         };
+    }
+
+    /**
+     * Detect when user is asking HOW TO USE a specific tool
+     * e.g., "how to create an app using lovable", "how to use bolt", "guide me on figma"
+     */
+    detectToolGuidance(query) {
+        // Guidance signal words
+        const guidanceSignals = [
+            'how to use', 'how to create', 'how to build', 'how to make',
+            'how do i use', 'how does', 'guide me', 'teach me', 'help me use',
+            'steps to use', 'tutorial', 'how to start with', 'getting started',
+            'using the', 'using it', 'how can i use', 'what can i do with',
+            'tips for', 'how to get started'
+        ];
+
+        const hasGuidanceSignal = guidanceSignals.some(signal => query.includes(signal));
+        if (!hasGuidanceSignal) return null;
+
+        // Look for a specific tool name in the query
+        for (const tool of this.allToolsFlat) {
+            const toolName = tool.name.toLowerCase();
+            const toolId = tool.id.toLowerCase();
+
+            if (query.includes(toolName) || query.includes(toolId)) {
+                return {
+                    matched: true,
+                    isGuidance: true,
+                    category: tool.categoryKey,
+                    tool: tool,
+                    context: `The user is asking for guidance on HOW TO USE ${tool.name}. DO NOT recommend other tools. Instead, give a clear step-by-step guide on how to use ${tool.name} effectively. Include: 1) How to get started 2) Key features to use 3) Tips for best results. Tool details: ${tool.bestFor}. URL: ${tool.url}`,
+                    confidence: 1.0,
+                    tools: [tool]
+                };
+            }
+        }
+
+        return null;
     }
 
     /**

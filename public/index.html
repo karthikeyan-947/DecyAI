@@ -1151,7 +1151,13 @@
                 const data = await response.json();
                 removeMessage(loadingId);
 
-                if (data.type === 'show_tools') {
+                if (data.type === 'show_guide') {
+                    // AI generated a step-by-step guide for a specific tool
+                    addMessage(data.response, 'assistant');
+                    chatHistory.push({ role: 'assistant', content: data.response });
+                    addGuideCard(data);
+                    if (data.followUps) addFollowUpSuggestions(data.followUps);
+                } else if (data.type === 'show_tools') {
                     // AI decided it's time to show tool recommendations
                     addMessage(data.response, 'assistant');
                     chatHistory.push({ role: 'assistant', content: data.response });
@@ -1371,6 +1377,54 @@
             scrollToBottom();
         }
 
+        function addGuideCard(data) {
+            const container = document.getElementById('messages');
+
+            const stepsHtml = data.steps.map((step, i) => `
+                <div class="flex gap-3 items-start">
+                    <div class="w-7 h-7 rounded-full bg-gradient-to-br from-purple-500 to-violet-600 flex items-center justify-center flex-shrink-0 text-white text-xs font-bold">${i + 1}</div>
+                    <p class="text-white/80 text-sm leading-relaxed pt-0.5">${escapeHtml(step)}</p>
+                </div>
+            `).join('');
+
+            const tipsHtml = data.proTips && data.proTips.length > 0 ? `
+                <div class="mt-4 pt-4 border-t border-white/[0.08]">
+                    <p class="text-xs font-semibold text-purple-400 mb-2">💡 Pro Tips</p>
+                    ${data.proTips.map(tip => `
+                        <p class="text-white/60 text-xs leading-relaxed mb-1.5">• ${escapeHtml(tip)}</p>
+                    `).join('')}
+                </div>
+            ` : '';
+
+            const html = `
+                <div class="mb-4 p-5 rounded-2xl bg-gradient-to-br from-white/[0.06] to-white/[0.02] border border-white/[0.1] backdrop-blur-xl">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500/30 to-violet-600/30 border border-purple-500/20 flex items-center justify-center">
+                            <span class="material-symbols-outlined text-purple-400" style="font-size:20px">school</span>
+                        </div>
+                        <div>
+                            <h3 class="text-white font-semibold text-base">${escapeHtml(data.toolName)} Guide</h3>
+                            <p class="text-white/40 text-xs">Step-by-step instructions</p>
+                        </div>
+                    </div>
+                    <div class="space-y-3">
+                        ${stepsHtml}
+                    </div>
+                    ${tipsHtml}
+                    ${data.toolUrl ? `
+                        <a href="${data.toolUrl}" target="_blank" rel="noopener" 
+                           class="mt-4 inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-violet-600 text-white text-sm font-medium hover:from-purple-500 hover:to-violet-500 transition-all duration-300">
+                            <span class="material-symbols-outlined" style="font-size:16px">open_in_new</span>
+                            Open ${escapeHtml(data.toolName)}
+                        </a>
+                    ` : ''}
+                </div>
+            `;
+
+            container.insertAdjacentHTML('beforeend', html);
+            scrollToBottom();
+        }
+
         function addFollowUpSuggestions(followUps) {
             const container = document.getElementById('messages');
 
@@ -1395,9 +1449,9 @@
         }
 
         function sendFollowUp(message) {
-            const input = document.getElementById('search-input');
+            const input = document.getElementById('user-input');
             input.value = message;
-            handleSend();
+            sendMessage();
         }
 
         function copyPrompt(el, text) {

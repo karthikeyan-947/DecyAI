@@ -291,13 +291,49 @@ Please make it polished and ready to use.`;
             ? this.intelligence.buildToolContext(analysis.tools)
             : 'No specific tools matched. Help the user clarify what they need.';
 
-        console.log(`[DECY] Intent analysis: category=${analysis.category}, confidence=${analysis.confidence.toFixed(2)}, tools=${analysis.tools.length}`);
+        console.log(`[DECY] Intent analysis: category=${analysis.category}, confidence=${analysis.confidence.toFixed(2)}, tools=${analysis.tools.length}${analysis.isGuidance ? ', GUIDANCE MODE' : ''}`);
 
-        // STEP 2: Build LLM prompt with rich tool context
-        const messages = [
-            {
-                role: 'system',
-                content: `You are DECY - a smart AI assistant that recommends the perfect AI tools. You genuinely understand what users need and give thoughtful, specific recommendations.
+        // STEP 2: Build LLM prompt — different for guidance vs recommendation
+        let systemPrompt;
+
+        if (analysis.isGuidance) {
+            // USER IS ASKING HOW TO USE A SPECIFIC TOOL
+            const tool = analysis.tool;
+            systemPrompt = `You are DECY - a smart AI assistant. The user is asking for guidance on how to use ${tool.name}.
+
+TOOL DETAILS:
+- Name: ${tool.name}
+- Best for: ${tool.bestFor}
+- URL: ${tool.url}
+- Pricing: ${tool.pricing?.free ? 'Free tier available' : 'Paid'} ${tool.pricing?.premium ? '| Premium: ' + tool.pricing.premium : ''}
+- Ease: ${tool.ease || 3}/5
+
+YOUR JOB: Give a clear, actionable step-by-step guide on how to use ${tool.name}. DO NOT recommend other tools.
+
+RESPONSE FORMAT (JSON only):
+{
+  "action": "show_guide",
+  "message": "Here's how to use ${tool.name}! 🚀",
+  "tool_name": "${tool.name}",
+  "tool_url": "${tool.url}",
+  "steps": [
+    "Step 1: Go to ${tool.url} and sign up for free",
+    "Step 2: [specific action based on what the tool does]",
+    "Step 3: [next action]",
+    "Step 4: [how to get the best result]",
+    "Step 5: [how to export/deploy/share]"
+  ],
+  "pro_tips": [
+    "Tip about getting better results",
+    "Tip about a hidden feature"
+  ]
+}
+
+Give 4-6 actionable steps and 2-3 pro tips. Be specific to ${tool.name}, not generic.
+CRITICAL: Return ONLY valid JSON.`;
+        } else {
+            // NORMAL TOOL RECOMMENDATION
+            systemPrompt = `You are DECY - a smart AI assistant that recommends the perfect AI tools. You genuinely understand what users need and give thoughtful, specific recommendations.
 
 YOU HAVE ANALYZED THE USER'S REQUEST AND FOUND THESE RELEVANT TOOLS:
 ${toolContext}
@@ -342,8 +378,11 @@ RULES:
 - Be warm, concise (2-3 sentences), use emojis occasionally
 - In your message, briefly explain WHY you picked these tools
 
-CRITICAL: Return ONLY valid JSON.`
-            }
+CRITICAL: Return ONLY valid JSON.`;
+        }
+
+        const messages = [
+            { role: 'system', content: systemPrompt }
         ];
 
         // Add conversation history
@@ -371,7 +410,19 @@ CRITICAL: Return ONLY valid JSON.`
         try {
             const aiResponse = JSON.parse(responseText);
 
-            if (aiResponse.action === 'show_workflow' && aiResponse.steps) {
+            if (aiResponse.action === 'show_guide' && aiResponse.steps) {
+                console.log(`[DECY] AI generated guide for: ${aiResponse.tool_name}`);
+                return {
+                    success: true,
+                    type: 'show_guide',
+                    toolName: aiResponse.tool_name,
+                    toolUrl: aiResponse.tool_url,
+                    steps: aiResponse.steps,
+                    proTips: aiResponse.pro_tips || [],
+                    response: aiResponse.message || `Here's how to use ${aiResponse.tool_name}! 🚀`,
+                    followUps: this.intelligence.getFollowUpSuggestions(analysis.category)
+                };
+            } else if (aiResponse.action === 'show_workflow' && aiResponse.steps) {
                 console.log(`[DECY] AI generated workflow: ${aiResponse.steps.length} steps`);
                 return {
                     success: true,
