@@ -377,7 +377,8 @@ CRITICAL: Return ONLY valid JSON.`
                     success: true,
                     type: 'show_workflow',
                     steps: aiResponse.steps,
-                    response: aiResponse.message || '🚀 Here\'s your complete plan!'
+                    response: aiResponse.message || '🚀 Here\'s your complete plan!',
+                    followUps: this.intelligence.getFollowUpSuggestions(analysis.category)
                 };
             } else if (aiResponse.action === 'show_tools' && aiResponse.budget && aiResponse.tools) {
                 console.log(`[DECY] AI recommended tools: ${aiResponse.tools.join(', ')} | Budget: ${aiResponse.budget}`);
@@ -386,7 +387,8 @@ CRITICAL: Return ONLY valid JSON.`
                     type: 'show_tools',
                     budget: aiResponse.budget,
                     toolIds: aiResponse.tools,
-                    response: aiResponse.message || '🔍 Here are the best tools for you!'
+                    response: aiResponse.message || '🔍 Here are the best tools for you!',
+                    followUps: this.intelligence.getFollowUpSuggestions(analysis.category)
                 };
             } else {
                 console.log('[DECY] AI decided to chat');

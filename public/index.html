@@ -1158,11 +1158,15 @@
                     isLoading = false;
                     // Get tools that AI specifically recommended
                     await getToolsByIds(data.toolIds, data.budget);
+                    // Show follow-up suggestions
+                    if (data.followUps) addFollowUpSuggestions(data.followUps);
                 } else if (data.type === 'show_workflow') {
                     // AI generated a multi-step workflow plan
                     addMessage(data.response, 'assistant');
                     chatHistory.push({ role: 'assistant', content: data.response });
                     addWorkflowCards(data.steps);
+                    // Show follow-up suggestions
+                    if (data.followUps) addFollowUpSuggestions(data.followUps);
                 } else {
                     // Regular chat response
                     addMessage(data.response, 'assistant');
@@ -1365,6 +1369,35 @@
 
             container.insertAdjacentHTML('beforeend', html);
             scrollToBottom();
+        }
+
+        function addFollowUpSuggestions(followUps) {
+            const container = document.getElementById('messages');
+
+            const chips = followUps.map(f => `
+                <button onclick="sendFollowUp('${escapeHtml(f.message).replace(/'/g, "\\'")}')"
+                    class="px-3.5 py-2 rounded-xl bg-white/[0.05] border border-white/[0.1] text-white/70 text-[13px] font-medium hover:bg-white/[0.1] hover:border-purple-500/30 hover:text-white transition-all duration-300 flex items-center gap-1.5">
+                    ${f.text}
+                </button>
+            `).join('');
+
+            const html = `
+                <div class="mb-4 mt-1">
+                    <p class="text-[12px] text-white/30 mb-2 ml-1">What's next?</p>
+                    <div class="flex flex-wrap gap-2">
+                        ${chips}
+                    </div>
+                </div>
+            `;
+
+            container.insertAdjacentHTML('beforeend', html);
+            scrollToBottom();
+        }
+
+        function sendFollowUp(message) {
+            const input = document.getElementById('search-input');
+            input.value = message;
+            handleSend();
         }
 
         function copyPrompt(el, text) {
