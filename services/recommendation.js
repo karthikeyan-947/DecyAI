@@ -7,6 +7,7 @@ const Groq = require('groq-sdk');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const fs = require('fs');
 const path = require('path');
+const DecyIntelligence = require('./intelligence');
 
 class RecommendationEngine {
     constructor(geminiKey) {
@@ -21,6 +22,7 @@ class RecommendationEngine {
         // Load tools (dynamic - reloads when new tools are added by scraper)
         this.toolsPath = path.join(__dirname, '..', 'data', 'tools.json');
         this.tools = this.loadTools();
+        this.intelligence = new DecyIntelligence(this.tools);
 
         // Scraper for auto-discovery
         this.scraper = null; // lazy-loaded to avoid circular dependency
@@ -283,89 +285,62 @@ Please make it polished and ready to use.`;
      * The AI understands the conversation and returns structured JSON
      */
     async getGroqResponse(message, history = []) {
-        // Build the tools context for the AI
-        const toolsContext = this.buildToolsContext();
+        // STEP 1: Use intelligence layer to understand intent and find relevant tools
+        const analysis = this.intelligence.analyzeIntent(message);
+        const toolContext = analysis.matched
+            ? this.intelligence.buildToolContext(analysis.tools)
+            : 'No specific tools matched. Help the user clarify what they need.';
 
-        // Build conversation messages with a smart system prompt
+        console.log(`[DECY] Intent analysis: category=${analysis.category}, confidence=${analysis.confidence.toFixed(2)}, tools=${analysis.tools.length}`);
+
+        // STEP 2: Build LLM prompt with rich tool context
         const messages = [
             {
                 role: 'system',
-                content: `You are DECY - an AI assistant that helps users find the perfect AI tools. You TRULY UNDERSTAND what users need.
+                content: `You are DECY - a smart AI assistant that recommends the perfect AI tools. You genuinely understand what users need and give thoughtful, specific recommendations.
 
-YOUR TOOL KNOWLEDGE (use these exact IDs when recommending):
-- Website/App Building: lovable, bolt, replit, v0
-- Image Generation: ideogram, leonardo, bing_image_creator, midjourney
-- Image Editing: canva, remove_bg, photoroom, clipdrop
-- Video Creation: capcut, runway, invideo, descript, opusclip
-- Coding: cursor, github_copilot, chatgpt, claude
-- Writing: notion_ai, grammarly, copy_ai, jasper
-- Design/Graphics: canva_design, figma, looka, kittl
-- Presentations: gamma, tome, beautiful_ai
-- Audio/Music: elevenlabs, suno, murf
+YOU HAVE ANALYZED THE USER'S REQUEST AND FOUND THESE RELEVANT TOOLS:
+${toolContext}
 
-INTENT MAPPING - FOLLOW STRICTLY:
-When user says...                          → Category to pick from
-"portfolio", "personal website", "landing page", "website", "web app" → Website/App Building (lovable, bolt, v0)
-"app", "mobile app", "build app", "startup idea" → Website/App Building (lovable, bolt, replit)
-"logo", "brand", "branding" → Design/Graphics (looka, canva_design, kittl)
-"poster", "flyer", "social media post", "instagram post", "thumbnail" → Design/Graphics (canva_design, kittl, figma)
-"UI design", "wireframe", "mockup", "prototype" → Design/Graphics (figma, canva_design)
-"image", "picture", "illustration", "artwork", "AI art" → Image Generation (ideogram, leonardo, midjourney)
-"edit photo", "remove background", "enhance photo" → Image Editing (canva, remove_bg, clipdrop)
-"video", "reel", "short", "youtube", "edit video" → Video Creation (capcut, descript, invideo)
-"generate video", "text to video", "AI video" → Video Creation (runway, invideo, pika)
-"presentation", "slides", "pitch deck", "ppt" → Presentations (gamma, tome, beautiful_ai)
-"write", "blog", "article", "essay", "content" → Writing (notion_ai, copy_ai, grammarly)
-"code", "programming", "debug", "developer" → Coding (cursor, github_copilot, chatgpt)
-"voice", "voiceover", "text to speech", "narration" → Audio/Music (elevenlabs, murf)
-"music", "song", "beat" → Audio/Music (suno, elevenlabs)
-"resume" → BOTH Design (canva_design) AND App Building (lovable)
+ANALYSIS CONTEXT: ${analysis.context || 'General inquiry'}
 
-CRITICAL RULES:
-1. NEVER mix categories randomly. A "portfolio" request = Website/App Building tools ONLY (lovable, bolt, v0)
-2. Recommend ALL 3 tools from the SAME primary category
-3. Only mix categories if the request EXPLICITLY mentions two different tasks
+YOUR JOB:
+1. Pick the TOP 3 tools from the list above that best match the user's need
+2. Explain WHY each tool is a good fit (be specific, mention features)
+3. Use the exact tool IDs from the list
 
-YOUR RESPONSE FORMAT (JSON only) — pick ONE of these:
+RESPONSE FORMAT (JSON only) — pick ONE:
 
-FORMAT A - Single task (e.g. "I need to edit videos"):
+FORMAT A - User wants ONE specific thing:
 {
   "action": "show_tools",
-  "message": "Your friendly response",
+  "message": "Brief friendly response explaining WHY these tools are perfect for their need. Be specific, not generic.",
   "budget": "free",
   "tools": ["tool_id_1", "tool_id_2", "tool_id_3"]
 }
 
-FORMAT B - Complex multi-step goal (e.g. "launch a food delivery startup", "build and market my app"):
+FORMAT B - User describes a BIG multi-step goal (launch startup, build & market, full brand):
 {
   "action": "show_workflow",
-  "message": "Here's your complete plan!",
+  "message": "Here's your step-by-step plan!",
   "steps": [
-    {"step": 1, "title": "Build Your App", "tool_id": "lovable", "tool_name": "Lovable", "prompt": "Create a food delivery app with menu browsing, cart, and checkout"},
-    {"step": 2, "title": "Design Your Logo", "tool_id": "looka", "tool_name": "Looka", "prompt": "Modern food delivery logo with warm colors and friendly font"},
-    {"step": 3, "title": "Create Pitch Deck", "tool_id": "gamma", "tool_name": "Gamma", "prompt": "Pitch deck for food delivery startup targeting urban millennials"},
-    {"step": 4, "title": "Launch Video", "tool_id": "invideo", "tool_name": "InVideo", "prompt": "30-second promotional video announcing new food delivery service"}
+    {"step": 1, "title": "Step Title", "tool_id": "id", "tool_name": "Name", "prompt": "Ready-to-use prompt for this tool"}
   ]
 }
 
-FORMAT C - Just chatting:
+FORMAT C - Just chatting/greeting/unclear:
 {
   "action": "chat",
-  "message": "Your friendly response"
+  "message": "Your response. If the user seems to have a need, ask a clarifying question like: What exactly are you trying to build? Is it a website, an app, or a design?"
 }
 
-WHEN TO USE EACH FORMAT:
-- "show_tools" → User wants ONE specific thing (edit video, generate image, build website)
-- "show_workflow" → User describes a BIG GOAL that needs MULTIPLE tools in sequence (launch startup, build and market, create full brand)
-- "chat" → User is just chatting, greeting, or asking a question
-
-DECISION RULES:
-- Just chatting/greeting/question → action: "chat"
-- User wants to CREATE, BUILD, MAKE one thing → action: "show_tools", budget: "free", return best 3 tool IDs IMMEDIATELY
-- User describes a COMPLEX GOAL needing multiple steps → action: "show_workflow", return 3-5 steps with specific tools and prompts
-- NEVER ask "free or premium?". Just show free tools by default.
-
-PERSONALITY: Warm, friendly, concise (2-3 sentences), use emojis occasionally.
+RULES:
+- If tools were found above → action MUST be "show_tools" with the best 3 IDs
+- If the request is a BIG multi-step goal → use "show_workflow"
+- If unclear what user wants → action: "chat", ask a specific clarifying question
+- NEVER ask about budget. Default to free tools.
+- Be warm, concise (2-3 sentences), use emojis occasionally
+- In your message, briefly explain WHY you picked these tools
 
 CRITICAL: Return ONLY valid JSON.`
             }
@@ -385,7 +360,7 @@ CRITICAL: Return ONLY valid JSON.`
         const completion = await this.groq.chat.completions.create({
             messages: messages,
             model: 'llama-3.3-70b-versatile',
-            temperature: 0.7,
+            temperature: 0.6,
             max_tokens: 1000,
             response_format: { type: "json_object" }
         });

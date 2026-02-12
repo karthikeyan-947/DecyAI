@@ -1,0 +1,336 @@
+/**
+ * DECY Intelligence Layer
+ * Smart pre-filtering and context building for AI recommendations
+ * This is what makes DECY actually understand user needs
+ */
+
+class DecyIntelligence {
+    constructor(tools) {
+        this.tools = tools;
+        this.intentMap = this.buildIntentMap();
+        this.allToolsFlat = this.flattenTools();
+    }
+
+    /**
+     * Flatten all tools into a single searchable array with category info
+     */
+    flattenTools() {
+        const flat = [];
+        for (const [catKey, cat] of Object.entries(this.tools.categories)) {
+            for (const tool of cat.tools) {
+                flat.push({
+                    ...tool,
+                    categoryKey: catKey,
+                    categoryName: cat.name,
+                    categoryKeywords: cat.keywords || [],
+                    // Build searchable text for matching
+                    searchText: [
+                        tool.name,
+                        tool.bestFor,
+                        tool.whySuitsYou || '',
+                        tool.limits || '',
+                        ...(cat.keywords || [])
+                    ].join(' ').toLowerCase()
+                });
+            }
+        }
+        return flat;
+    }
+
+    /**
+     * Intent mapping — maps real user language to tool categories and use cases
+     * This is the "brain" that understands what users actually mean
+     */
+    buildIntentMap() {
+        return [
+            // === BUILDING / CREATING ===
+            {
+                intents: ['portfolio', 'personal website', 'personal site', 'showcase my work', 'online presence'],
+                category: 'app_building',
+                context: 'The user wants to build a personal portfolio website to showcase their work. Recommend app/website builders that are easy to use and produce professional-looking sites.',
+                priority: ['lovable', 'bolt', 'v0']
+            },
+            {
+                intents: ['landing page', 'saas', 'startup website', 'product page', 'business website'],
+                category: 'app_building',
+                context: 'The user wants to build a professional landing page or business website. Recommend tools that can create polished, conversion-optimized pages.',
+                priority: ['lovable', 'bolt', 'v0']
+            },
+            {
+                intents: ['app', 'mobile app', 'web app', 'build app', 'create app', 'develop app', 'mvp', 'prototype'],
+                category: 'app_building',
+                context: 'The user wants to build a functional application. Recommend no-code/low-code builders that can create real, deployable apps.',
+                priority: ['lovable', 'bolt', 'replit']
+            },
+
+            // === VISUAL CONTENT ===
+            {
+                intents: ['logo', 'brand identity', 'branding', 'brand kit', 'company logo'],
+                category: 'design',
+                context: 'The user needs logo/branding design. Recommend AI tools specifically built for logo creation.',
+                priority: ['looka', 'canva_design', 'kittl']
+            },
+            {
+                intents: ['poster', 'flyer', 'banner', 'social media post', 'instagram post', 'thumbnail', 'cover image', 'marketing material'],
+                category: 'design',
+                context: 'The user wants to create visual marketing content. Recommend design tools with templates for social media and marketing.',
+                priority: ['canva_design', 'kittl', 'figma']
+            },
+            {
+                intents: ['ui design', 'wireframe', 'mockup', 'prototype design', 'user interface', 'figma'],
+                category: 'design',
+                context: 'The user needs to design user interfaces or wireframes. Recommend professional UI/UX design tools.',
+                priority: ['figma', 'uizard', 'canva_design']
+            },
+
+            // === IMAGE GENERATION ===
+            {
+                intents: ['generate image', 'create image', 'ai art', 'artwork', 'illustration', 'picture', 'image generation', 'ai image', 'draw'],
+                category: 'image_generation',
+                context: 'The user wants to generate images from text descriptions. Recommend AI image generators.',
+                priority: ['ideogram', 'leonardo', 'midjourney']
+            },
+            {
+                intents: ['edit photo', 'remove background', 'enhance photo', 'photo editing', 'retouch', 'upscale image'],
+                category: 'image_editing',
+                context: 'The user wants to edit or enhance existing photos. Recommend photo editing AI tools.',
+                priority: ['canva', 'remove_bg', 'clipdrop']
+            },
+
+            // === VIDEO ===
+            {
+                intents: ['video', 'edit video', 'reel', 'short', 'youtube', 'tiktok', 'clip', 'montage'],
+                category: 'video_creation',
+                context: 'The user wants to create or edit video content. Recommend video editing tools.',
+                priority: ['capcut', 'descript', 'invideo']
+            },
+            {
+                intents: ['generate video', 'text to video', 'ai video', 'animate', 'motion', 'video from text'],
+                category: 'video_creation',
+                context: 'The user wants to generate video from text or images using AI. Recommend AI video generators.',
+                priority: ['runway', 'pika', 'invideo']
+            },
+            {
+                intents: ['talking head', 'avatar video', 'spokesperson', 'virtual presenter'],
+                category: 'video_creation',
+                context: 'The user wants AI-generated talking head or avatar videos. Recommend avatar video tools.',
+                priority: ['heygen', 'synthesia', 'd-id']
+            },
+
+            // === WRITING ===
+            {
+                intents: ['write', 'blog', 'article', 'essay', 'content', 'copywriting', 'email', 'marketing copy'],
+                category: 'writing',
+                context: 'The user wants to write or generate text content. Recommend AI writing tools.',
+                priority: ['notion_ai', 'copy_ai', 'jasper']
+            },
+            {
+                intents: ['grammar', 'proofread', 'spelling', 'editing text', 'paraphrase', 'rewrite'],
+                category: 'writing',
+                context: 'The user wants to check grammar, paraphrase, or improve existing text. Recommend editing/grammar tools.',
+                priority: ['grammarly', 'quillbot', 'wordtune']
+            },
+
+            // === CODING ===
+            {
+                intents: ['code', 'programming', 'debug', 'developer', 'coding assistant', 'autocomplete', 'copilot'],
+                category: 'coding_assistance',
+                context: 'The user needs help with coding or programming. Recommend AI coding assistants.',
+                priority: ['cursor', 'github_copilot', 'chatgpt']
+            },
+
+            // === PRESENTATIONS ===
+            {
+                intents: ['presentation', 'slides', 'pitch deck', 'ppt', 'powerpoint', 'keynote', 'slide deck'],
+                category: 'presentation',
+                context: 'The user wants to create a presentation or slide deck. Recommend AI presentation tools.',
+                priority: ['gamma', 'tome', 'beautiful_ai']
+            },
+
+            // === AUDIO ===
+            {
+                intents: ['voice', 'voiceover', 'text to speech', 'narration', 'dubbing', 'voice clone'],
+                category: 'audio',
+                context: 'The user needs text-to-speech, voiceovers, or voice generation. Recommend voice AI tools.',
+                priority: ['elevenlabs', 'murf', 'play_ht']
+            },
+            {
+                intents: ['music', 'song', 'beat', 'soundtrack', 'jingle', 'compose'],
+                category: 'music_generation',
+                context: 'The user wants to create music or audio content. Recommend AI music tools.',
+                priority: ['suno', 'udio', 'aiva']
+            },
+
+            // === PRODUCTIVITY ===
+            {
+                intents: ['meeting notes', 'transcribe', 'summarize meeting', 'meeting summary'],
+                category: 'productivity',
+                context: 'The user wants to transcribe or summarize meetings. Recommend meeting AI tools.',
+                priority: ['otter', 'fireflies', 'granola']
+            },
+            {
+                intents: ['research', 'find information', 'academic', 'papers', 'study'],
+                category: 'research',
+                context: 'The user needs help with research or finding information. Recommend AI research tools.',
+                priority: ['perplexity', 'elicit', 'consensus']
+            },
+
+            // === RESUME (special - crosses categories) ===
+            {
+                intents: ['resume', 'cv', 'cover letter', 'job application'],
+                category: 'design',
+                context: 'The user wants to create a resume or CV. Recommend design tools with resume templates, AND website builders for online portfolios.',
+                priority: ['canva_design', 'lovable', 'notion_ai']
+            }
+        ];
+    }
+
+    /**
+     * THE CORE: Understand what the user wants and find the best tools
+     * Returns: { matchedTools: [], context: string, confidence: number }
+     */
+    analyzeIntent(userMessage) {
+        const query = userMessage.toLowerCase().trim();
+        const words = query.split(/\s+/);
+
+        let bestMatch = null;
+        let bestScore = 0;
+
+        // Score each intent pattern
+        for (const pattern of this.intentMap) {
+            let score = 0;
+
+            for (const intent of pattern.intents) {
+                // Exact phrase match (strongest signal)
+                if (query.includes(intent)) {
+                    score += 20;
+                }
+                // Individual word matches
+                const intentWords = intent.split(' ');
+                for (const iw of intentWords) {
+                    if (words.includes(iw)) {
+                        score += 5;
+                    }
+                }
+            }
+
+            if (score > bestScore) {
+                bestScore = score;
+                bestMatch = pattern;
+            }
+        }
+
+        // If we found a strong match, get the tools
+        if (bestMatch && bestScore >= 5) {
+            // Get priority tools first, then fill with category tools
+            const relevantTools = this.getRelevantTools(bestMatch, query);
+
+            return {
+                matched: true,
+                category: bestMatch.category,
+                context: bestMatch.context,
+                confidence: Math.min(bestScore / 20, 1),
+                tools: relevantTools
+            };
+        }
+
+        // Fallback: search all tools by keywords
+        const fallbackTools = this.searchAllTools(query);
+        if (fallbackTools.length > 0) {
+            return {
+                matched: true,
+                category: 'mixed',
+                context: `The user is looking for: "${query}". Found tools by keyword match.`,
+                confidence: 0.3,
+                tools: fallbackTools.slice(0, 6)
+            };
+        }
+
+        return {
+            matched: false,
+            category: null,
+            context: 'Could not determine specific tool needs from the message.',
+            confidence: 0,
+            tools: []
+        };
+    }
+
+    /**
+     * Get relevant tools for a matched intent pattern
+     */
+    getRelevantTools(pattern, query) {
+        const tools = [];
+        const addedIds = new Set();
+
+        // 1. Add priority tools first (the best picks)
+        for (const priorityId of pattern.priority) {
+            const tool = this.allToolsFlat.find(t => t.id === priorityId);
+            if (tool && !addedIds.has(tool.id)) {
+                tools.push(tool);
+                addedIds.add(tool.id);
+            }
+        }
+
+        // 2. Add more tools from the same category
+        const categoryTools = this.allToolsFlat
+            .filter(t => t.categoryKey === pattern.category && !addedIds.has(t.id))
+            .sort((a, b) => (b.ease || 3) - (a.ease || 3));
+
+        for (const tool of categoryTools) {
+            if (tools.length >= 6) break;
+            tools.push(tool);
+            addedIds.add(tool.id);
+        }
+
+        return tools;
+    }
+
+    /**
+     * Search all tools by keyword matching (fallback)
+     */
+    searchAllTools(query) {
+        const queryWords = query.toLowerCase().split(/\s+/);
+        const scored = [];
+
+        for (const tool of this.allToolsFlat) {
+            let score = 0;
+            for (const word of queryWords) {
+                if (word.length < 3) continue; // Skip tiny words
+                if (tool.searchText.includes(word)) {
+                    score += 5;
+                }
+                if (tool.name.toLowerCase().includes(word)) {
+                    score += 15;
+                }
+            }
+            if (score > 0) {
+                scored.push({ ...tool, matchScore: score });
+            }
+        }
+
+        return scored
+            .sort((a, b) => b.matchScore - a.matchScore)
+            .slice(0, 6);
+    }
+
+    /**
+     * Build rich context for the AI about matched tools
+     * This is what makes the AI actually KNOW the tools
+     */
+    buildToolContext(matchedTools) {
+        if (matchedTools.length === 0) return 'No specific tools matched.';
+
+        return matchedTools.map((tool, i) => {
+            const pricing = tool.pricing?.free ? 'Free tier available' : (tool.pricing?.premium || 'Paid');
+            const premium = tool.pricing?.premium ? ` | Premium: ${tool.pricing.premium}` : '';
+            return `${i + 1}. **${tool.name}** (ID: ${tool.id})
+   - Best for: ${tool.bestFor}
+   - Why it suits: ${tool.whySuitsYou || 'Great option'}
+   - Pricing: ${pricing}${premium}
+   - Ease of use: ${tool.ease || 3}/5
+   - Limits: ${tool.limits || 'Check website'}`;
+        }).join('\n\n');
+    }
+}
+
+module.exports = DecyIntelligence;
