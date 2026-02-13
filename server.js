@@ -272,10 +272,61 @@ app.get('/api/discover/stats', (req, res) => {
 });
 
 /**
+ * GET /api/discover/tools
+ * Get full list of discovered tools
+ */
+app.get('/api/discover/tools', (req, res) => {
+    try {
+        const fs = require('fs');
+        const discoveredPath = path.join(__dirname, 'data', 'discovered.json');
+        const discovered = JSON.parse(fs.readFileSync(discoveredPath, 'utf-8'));
+        res.json(discovered);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+/**
+ * GET /api/tools/all
+ * Get all tools from the database with category info
+ */
+app.get('/api/tools/all', (req, res) => {
+    try {
+        const fs = require('fs');
+        const toolsPath = path.join(__dirname, 'data', 'tools.json');
+        const data = JSON.parse(fs.readFileSync(toolsPath, 'utf-8'));
+
+        const allTools = [];
+        for (const [categoryKey, category] of Object.entries(data.categories)) {
+            for (const tool of category.tools) {
+                allTools.push({
+                    ...tool,
+                    categoryKey,
+                    categoryName: category.name
+                });
+            }
+        }
+
+        res.json({
+            totalTools: data.metadata.totalTools,
+            lastUpdated: data.metadata.lastUpdated,
+            categories: Object.keys(data.categories).length,
+            tools: allTools
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+/**
  * Serve frontend
  */
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public/index.html'));
+});
+
+app.get('/admin', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public/admin.html'));
 });
 
 app.get('/select', (req, res) => {

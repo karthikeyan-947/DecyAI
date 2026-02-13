@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DECY Admin — Monitoring Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: #0a0a0f;
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.08), rgba(99, 102, 241, 0.05));
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 20px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(20px);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-logo {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #8b5cf6, #6366f1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 16px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .header h1 span {
+            color: rgba(255, 255, 255, 0.4);
+            font-weight: 500;
+            font-size: 14px;
+            margin-left: 8px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.7);
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #8b5cf6, #6366f1);
+            border-color: rgba(139, 92, 246, 0.3);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #7c3aed, #4f46e5);
+        }
+
+        .btn .material-symbols-outlined {
+            font-size: 16px;
+        }
+
+        /* Main content */
+        .main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 28px 32px;
+        }
+
+        /* Stats cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 14px;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(139, 92, 246, 0.2);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-sub {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.3);
+            margin-top: 4px;
+        }
+
+        /* Sections */
+        .section {
+            margin-bottom: 28px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title .material-symbols-outlined {
+            font-size: 18px;
+            color: #8b5cf6;
+        }
+
+        .badge {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 100px;
+            background: rgba(139, 92, 246, 0.15);
+            color: #a78bfa;
+        }
+
+        /* Tools table */
+        .tools-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 14px;
+            overflow: hidden;
+        }
+
+        .tools-table thead {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .tools-table th {
+            padding: 12px 16px;
+            text-align: left;
+            font-size: 11px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .tools-table td {
+            padding: 12px 16px;
+            font-size: 13px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .tools-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .tools-table tr:hover td {
+            background: rgba(139, 92, 246, 0.04);
+        }
+
+        .tool-name {
+            font-weight: 600;
+            color: white;
+        }
+
+        .tool-link {
+            color: #8b5cf6;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+        }
+
+        .tool-link:hover {
+            color: #a78bfa;
+            text-decoration: underline;
+        }
+
+        .category-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 500;
+            background: rgba(99, 102, 241, 0.12);
+            color: #818cf8;
+        }
+
+        .date-text {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.35);
+        }
+
+        /* Search & Filter */
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .search-box {
+            flex: 1;
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.04);
+            color: white;
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .search-box:focus {
+            border-color: rgba(139, 92, 246, 0.4);
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .search-box::placeholder {
+            color: rgba(255, 255, 255, 0.25);
+        }
+
+        .filter-select {
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.04);
+            color: rgba(255, 255, 255, 0.7);
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            outline: none;
+            cursor: pointer;
+            min-width: 160px;
+        }
+
+        .filter-select option {
+            background: #1a1a2e;
+            color: white;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 4px;
+            border-radius: 12px;
+            width: fit-content;
+        }
+
+        .tab {
+            padding: 8px 18px;
+            border-radius: 9px;
+            border: none;
+            background: transparent;
+            color: rgba(255, 255, 255, 0.45);
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tab.active {
+            background: rgba(139, 92, 246, 0.15);
+            color: #a78bfa;
+        }
+
+        .tab:hover:not(.active) {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 14px;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border: 2px solid rgba(139, 92, 246, 0.3);
+            border-top-color: #8b5cf6;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-bottom: 10px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: rgba(139, 92, 246, 0.9);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: rgba(255, 255, 255, 0.25);
+        }
+
+        .empty-state .material-symbols-outlined {
+            font-size: 48px;
+            margin-bottom: 12px;
+            color: rgba(139, 92, 246, 0.3);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .header {
+                padding: 16px;
+            }
+
+            .main {
+                padding: 20px 16px;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <div class="header-left">
+            <div class="header-logo">D</div>
+            <h1>DECY Admin <span>Monitoring Dashboard</span></h1>
+        </div>
+        <div class="header-actions">
+            <button class="btn" onclick="refreshData()">
+                <span class="material-symbols-outlined">refresh</span>
+                Refresh
+            </button>
+            <button class="btn btn-primary" onclick="runScrape()">
+                <span class="material-symbols-outlined">radar</span>
+                Run Scrape
+            </button>
+            <a href="/" class="btn" style="text-decoration:none">
+                <span class="material-symbols-outlined">chat</span>
+                Back to DECY
+            </a>
+        </div>
+    </div>
+
+    <div class="main">
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Total Tools</div>
+                <div class="stat-value" id="stat-total">—</div>
+                <div class="stat-sub" id="stat-total-sub">Loading...</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Categories</div>
+                <div class="stat-value" id="stat-categories">—</div>
+                <div class="stat-sub">Active categories</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Discovered</div>
+                <div class="stat-value" id="stat-discovered">—</div>
+                <div class="stat-sub" id="stat-discovered-sub">By scraper</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Last Scrape</div>
+                <div class="stat-value" id="stat-last-scrape" style="font-size:16px;">—</div>
+                <div class="stat-sub" id="stat-scrape-ago"></div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('discovered')">Recently Discovered</button>
+            <button class="tab" onclick="switchTab('all')">All Tools in DB</button>
+        </div>
+
+        <!-- Discovered tools view -->
+        <div id="tab-discovered">
+            <div class="controls">
+                <input type="text" class="search-box" id="search-discovered" placeholder="Search discovered tools..."
+                    oninput="filterDiscovered()">
+                <select class="filter-select" id="filter-category" onchange="filterDiscovered()">
+                    <option value="">All Categories</option>
+                </select>
+            </div>
+            <div id="discovered-table-container">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <br>Loading discovered tools...
+                </div>
+            </div>
+        </div>
+
+        <!-- All tools view -->
+        <div id="tab-all" style="display:none">
+            <div class="controls">
+                <input type="text" class="search-box" id="search-all" placeholder="Search all tools in database..."
+                    oninput="filterAll()">
+                <select class="filter-select" id="filter-all-category" onchange="filterAll()">
+                    <option value="">All Categories</option>
+                </select>
+            </div>
+            <div id="all-table-container">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <br>Loading tools database...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        let discoveredTools = [];
+        let allTools = [];
+
+        // Load data on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            refreshData();
+        });
+
+        async function refreshData() {
+            await Promise.all([loadStats(), loadDiscovered(), loadAllTools()]);
+            showToast('Data refreshed');
+        }
+
+        async function loadStats() {
+            try {
+                const res = await fetch('/api/discover/stats');
+                const stats = await res.json();
+
+                document.getElementById('stat-total').textContent = stats.totalTools || 0;
+                document.getElementById('stat-total-sub').textContent = `Updated ${stats.lastUpdated || 'never'}`;
+                document.getElementById('stat-categories').textContent = stats.categories || 0;
+                document.getElementById('stat-discovered').textContent = stats.totalDiscovered || 0;
+
+                if (stats.lastScrape) {
+                    const date = new Date(stats.lastScrape);
+                    document.getElementById('stat-last-scrape').textContent = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                    document.getElementById('stat-scrape-ago').textContent = timeAgo(date);
+                } else {
+                    document.getElementById('stat-last-scrape').textContent = 'Never';
+                }
+            } catch (e) {
+                console.error('Failed to load stats:', e);
+            }
+        }
+
+        async function loadDiscovered() {
+            try {
+                const res = await fetch('/api/discover/tools');
+                const data = await res.json();
+                discoveredTools = (data.tools || []).reverse(); // newest first
+
+                // Populate category filter
+                const categories = [...new Set(discoveredTools.map(t => t.category))].sort();
+                const select = document.getElementById('filter-category');
+                select.innerHTML = '<option value="">All Categories</option>';
+                categories.forEach(cat => {
+                    select.innerHTML += `<option value="${cat}">${formatCategory(cat)}</option>`;
+                });
+
+                renderDiscovered(discoveredTools);
+            } catch (e) {
+                document.getElementById('discovered-table-container').innerHTML = `
+                    <div class="empty-state">
+                        <span class="material-symbols-outlined">error</span>
+                        <p>Failed to load discovered tools</p>
+                    </div>`;
+            }
+        }
+
+        async function loadAllTools() {
+            try {
+                const res = await fetch('/api/tools/all');
+                const data = await res.json();
+                allTools = data.tools || [];
+
+                // Populate category filter
+                const categories = [...new Set(allTools.map(t => t.categoryName))].sort();
+                const select = document.getElementById('filter-all-category');
+                select.innerHTML = '<option value="">All Categories</option>';
+                categories.forEach(cat => {
+                    select.innerHTML += `<option value="${cat}">${cat}</option>`;
+                });
+
+                renderAllTools(allTools);
+            } catch (e) {
+                document.getElementById('all-table-container').innerHTML = `
+                    <div class="empty-state">
+                        <span class="material-symbols-outlined">error</span>
+                        <p>Failed to load tools database</p>
+                    </div>`;
+            }
+        }
+
+        function renderDiscovered(tools) {
+            if (tools.length === 0) {
+                document.getElementById('discovered-table-container').innerHTML = `
+                    <div class="empty-state">
+                        <span class="material-symbols-outlined">search_off</span>
+                        <p>No tools found</p>
+                    </div>`;
+                return;
+            }
+
+            const rows = tools.map((t, i) => `
+                <tr>
+                    <td style="color:rgba(255,255,255,0.2);font-size:11px;">${tools.length - i}</td>
+                    <td class="tool-name">${esc(t.name)}</td>
+                    <td><span class="category-badge">${formatCategory(t.category)}</span></td>
+                    <td><a href="${t.url}" target="_blank" class="tool-link">${esc(t.url)} <span class="material-symbols-outlined" style="font-size:12px">open_in_new</span></a></td>
+                    <td class="date-text">${formatDate(t.discoveredAt)}</td>
+                </tr>
+            `).join('');
+
+            document.getElementById('discovered-table-container').innerHTML = `
+                <table class="tools-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Tool Name</th>
+                            <th>Category</th>
+                            <th>URL</th>
+                            <th>Discovered</th>
+                        </tr>
+                    </thead>
+                    <tbody>${rows}</tbody>
+                </table>`;
+        }
+
+        function renderAllTools(tools) {
+            if (tools.length === 0) {
+                document.getElementById('all-table-container').innerHTML = `
+                    <div class="empty-state">
+                        <span class="material-symbols-outlined">search_off</span>
+                        <p>No tools found</p>
+                    </div>`;
+                return;
+            }
+
+            const rows = tools.map((t, i) => `
+                <tr>
+                    <td style="color:rgba(255,255,255,0.2);font-size:11px;">${i + 1}</td>
+                    <td class="tool-name">${esc(t.name)}</td>
+                    <td><span class="category-badge">${esc(t.categoryName)}</span></td>
+                    <td style="font-size:12px;color:rgba(255,255,255,0.5);">${esc(t.bestFor || '')}</td>
+                    <td><a href="${t.url}" target="_blank" class="tool-link">${shortenUrl(t.url)} <span class="material-symbols-outlined" style="font-size:12px">open_in_new</span></a></td>
+                    <td style="font-size:12px;color:rgba(255,255,255,0.35);">${t.pricing?.free ? '✅ Free' : '💰 Paid'}</td>
+                </tr>
+            `).join('');
+
+            document.getElementById('all-table-container').innerHTML = `
+                <table class="tools-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Tool Name</th>
+                            <th>Category</th>
+                            <th>Best For</th>
+                            <th>URL</th>
+                            <th>Pricing</th>
+                        </tr>
+                    </thead>
+                    <tbody>${rows}</tbody>
+                </table>`;
+        }
+
+        // Tab switching
+        function switchTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+
+            document.getElementById('tab-discovered').style.display = tab === 'discovered' ? 'block' : 'none';
+            document.getElementById('tab-all').style.display = tab === 'all' ? 'block' : 'none';
+        }
+
+        // Filters
+        function filterDiscovered() {
+            const search = document.getElementById('search-discovered').value.toLowerCase();
+            const cat = document.getElementById('filter-category').value;
+            const filtered = discoveredTools.filter(t => {
+                const matchSearch = !search || t.name.toLowerCase().includes(search) || t.url.toLowerCase().includes(search);
+                const matchCat = !cat || t.category === cat;
+                return matchSearch && matchCat;
+            });
+            renderDiscovered(filtered);
+        }
+
+        function filterAll() {
+            const search = document.getElementById('search-all').value.toLowerCase();
+            const cat = document.getElementById('filter-all-category').value;
+            const filtered = allTools.filter(t => {
+                const matchSearch = !search || t.name.toLowerCase().includes(search) || (t.bestFor || '').toLowerCase().includes(search);
+                const matchCat = !cat || t.categoryName === cat;
+                return matchSearch && matchCat;
+            });
+            renderAllTools(filtered);
+        }
+
+        // Run scrape
+        async function runScrape() {
+            const btn = event.target.closest('.btn');
+            btn.innerHTML = '<span class="material-symbols-outlined">hourglass_top</span> Scraping...';
+            btn.disabled = true;
+            showToast('Starting scrape — this may take a minute...');
+
+            try {
+                const res = await fetch('/api/discover/scrape', { method: 'POST' });
+                const result = await res.json();
+                showToast(`Scrape done: ${result.added || 0} new tools added!`);
+                await refreshData();
+            } catch (e) {
+                showToast('Scrape failed — check server logs');
+            }
+
+            btn.innerHTML = '<span class="material-symbols-outlined">radar</span> Run Scrape';
+            btn.disabled = false;
+        }
+
+        // Utilities
+        function esc(str) {
+            const div = document.createElement('div');
+            div.textContent = str || '';
+            return div.innerHTML;
+        }
+
+        function formatCategory(cat) {
+            return (cat || '').replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        }
+
+        function formatDate(iso) {
+            if (!iso) return '—';
+            const d = new Date(iso);
+            return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) +
+                ' ' + d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+        }
+
+        function shortenUrl(url) {
+            return (url || '').replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
+        }
+
+        function timeAgo(date) {
+            const seconds = Math.floor((new Date() - date) / 1000);
+            if (seconds < 60) return 'Just now';
+            if (seconds < 3600) return `${Math.floor(seconds / 60)} min ago`;
+            if (seconds < 86400) return `${Math.floor(seconds / 3600)} hours ago`;
+            return `${Math.floor(seconds / 86400)} days ago`;
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+    </script>
+</body>
+
+</html>
